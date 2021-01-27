@@ -45,10 +45,12 @@ def complex_tone(freqs, levels, phases, dur, fs):
 def cosine_ramp(signal, dur_ramp, fs):
     """
     Applies a raised-cosine ramp to a time-domain signal.
+
     Arguments:
         signal (np.ndarray): time-domain signal to be ramped
         dur_ramp (float): duration of the ramp in seconds
         fs (int): sampling rate in Hz
+
     Returns:
         output (array): time-domain signal with ramp
     """
