@@ -6,14 +6,12 @@ def test_simulator_construct_batch_size():
     """ Check that construct batch accepts stimulus and parameter sequences of variable sizes and returns a list of the
     appropriate size"""
     sim = sy.Simulator()
-    batch_zip = sim.construct_batch([np.zeros(5), np.ones(5), 2*np.ones(5)],
+    batch_zip = sim.construct_batch([np.zeros(5), np.ones(5), 2 * np.ones(5)],
                                     [{'freq': 1000}, {'freq': 2000}, {'freq': 5000}],
-                                    [{'CF': 50, 'fs': 10000}, {'CF': 100, 'fs': 10000}],
-                                    'zip')
-    batch_product = sim.construct_batch([np.zeros(5), np.ones(5), 2*np.ones(5)],
-                                    [{'freq': 1000}, {'freq': 2000}, {'freq': 5000}],
-                                    [{'CF': 50, 'fs': 10000}, {'CF': 100, 'fs': 10000}],
-                                    'product')
+                                    [{'CF': 50, 'fs': 10000}, {'CF': 100, 'fs': 10000}], 'zip')
+    batch_product = sim.construct_batch([np.zeros(5), np.ones(5), 2 * np.ones(5)],
+                                        [{'freq': 1000}, {'freq': 2000}, {'freq': 5000}],
+                                        [{'CF': 50, 'fs': 10000}, {'CF': 100, 'fs': 10000}], 'product')
     assert len(batch_zip) == 2 and len(batch_product) == 6
 
 
@@ -21,10 +19,8 @@ def test_simulator_construct_batch_error_handling():
     """ Check that construct batch correctly throws an error if sizes of inputs don't match """
     sim = sy.Simulator()
     try:
-        temp = sim.construct_batch([np.zeros(5), np.ones(5), 2*np.ones(5)],
-                                        [{'freq': 1000}, {'freq': 2000}],
-                                        [{'CF': 50, 'fs': 10000}, {'CF': 100, 'fs': 10000}],
-                                        'zip')
+        temp = sim.construct_batch([np.zeros(5), np.ones(5), 2 * np.ones(5)], [{'freq': 1000}, {'freq': 2000}],
+                                   [{'CF': 50, 'fs': 10000}, {'CF': 100, 'fs': 10000}], 'zip')
         raise Exception('Should have failed!')
     except AssertionError:
         return
@@ -98,3 +94,14 @@ def test_synthesizer_synthesize():
     """ Check that Synthesizer object can successfully synthesize"""
     synth = sy.Synthesizer()
     synth.synthesize()
+
+
+def test_simulate_firing_rates_error_gen():
+    """ Check that simulate firing rates raises exceptions if no input or model is provided """
+    try:
+        sy.simulate_firing_rates()
+        raise Exception('Should have failed')
+    except TypeError:
+        return
+
+

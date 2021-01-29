@@ -43,50 +43,44 @@ class Simulator:
         return None
 
     @staticmethod
-    def construct_batch(stimulus_sequence, stimulus_parameter_sequence, parameter_sequence, mode='zip'):
+    def construct_batch(input_sequence, input_parameter_sequence, parameter_sequence, mode='zip'):
         """
-        Combines a stimulus sequence, a stimulus parameter sequence, and a parameter sequence into a combined sequence
+        Combines an input sequence, an input parameter sequence, and a model parameter sequence into a combined sequence
         that can be handled by run() to run a series of simulations.
 
         Arguments:
-            stimulus_sequence (list): list containing acoustic stimuli (in pascals) to run the model on. Elements can be
-                1D ndarrays containing acoustic stimuli or lists containing multiple stimuli (also 1D ndarrays).
+            input_sequence (list): list containing inputs to run the model on.
 
-            stimulus_parameter_sequence (list): list containing stimulus parameters corresponding to the stimuli in
-                stimulus sequence. Elements can be dicts containing parameter names and values or lists containing
-                multiple such dicts.
+            input_parameter_sequence (list): list containing input parameters corresponding to the inputs in
+                input_sequence.
 
             parameter_sequence (list): list of parameter values to run the model at. Each element of the list is a dict
                 of parameter names and values that match the expected keyword arguments in run()
 
-            mode (string): controls how the stimulus and parameter sequences are combined. In 'zip' mode,
-                parameter_sequence and stimulus_sequence are combined into a unified sequence element-by-element, such
-                that the first element of stimulus_sequence will be run at the parameter values specified in the first
-                element of parameter_sequence. In 'product' mode, every element of stimulus sequence will be run at
+            mode (string): controls how the input and parameter sequences are combined. In 'zip' mode,
+                parameter_sequence and input_sequence are combined into a unified sequence element-by-element, such
+                that the first element of input_sequence will be run at the parameter values specified in the first
+                element of parameter_sequence. In 'product' mode, every element of input_sequence will be run at
                 every element of parameter sequence.
 
         Returns:
-            batch: list of dicts containing (1) model parameters, (2) acoustic stimuli, and (3) corresponding acoustic
-                stimulus parameters. All of these are stored as elements of the dicts. The acoustic stimuli and
-                parameters can correspond to a single simulation that needs to be run (in which case the stimulus is
-                a 1D ndarray and the acoustic stimulus parameters are a dict) or can correspond to multiple simulations
-                that need to be run (in which case the stimuli are in a list and the stimulus parameters are dicts in a
-                list)
+            batch: list of dicts containing (1) model parameters, (2) inputs, and (3) corresponding input parameters.
+                All of these are stored as elements of the dicts.
         """
-        # Check that stimulus_sequence and stimulus_parameter_sequence are the same length
-        assert len(stimulus_sequence) == len(stimulus_parameter_sequence)
+        # Check that input_sequence and input_parameter_sequence are the same length
+        assert len(input_sequence) == len(input_parameter_sequence)
         # Create empty list that will contain a master sequence of combined stimuli and parameters
         batch = []
         # Fork based on whether we're going to 'zip' or 'permute'
         if mode == 'zip':
-            for stimulus, params in zip(zip(stimulus_sequence, stimulus_parameter_sequence), parameter_sequence):
-                params['stim'] = stimulus[0]
-                params['stim_params'] = stimulus[1]
+            for input, params in zip(zip(input_sequence, input_parameter_sequence), parameter_sequence):
+                params['input'] = input[0]
+                params['input_params'] = input[1]
                 batch.append(params)
         elif mode == 'product':
-            for stimulus, params in product(zip(stimulus_sequence, stimulus_parameter_sequence), parameter_sequence):
-                params['stim'] = stimulus[0]
-                params['stim_params'] = stimulus[1]
+            for input, params in product(zip(input_sequence, input_parameter_sequence), parameter_sequence):
+                params['input'] = input[0]
+                params['input_params'] = input[1]
                 batch.append(params)
         else:
             raise ValueError('Unknown mode!')
@@ -140,6 +134,22 @@ class Synthesizer:
         # Return sequence
         return parameter_sequence
 
+    @staticmethod
+    def wiggle_parameter(paramdict, parameter):
+        """
+        Takes a parameter
+
+        Arguments:
+            baselines (dict): dict of baseline parameter names and values
+
+            increments (dict): dict of parameter names and values to increment them by
+
+        Returns:
+            sequence: list of dicts to be passed to synthesize_parameter_sequence()
+        """
+
+        TODOODODODODOD
+
     def apply_increment_to_sequence(self, baseline_sequence, increments):
         """
         Takes a parameter sequence and transforms each element into an incremented parameter sequence
@@ -181,8 +191,20 @@ class Synthesizer:
         return results
 
 
-def simulate_firing_rates():
-    return
+def simulate_firing_rates(model, paramdict):
+    """
+    Simulates a response for a model neuron and returns that neuron's instantaneous firing rate
 
-def decode_ideal_observer():
-    return
+    Arguments:
+        model: an function that accepts input ndarrays and **kwargs and returns a firing rate ndarray
+
+        paramdict: a dict containing at least an element called 'input' containing an input and also optionally various
+            parameter names and values. They are unpacked and passed to the model as keyword arguments.
+
+    Returns:
+        output: an output ndarray of firing rates
+
+    """
+    return model(**paramdict)
+
+
