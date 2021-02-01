@@ -1,9 +1,31 @@
 import numpy as np
 from gammatone import filters
 from scipy.signal import butter, lfilter
+from apcmodels.simulation import Simulator
+
+
+class AuditoryNerveHeinz2001Numba(Simulator):
+    """
+    Synthesizes a pure tone with raised-cosine ramps
+    """
+    def __init__(self):
+        super().__init__()
+
+    def simulate(self, params):
+        return calculate_heinz2001_firing_rate(**params)
 
 
 def calculate_auditory_nerve_firing_rate(nerve_model):
+    """
+    A function wrapper around functions that simulate auditory nerve firing rates to handle parameters
+
+    Arguments:
+        nerve_model (function): a function that implements a firing rate simulation for an auditory nerve model
+
+    Returns:
+        run_model (function): the wrapped function
+
+    """
     def run_model(**kwargs):
         # If a user passes 'cfs' and 'cf_low' or 'cf_high', reject the input combination as invalid
         if ('cfs' in kwargs and 'cf_low' in kwargs) or ('cfs' in kwargs and 'cf_high' in kwargs):
@@ -24,7 +46,20 @@ def calculate_auditory_nerve_firing_rate(nerve_model):
 
 
 @calculate_auditory_nerve_firing_rate
-def calculate_Heinz2001_firing_rate(input, cfs=None, fs=int(200e3)):
+def calculate_heinz2001_firing_rate(input, cfs=None, fs=int(200e3), **kwargs):
+    """
+    Implements Heinz, Colburn, and Carney (2001) auditory nerve simulation.
+
+    Arguments:
+        input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
+
+        cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
+
+        fs (int): sampling rate in Hz
+
+    Returns:
+        output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
+    """
     # Check if cfs is None, if so set 1000 Hz single CF
     if cfs is None:
         cfs = np.array([1000])
