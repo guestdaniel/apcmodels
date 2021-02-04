@@ -40,8 +40,8 @@ def calculate_auditory_nerve_firing_rate(nerve_model):
             kwargs['fs'] = int(200e3)  # if no fs, set to default of 200 kHz
 
         # Append 10 ms silence to the beginning of the acoustic input and the end of acoutsic input
-        kwargs['input'] = np.concatenate([np.zeros(int(kwargs['fs']*0.01)),
-                                          kwargs['input'],
+        kwargs['_input'] = np.concatenate([np.zeros(int(kwargs['fs']*0.01)),
+                                          kwargs['_input'],
                                           np.zeros(int(kwargs['fs']*0.01))])
 
         # If a user passes 'cfs' and 'cf_low' or 'cf_high', reject the input combination as invalid
@@ -64,12 +64,12 @@ def calculate_auditory_nerve_firing_rate(nerve_model):
 
 
 @calculate_auditory_nerve_firing_rate
-def calculate_heinz2001_firing_rate(input, fs, cfs=None, **kwargs):
+def calculate_heinz2001_firing_rate(_input, fs, cfs=None, **kwargs):
     """
     Implements Heinz, Colburn, and Carney (2001) auditory nerve simulation.
 
     Arguments:
-        input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
+        _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
 
         fs (int): sampling rate in Hz
 
@@ -86,7 +86,7 @@ def calculate_heinz2001_firing_rate(input, fs, cfs=None, **kwargs):
         cfs = np.array([1000])
 
     # Run peripheral filters
-    bm = filters.erb_filterbank(input, filters.make_erb_filters(fs, cfs))
+    bm = filters.erb_filterbank(_input, filters.make_erb_filters(fs, cfs))
 
     # Saturating nonlinearity
     K = 1225

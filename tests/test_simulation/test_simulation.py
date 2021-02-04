@@ -31,7 +31,7 @@ def test_simulator_construct_batch_product():
     # Initialize simulator object
     sim = si.Simulator()
     batch = sim.construct_batch(inputs=[1, 2, 3], input_parameters=[None, None, None], model_parameters=[{'a': 1}])
-    assert batch[0]['input'] == 1 and batch[1]['input'] == 2 and batch[2]['input'] == 3
+    assert batch[0]['_input'] == 1 and batch[1]['_input'] == 2 and batch[2]['_input'] == 3
 
 
 def test_simulator_construct_batch_nested_stimuli():

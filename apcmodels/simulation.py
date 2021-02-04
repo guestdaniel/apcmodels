@@ -124,14 +124,14 @@ class Simulator:
             # Now, loop through zipped up combos of elements of inputs, input_parameters, and model_parameters
             for _input, input_params, model_params in zip(inputs, input_parameters, model_parameters):
                 temp = deepcopy(model_params)
-                temp['input'] = _input
+                temp['_input'] = _input
                 temp['input_params'] = input_params
                 batch.append(temp)
         elif mode == 'product':
             # Loop through product of zipped up combos of elements of inputs and input_parameters with model_parameters
             for _temp, model_params in product(zip(inputs, input_parameters), model_parameters):
                 temp = deepcopy(model_params)
-                temp['input'] = _temp[0]
+                temp['_input'] = _temp[0]
                 temp['input_params'] = _temp[1]
                 batch.append(temp)
         else:
@@ -280,30 +280,3 @@ def _wiggle_parameters_dict(paramdict, parameter, values):
     return parameter_sequence
 
 
-def run_rates_util(params, ratefunc):
-    """
-    Looks for an input element of params called 'input' and attempts to simulate a response for each element of
-    'input' using ratefunc
-
-    Arguments:
-        params (dict): a dict whose elements are 'input', containing inputs appropriate for ratefunc, and kwargs to be
-            passed to ratefunc
-
-        ratefunc (function): a function that accepts input and other kwargs and returns model simulations
-
-    Returns:
-        output: results of applying ratefunc to each input in params
-
-    """
-    # If the input is not a list, just run ratefunc
-    if type(params['input']) is not list:
-        return [ratefunc(**params)]
-    # If the input *is* a list, process each input separately
-    else:
-        output = []
-        for _input in params['input']:
-            # Make a copy of the parameters and replace the list of inputs with just this current iteration's input
-            temp_params = deepcopy(params)
-            temp_params['input'] = _input
-            output.append(ratefunc(**temp_params))
-    return output

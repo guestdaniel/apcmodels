@@ -1,5 +1,4 @@
 from copy import deepcopy
-from apcmodels.simulation import run_rates_util
 
 
 def decode_ideal_observer(ratefunc):
@@ -31,3 +30,27 @@ def decode_ideal_observer(ratefunc):
 
         return DOSOMETHING(rates)
     return inner
+
+
+def run_rates_util(ratefunc, _input, **kwargs):
+    """
+    Takes a list of inputs and passes each element to ratefunc along with kwargs, returns the results as a list
+
+    Arguments:
+        ratefunc (function): a function that accepts input and other kwargs and returns model simulations
+
+        _input (list): a list of inputs
+
+    Returns:
+        output: results of applying ratefunc to each input in params
+
+    """
+    # If the input is not a list, just run ratefunc
+    if type(_input) is not list:
+        return [ratefunc(input=_input, **kwargs)]
+    # If the input *is* a list, process each input separately
+    else:
+        output = []
+        for _input_element in _input:
+            output.append(ratefunc(input=_input, **kwargs))
+    return output

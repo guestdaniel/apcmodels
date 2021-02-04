@@ -8,7 +8,7 @@ def test_anf():
     # Initialize simulator object
     sim = anf.AuditoryNerveHeinz2001Numba()
     # Create dummy input
-    dummy_input = [{'input': np.zeros(5000), 'cf_low': 200, 'cf_high': 20000, 'n_cf': 20}]
+    dummy_input = [{'_input': np.zeros(5000), 'cf_low': 200, 'cf_high': 20000, 'n_cf': 20}]
     output = sim.run(batch=dummy_input,
                      parallel=True)
 
@@ -19,7 +19,7 @@ def test_anf_check_no_output_channels():
     # Initialize simulator object
     sim = anf.AuditoryNerveHeinz2001Numba()
     # Create dummy input
-    dummy_input = [{'input': np.zeros(5000), 'cf_low': 200, 'cf_high': 20000, 'n_cf': 20}]
+    dummy_input = [{'_input': np.zeros(5000), 'cf_low': 200, 'cf_high': 20000, 'n_cf': 20}]
     output = sim.run(batch=dummy_input,
                      parallel=True)
     assert output[0].shape[0] == 20
