@@ -1,6 +1,3 @@
-from copy import deepcopy
-
-
 def decode_ideal_observer(ratefunc):
     """
     Estimate thresholds for calculating an ideal observer
@@ -39,7 +36,7 @@ def run_rates_util(ratefunc, _input, **kwargs):
     Arguments:
         ratefunc (function): a function that accepts input and other kwargs and returns model simulations
 
-        _input (list): a list of inputs
+        _input: an input or a list of inputs
 
     Returns:
         output: results of applying ratefunc to each input in params
@@ -47,10 +44,10 @@ def run_rates_util(ratefunc, _input, **kwargs):
     """
     # If the input is not a list, just run ratefunc
     if type(_input) is not list:
-        return [ratefunc(input=_input, **kwargs)]
+        return [ratefunc(_input=_input, **kwargs)]
     # If the input *is* a list, process each input separately
     else:
         output = []
         for _input_element in _input:
-            output.append(ratefunc(input=_input, **kwargs))
+            output.append(ratefunc(_input=_input_element, **kwargs))
     return output
