@@ -6,5 +6,5 @@ setup(
     packages=['apcmodels'],
     license='GPL v3',
     author='Daniel R. Guest',
-    install_requires=['numpy', 'scipy', 'pandas', 'matplotlib', 'Cython', 'pathos', 'tqdm', 'cochlea']
+    install_requires=['numpy', 'scipy', 'pandas', 'matplotlib', 'Cython', 'numba', 'pathos', 'tqdm', 'cochlea']
 )

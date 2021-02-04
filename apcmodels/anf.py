@@ -2,16 +2,28 @@ import numpy as np
 from gammatone import filters
 from scipy.signal import butter, lfilter
 from apcmodels.simulation import Simulator
+from numba import jit
 
 
 class AuditoryNerveHeinz2001Numba(Simulator):
     """
-    Synthesizes a pure tone with raised-cosine ramps
+    Synthesizes a pure tone with raised-cosine ramps.
     """
     def __init__(self):
         super().__init__()
 
     def simulate(self, params):
+        """
+        Passes params to the Heinz (2001) firing rate simulation and returns the firing rates
+
+        Arguments:
+            params (dict): dict of parameter names and values. Parameters that are not used by
+                calculate_heinz2001_firing_rate() are ignored silently.
+
+        Returns:
+        output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
+
+        """
         return calculate_heinz2001_firing_rate(**params)
 
 
@@ -27,6 +39,15 @@ def calculate_auditory_nerve_firing_rate(nerve_model):
 
     """
     def run_model(**kwargs):
+        # Handle default inputs
+        if 'fs' not in kwargs:
+            kwargs['fs'] = int(200e3)  # if no fs, set to default of 200 kHz
+
+        # Append 10 ms silence to the beginning of the acoustic input and the end of acoutsic input
+        kwargs['input'] = np.concatenate([np.zeros(int(kwargs['fs']*0.01)),
+                                          kwargs['input'],
+                                          np.zeros(int(kwargs['fs']*0.01))])
+
         # If a user passes 'cfs' and 'cf_low' or 'cf_high', reject the input combination as invalid
         if ('cfs' in kwargs and 'cf_low' in kwargs) or ('cfs' in kwargs and 'cf_high' in kwargs):
             return ValueError('Both `cfs` and `cf_low` or `cf_high` passed at same time')
@@ -40,25 +61,29 @@ def calculate_auditory_nerve_firing_rate(nerve_model):
         # If user passes no appropriate inputs, raise error
         elif 'cfs' not in kwargs:
             raise ValueError('Valid CFs not specified')
+
         # Pass input to nerve model
         return nerve_model(**kwargs)
     return run_model
 
 
 @calculate_auditory_nerve_firing_rate
-def calculate_heinz2001_firing_rate(input, cfs=None, fs=int(200e3), **kwargs):
+def calculate_heinz2001_firing_rate(input, fs, cfs=None, **kwargs):
     """
     Implements Heinz, Colburn, and Carney (2001) auditory nerve simulation.
 
     Arguments:
         input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
 
-        cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
-
         fs (int): sampling rate in Hz
+
+        cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
 
     Returns:
         output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
+
+    Warnings:
+        - Note that arguments passed to **kwargs are discarded silently
     """
     # Check if cfs is None, if so set 1000 Hz single CF
     if cfs is None:
@@ -79,6 +104,16 @@ def calculate_heinz2001_firing_rate(input, cfs=None, fs=int(200e3), **kwargs):
 
     # Neural adaptation
     dims = ihc.shape
+    C_I = np.zeros_like(ihc)
+    C_L = np.zeros_like(ihc)
+    return _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L)
+
+
+@jit
+def _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L):
+    """ Function to implement neural adaptation stage of Heinz (2001) auditory nerve model. Separate from main function
+    so that it can be processed with Numba """
+    # Neural adaptation
     len_t = dims[1]
     len_f = dims[0]
     T_s = 1 / fs
@@ -91,8 +126,7 @@ def calculate_heinz2001_firing_rate(input, cfs=None, fs=int(200e3), **kwargs):
     PI_max = 0.6
     C_G = 6666.7
     P_I = 0.0173 * np.log(1 + np.exp(34.657 * ihc))
-    C_I = np.zeros_like(ihc)
-    C_L = np.zeros_like(ihc)
+
     C_I[:, 0] = r_o / PI_rest
     C_L[:, 0] = C_I[:, 0] * (PI_rest + P_L) / P_L
 

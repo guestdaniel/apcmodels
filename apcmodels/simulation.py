@@ -20,8 +20,7 @@ class Simulator:
         side effects (e.g., saving to disk).
 
         Arguments:
-            batch (list): a list of elements accepted by runfunc as input parameters, generally produced by
-                construct_batch for the runfuncs provided by apcmodels.
+            batch (list): a list of elements accepted by runfunc as input parameters
 
             runfunc (func): function that accepts elements of a sequence as arguments and returns simulation results
 
@@ -274,3 +273,32 @@ def _wiggle_parameters_dict(paramdict, parameter, values):
         parameter_sequence.append(temp)
     # Return sequence
     return parameter_sequence
+
+
+def run_rates_util(params, ratefunc):
+    """
+    Looks for an input element of params called 'input' and attempts to simulate a response for each element of
+    'input' using ratefunc
+
+    Arguments:
+        params (dict): a dict whose elements are 'input', containing inputs appropriate for ratefunc, and kwargs to be
+            passed to ratefunc
+
+        ratefunc (function): a function that accepts input and other kwargs and returns model simulations
+
+    Returns:
+        output: results of applying ratefunc to each input in params
+
+    """
+    # If the input is not a list, just run ratefunc
+    if type(params['input']) is not list:
+        return [ratefunc(**params)]
+    # If the input *is* a list, process each input separately
+    else:
+        output = []
+        for _input in params['input']:
+            # Make a copy of the parameters and replace the list of inputs with just this current iteration's input
+            temp_params = deepcopy(params)
+            temp_params['input'] = _input
+            output.append(ratefunc(**temp_params))
+    return output

@@ -2,12 +2,13 @@ from apcmodels import signal as sg
 import numpy as np
 from apcmodels.anf import calculate_heinz2001_firing_rate
 
+
 def test_null_inputs():
     """ Test to make sure that if model receives no input an error is raised """
     try:
-        calculate_heinz2001_firing_rate(cfs=np.array([500]))
+        calculate_heinz2001_firing_rate()
         raise Exception('This should have failed')
-    except TypeError:
+    except KeyError:
         return
 
 

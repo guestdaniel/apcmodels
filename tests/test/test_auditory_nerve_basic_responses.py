@@ -32,7 +32,7 @@ def test_anf_rate_level_function():
     sim = anf.AuditoryNerveHeinz2001Numba()
 
     # Define stimulus parameters
-    fs = int(48e3)
+    fs = int(200e3)
     tone_freq = 1000
     tone_dur = 0.1
     tone_ramp_dur = 0.01

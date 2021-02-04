@@ -1,12 +1,11 @@
-import apcmodels.simulation as sy
+import apcmodels.simulation as si
 import numpy as np
-import apcmodels.synthesis
 
 
 def test_simulator_construct_batch_size():
     """ Check that construct batch accepts stimulus and parameter sequences of variable sizes and returns a list of the
     appropriate size"""
-    sim = sy.Simulator()
+    sim = si.Simulator()
     batch_zip = sim.construct_batch([np.zeros(5), np.ones(5), 2 * np.ones(5)],
                                     [{'freq': 1000}, {'freq': 2000}, {'freq': 5000}],
                                     [{'CF': 50, 'fs': 10000}, {'CF': 100, 'fs': 10000}, {'CF': 200, 'fs': 10000}], 'zip')
@@ -18,7 +17,7 @@ def test_simulator_construct_batch_size():
 
 def test_simulator_construct_batch_error_handling():
     """ Check that construct batch correctly throws an error if sizes of inputs don't match """
-    sim = sy.Simulator()
+    sim = si.Simulator()
     try:
         temp = sim.construct_batch([np.zeros(5), np.ones(5), 2 * np.ones(5)], [{'freq': 1000}, {'freq': 2000}],
                                    [{'CF': 50, 'fs': 10000}, {'CF': 100, 'fs': 10000}], 'zip')
@@ -30,9 +29,20 @@ def test_simulator_construct_batch_error_handling():
 def test_simulator_construct_batch_product():
     """ Check that construct_batch product can successfully apply a single params set to multipel input stimuli """
     # Initialize simulator object
-    sim = sy.Simulator()
+    sim = si.Simulator()
     batch = sim.construct_batch(inputs=[1, 2, 3], input_parameters=[None, None, None], model_parameters=[{'a': 1}])
     assert batch[0]['input'] == 1 and batch[1]['input'] == 2 and batch[2]['input'] == 3
+
+
+def test_simulator_construct_batch_nested_stimuli():
+    """ Check that when construct_batch is provided with a stimulus array that has nested stimuli that
+    things are handled correctly """
+    sim = si.Simulator()
+    batch = sim.construct_batch(inputs=[[1.1, 1.2, 1.3], [2.1, 2.2, 2.3]],
+                                input_parameters=[[{'a': 0.1}, {'a': 0.2}, {'a': 0.3}],
+                                                  [{'a': 0.1}, {'a': 0.2}, {'a': 0.3}]],
+                                model_parameters=[{'fs': 1000}])
+
 
 
 def test_simulator_run_simple_batch():
@@ -41,7 +51,7 @@ def test_simulator_run_simple_batch():
     def dummy(input):
         return input
     # Initialize simulator object
-    sim = sy.Simulator()
+    sim = si.Simulator()
     # Create dummy input
     dummy_input = ['yo', 'ye', 'ya']
     output = sim.run(batch=dummy_input, runfunc=dummy, parallel=True)
@@ -52,13 +62,56 @@ def test_simulator_run_simple_batch():
 
 def test_simulator_run():
     """ Check that run() correctly accepts a list of dicts and returns a corresponding number of responses"""
-    sim = sy.Simulator()
+    sim = si.Simulator()
     results = sim.run([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}], sim.simulate, parallel=False)
     assert len(results) == 2
 
 
 def test_simulator_run_parallel():
     """ Check that run() correctly accepts a list of dicts and returns a corresponding number of responses"""
-    sim = sy.Simulator()
+    sim = si.Simulator()
     results = sim.run([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}], sim.simulate, parallel=True)
     assert len(results) == 2
+
+
+def test_increment_parameters_input_dict():
+    """ Check that increment_parameters accepts a dict as input """
+    si.increment_parameters(baselines={'a': 1, 'b': 2}, increments={'a': 0.01})
+
+
+def test_increment_parameters_input_list():
+    """ Check that increment_parameters accepts a list as input """
+    si.increment_parameters(baselines=[{'a': 1, 'b': 2}], increments={'a': 0.01})
+
+
+def test_increment_parameters_input_nested_list():
+    """ Check that increment_parameters accepts a nested list as input """
+    si.increment_parameters(baselines=[{'a': 1, 'b': 2},
+                                       [[{'a': 1, 'b': 2}, {'a': 1, 'b': 2}], [{'a': 2, 'b': 40}]]],
+                            increments={'a': 0.01})
+
+
+def test_wiggle_parameters_input_dict():
+    """ Check that wiggle_parameters accepts a dict as input """
+    si.wiggle_parameters(baselines={'a': 1, 'b': 2}, parameter='a', values=[1, 2, 3, 4])
+
+
+def test_wiggle_parameters_input_list():
+    """ Check that wiggle_parameters accepts a list as input """
+    si.wiggle_parameters(baselines=[{'a': 1, 'b': 2}], parameter='a', values=[1, 2, 3, 4])
+
+
+def test_wiggle_parameters_input_nested_list():
+    """ Check that wiggle_parameters accepts a nested list as input """
+    si.wiggle_parameters(baselines=[{'a': 1, 'b': 2},
+                                    [[{'a': 1, 'b': 2}, {'a': 1, 'b': 2}], [{'a': 2, 'b': 40}]]],
+                         parameter='a', values=[1, 2, 3, 4])
+
+
+def test_wiggle_parameters_repeated():
+    """ Check that increment_parameters accepts a nested list as input """
+    si.wiggle_parameters(baselines=si.wiggle_parameters(baselines={'a': 1, 'b': 2},
+                                                        parameter='a',
+                                                        values=[1, 2, 3, 4]),
+                         parameter='b',
+                         values=[10, 20])

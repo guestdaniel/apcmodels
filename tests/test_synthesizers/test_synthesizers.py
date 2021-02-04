@@ -4,56 +4,6 @@ from apcmodels.simulation import *
 import numpy as np
 
 
-def test_synthesizer_increment_parameters_input_dict():
-    """ Check that increment_parameters accepts a dict as input """
-    synth = sy.Synthesizer()
-    increment_parameters(baselines={'a': 1, 'b': 2}, increments={'a': 0.01})
-
-
-def test_synthesizer_increment_parameters_input_list():
-    """ Check that increment_parameters accepts a list as input """
-    synth = sy.Synthesizer()
-    increment_parameters(baselines=[{'a': 1, 'b': 2}], increments={'a': 0.01})
-
-
-def test_synthesizer_increment_parameters_input_nested_list():
-    """ Check that increment_parameters accepts a nested list as input """
-    synth = sy.Synthesizer()
-    increment_parameters(baselines=[{'a': 1, 'b': 2},
-                                          [[{'a': 1, 'b': 2}, {'a': 1, 'b': 2}], [{'a': 2, 'b': 40}]]],
-                               increments={'a': 0.01})
-
-
-def test_synthesizer_wiggle_parameters_input_dict():
-    """ Check that wiggle_parameters accepts a dict as input """
-    synth = sy.Synthesizer()
-    wiggle_parameters(baselines={'a': 1, 'b': 2}, parameter='a', values=[1, 2, 3, 4])
-
-
-def test_synthesizer_wiggle_parameters_input_list():
-    """ Check that wiggle_parameters accepts a list as input """
-    synth = sy.Synthesizer()
-    wiggle_parameters(baselines=[{'a': 1, 'b': 2}], parameter='a', values=[1, 2, 3, 4])
-
-
-def test_synthesizer_wiggle_parameters_input_nested_list():
-    """ Check that wiggle_parameters accepts a nested list as input """
-    synth = sy.Synthesizer()
-    wiggle_parameters(baselines=[{'a': 1, 'b': 2},
-                                          [[{'a': 1, 'b': 2}, {'a': 1, 'b': 2}], [{'a': 2, 'b': 40}]]],
-                            parameter='a', values=[1, 2, 3, 4])
-
-
-def test_synthesizer_wiggle_parameters_repeated():
-    """ Check that increment_parameters accepts a nested list as input """
-    synth = sy.Synthesizer()
-    wiggle_parameters(baselines=wiggle_parameters(baselines={'a': 1, 'b': 2},
-                                                  parameter='a',
-                                                  values=[1, 2, 3, 4]),
-                            parameter='b',
-                            values=[10, 20])
-
-
 def test_synthesizer_synthesize_parameter_sequence():
     """ Check that synthesize_sequence() correctly accepts a list of dicts and returns a corresponding number
     of stimuli"""
