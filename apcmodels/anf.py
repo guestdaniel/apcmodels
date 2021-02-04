@@ -12,19 +12,15 @@ class AuditoryNerveHeinz2001Numba(Simulator):
     def __init__(self):
         super().__init__()
 
-    def simulate(self, params):
+    def simulate(self, **kwargs):
         """
-        Passes params to the Heinz (2001) firing rate simulation and returns the firing rates
-
-        Arguments:
-            params (dict): dict of parameter names and values. Parameters that are not used by
-                calculate_heinz2001_firing_rate() are ignored silently.
+        Passes kwargs to the Heinz (2001) firing rate simulation and returns the firing rates
 
         Returns:
-        output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
+            output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
 
         """
-        return calculate_heinz2001_firing_rate(**params)
+        return calculate_heinz2001_firing_rate(**kwargs)
 
 
 def calculate_auditory_nerve_firing_rate(nerve_model):

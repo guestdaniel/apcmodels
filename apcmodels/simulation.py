@@ -15,16 +15,16 @@ class Simulator:
 
     def run(self, batch, runfunc=None, parallel=True, n_thread=8):
         """ Main logical core of Simulator, accepts a function (which defines the simulation and what returns its
-        output) and a batch (list with elements to be passed to runfunc), runs the model over the
-        sequence, and returns the simulated results as specified in runfunc. In theory, runfunc is allowed to have
-        side effects (e.g., saving to disk).
+        output) and a batch (list of dicts whose elements are passed to the function as kwargs), runs the model over the
+        sequence, and returns the simulated results as specified in the function. In theory, the function is allowed to
+        have side effects (e.g., saving to disk).
 
         Arguments:
-            batch (list): a list of elements accepted by runfunc as input parameters
+            batch (list): a list of dicts whose elements are passed to runfunc as kwargs
 
-            runfunc (func): function that accepts elements of a sequence as arguments and returns simulation results
+            runfunc (func): function that accepts kwargs and returns simulation results
 
-            parallel (bool): flag to control whether we run the sequence in parallel using pathos multiprocessing or not
+            parallel (bool): flag to control if we run the sequence in parallel using pathos multiprocessing
 
             n_thread (int): number of threads to use in multiprocessing, ignored if parallel is false
 
@@ -34,13 +34,18 @@ class Simulator:
         # If runfunc is None, use the default
         if runfunc is None:
             runfunc = self.default_runfunc
+
+        # Now, wrap runfunc around a function that takes the elements of batch and unpacks them
+        def runfunc_wrapper(kwargs):
+            return runfunc(**kwargs)
+
         # If parallel, set up the pool and run sequence on pool
         if parallel:
             p = ProcessPool(n_thread)
-            results = p.map(runfunc, batch)
+            results = p.map(runfunc_wrapper, batch)
         # If not parallel, simply iterate over and run each element of the sequence
         else:
-            results = [runfunc(element) for element in batch]
+            results = [runfunc_wrapper(element) for element in batch]
         return results
 
     def run_batch(self, inputs, input_parameters, model_parameters, mode='product', parallel=True, n_thread=8,
@@ -79,7 +84,7 @@ class Simulator:
         batch = self.construct_batch(inputs, input_parameters, model_parameters, mode)
         return self.run(batch, runfunc, parallel, n_thread)
 
-    def simulate(self, params):
+    def simulate(self, **kwargs):
         """ Dummy method to provide an example runfunc for run() above. Subclasses should implement appropriate
          runfuncs (see run() and run_batch() above). """
         return None

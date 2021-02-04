@@ -48,16 +48,16 @@ def test_simulator_construct_batch_nested_stimuli():
 def test_simulator_run_simple_batch():
     """ Check that run can handle arbitrary inputs """
     # Create dummy function that returns input as output --- thus, the output of run() should be identical to its input
-    def dummy(input):
-        return input
+    def dummy(_input):
+        return _input
     # Initialize simulator object
     sim = si.Simulator()
     # Create dummy input
-    dummy_input = ['yo', 'ye', 'ya']
+    dummy_input = [{'_input': 1}, {'_input': 2}]
     output = sim.run(batch=dummy_input, runfunc=dummy, parallel=True)
     # Check that all inputs and outputs align
     for this_input, this_output in zip(dummy_input, output):
-        assert(this_input == this_output)
+        assert(this_input['_input'] == this_output)
 
 
 def test_simulator_run():
