@@ -116,3 +116,12 @@ def test_puretone_incremented_level_with_random_level():
     np.testing.assert_approx_equal(sg.dbspl_pascal(synth.synthesize_sequence(parameter_sequence=params)[0]) -
                                    sg.dbspl_pascal(synth.synthesize_sequence(parameter_sequence=params)[1]),
                                    -1, 5)
+
+def test_puretone_wiggled_level_with_random_variables():
+    """ Check that we can construct a parameter dict, wiggle level to be various random variables, and then
+    synthesize and get plausible output values. """
+    synth = sy.PureTone()
+    params = wiggle_parameters(dict(), 'level', [lambda: np.random.uniform(35, 45, 1),
+                                                 lambda: np.random.uniform(45, 55, 1)])
+    outs = synth.synthesize_sequence(parameter_sequence=params)
+    assert sg.rms(outs[0]) < sg.rms(outs[1])
