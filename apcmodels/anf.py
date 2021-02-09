@@ -39,7 +39,7 @@ def calculate_auditory_nerve_firing_rate(nerve_model):
         if 'fs' not in kwargs:
             kwargs['fs'] = int(200e3)  # if no fs, set to default of 200 kHz
 
-        # Append 10 ms silence to the beginning of the acoustic input and the end of acoutsic input
+        # Append 10 ms silence to the beginning of the acoustic input and the end of acoustic input
         kwargs['_input'] = np.concatenate([np.zeros(int(kwargs['fs']*0.01)),
                                           kwargs['_input'],
                                           np.zeros(int(kwargs['fs']*0.01))])
