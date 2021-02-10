@@ -388,5 +388,3 @@ def _wiggle_parameters_dict(paramdict, parameter, values):
         parameter_sequence.append(temp)
     # Return sequence
     return parameter_sequence
-
-

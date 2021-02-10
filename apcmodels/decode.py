@@ -24,15 +24,16 @@ def decode_ideal_observer(ratefunc):
         Returns:
             thresholds (ndarray): predicted all-information and rate-place thresholds
         """
-        # Run ratefunc on kwargs
+        # Run ratefunc on kwargs and get firing rates for each input
         rates = run_rates_util(ratefunc, **kwargs)
 
-        # Compute partial derivative matrix for rates
-        pdm = compute_partial_derivative_matrix(rates, kwargs['fs'], kwargs['delta_theta'],
-                                                kwargs['n_fiber_per_chan'], 'AI')
+        # Compute partial derivative matrices for rates
+        pdms = [compute_partial_derivative_matrix(x, kwargs['fs'], kwargs['delta_theta'],
+                                                  kwargs['n_fiber_per_chan'], 'AI') for x in rates]
+        pdms = np.array(pdms)
 
         # Return ideal observer results
-        return calculate_threshold(pdm, kwargs['API'])
+        return calculate_threshold(pdms, kwargs['API'])
 
     def compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type):
         """
@@ -56,10 +57,12 @@ def decode_ideal_observer(ratefunc):
         """
         # Calculate n_param
         n_param = len(x)-1
-        assert n_param > 0
+        if n_param < 1:
+            raise ValueError('There is only one simulation per condition --- ideal observer needs n_param + 1 '
+                             'simulations!')
         # Transform from list to ndarray
         x = np.array(x)
-        x = np.transpose(x, [1, 0, 2])  # shape: n_time x (n_param + 1) x n_sample
+        x = np.transpose(x, [1, 0, 2])  # shape: n_cf x (n_param + 1) x n_sample
         # Construct one ndarray of baseline values and another of incremented values
         baseline = np.tile(x[:, 0, :], [n_param, 1, 1])
         baseline = np.transpose(baseline, [1, 0, 2])  # shape: n_cf x n_param x n_sample
@@ -72,7 +75,7 @@ def decode_ideal_observer(ratefunc):
             # Compute derivative matrix
             deriv_matrix = 1 / fs * np.matmul(deriv_norm, np.transpose(deriv_norm, [0, 2, 1]))  # shape: n_CF x n_param x n_param
             # Sum across fibers
-            deriv_matrix = np.sum(np.transpose(n_fiber_per_chan * np.transpose(deriv_matrix, [1, 2, 0]), [2, 0, 1]))
+            deriv_matrix = np.sum(np.transpose(n_fiber_per_chan * np.transpose(deriv_matrix, [1, 2, 0]), [2, 0, 1]), axis=0)
             return deriv_matrix
         elif _type == 'RP':
             # Calculate the duration of the response
@@ -118,7 +121,9 @@ def decode_ideal_observer(ratefunc):
 
 def run_rates_util(ratefunc, _input, **kwargs):
     """
-    Takes a list of inputs and passes each element to ratefunc along with kwargs, returns the results as a list
+    Takes inputs and processes each element. If the element is just not a list, it passes it to ratefunc along with
+    kwargs. If the element *is* a list, it recursively passes it along with kwargs to run_rates_util(). This results
+    in ratefunc being evaluated on every "bottom-level" element of the possibly nested list of inputs.
 
     Arguments:
         ratefunc (function): a function that accepts input and other kwargs and returns model simulations
@@ -131,10 +136,10 @@ def run_rates_util(ratefunc, _input, **kwargs):
     """
     # If the input is not a list, just run ratefunc
     if type(_input) is not list:
-        return [ratefunc(_input=_input, **kwargs)]
+        return ratefunc(_input=_input, **kwargs)
     # If the input *is* a list, process each input separately
     else:
         output = []
         for _input_element in _input:
-            output.append(ratefunc(_input=_input_element, **kwargs))
+            output.append(run_rates_util(ratefunc, _input_element, **kwargs))
     return output
