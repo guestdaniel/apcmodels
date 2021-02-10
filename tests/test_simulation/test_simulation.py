@@ -76,42 +76,42 @@ def test_simulator_run_parallel():
 
 def test_increment_parameters_input_dict():
     """ Check that increment_parameters accepts a dict as input """
-    si.increment_parameters(baselines={'a': 1, 'b': 2}, increments={'a': 0.01})
+    si.increment_parameters(parameters={'a': 1, 'b': 2}, increments={'a': 0.01})
 
 
 def test_increment_parameters_input_list():
     """ Check that increment_parameters accepts a list as input """
-    si.increment_parameters(baselines=[{'a': 1, 'b': 2}], increments={'a': 0.01})
+    si.increment_parameters(parameters=[{'a': 1, 'b': 2}], increments={'a': 0.01})
 
 
 def test_increment_parameters_input_nested_list():
     """ Check that increment_parameters accepts a nested list as input """
-    si.increment_parameters(baselines=[{'a': 1, 'b': 2},
-                                       [[{'a': 1, 'b': 2}, {'a': 1, 'b': 2}], [{'a': 2, 'b': 40}]]],
+    si.increment_parameters(parameters=[{'a': 1, 'b': 2},
+                                        [[{'a': 1, 'b': 2}, {'a': 1, 'b': 2}], [{'a': 2, 'b': 40}]]],
                             increments={'a': 0.01})
 
 
 def test_wiggle_parameters_input_dict():
     """ Check that wiggle_parameters accepts a dict as input """
-    si.wiggle_parameters(baselines={'a': 1, 'b': 2}, parameter='a', values=[1, 2, 3, 4])
+    si.wiggle_parameters(parameters={'a': 1, 'b': 2}, parameter_to_wiggle='a', values=[1, 2, 3, 4])
 
 
 def test_wiggle_parameters_input_list():
     """ Check that wiggle_parameters accepts a list as input """
-    si.wiggle_parameters(baselines=[{'a': 1, 'b': 2}], parameter='a', values=[1, 2, 3, 4])
+    si.wiggle_parameters(parameters=[{'a': 1, 'b': 2}], parameter_to_wiggle='a', values=[1, 2, 3, 4])
 
 
 def test_wiggle_parameters_input_nested_list():
     """ Check that wiggle_parameters accepts a nested list as input """
-    si.wiggle_parameters(baselines=[{'a': 1, 'b': 2},
-                                    [[{'a': 1, 'b': 2}, {'a': 1, 'b': 2}], [{'a': 2, 'b': 40}]]],
-                         parameter='a', values=[1, 2, 3, 4])
+    si.wiggle_parameters(parameters=[{'a': 1, 'b': 2},
+                                     [[{'a': 1, 'b': 2}, {'a': 1, 'b': 2}], [{'a': 2, 'b': 40}]]],
+                         parameter_to_wiggle='a', values=[1, 2, 3, 4])
 
 
 def test_wiggle_parameters_repeated():
     """ Check that increment_parameters accepts a nested list as input """
-    si.wiggle_parameters(baselines=si.wiggle_parameters(baselines={'a': 1, 'b': 2},
-                                                        parameter='a',
-                                                        values=[1, 2, 3, 4]),
-                         parameter='b',
+    si.wiggle_parameters(parameters=si.wiggle_parameters(parameters={'a': 1, 'b': 2},
+                                                         parameter_to_wiggle='a',
+                                                         values=[1, 2, 3, 4]),
+                         parameter_to_wiggle='b',
                          values=[10, 20])

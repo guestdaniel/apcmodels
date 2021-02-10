@@ -41,7 +41,7 @@ def test_anf_rate_level_function():
     # Synthesize stimuli
     synth = sy.PureTone()
     params = {'freq': tone_freq, 'dur': tone_dur, 'dur_ramp': tone_ramp_dur, 'fs': fs}
-    params = si.wiggle_parameters(params, parameter='level', values=tone_levels)
+    params = si.wiggle_parameters(params, parameter_to_wiggle='level', values=tone_levels)
     stimuli = synth.synthesize_sequence(params)
 
     # Define model

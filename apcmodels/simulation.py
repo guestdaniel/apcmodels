@@ -157,11 +157,46 @@ def flatten_parameters(parameters):
     return parameters[:1] + flatten_parameters(parameters[1:])
 
 
-def _increment_parameter_callable(paramfunc, inc):
-    """ Simple function wrapper to allow us to increment the output of paramfunc() by inc when it is evaluated """
-    def inner():
-        return paramfunc() + inc
-    return inner
+def _evaluate_parameters_dict(paramdict):
+    """
+    Takes a dict of parameter names and values and evaluates any callable elements in the dicts.
+
+    Arguments:
+        paramdict (dict): dict of parameter names and values
+
+    Returns:
+        paramdict (dict): input but where each callable element in the dict has been evaluated
+    """
+    temp = deepcopy(paramdict)
+    # Check if elements of temp are callable, if so we call them now
+    for key in temp.keys():
+        if callable(temp[key]):
+            temp[key] = temp[key]()
+    return temp
+
+
+def evaluate_parameters(parameters):
+    """
+    Takes a dict of parameter names and values or a (possibly nested) list of these and evaluates any callable elements
+    in the dicts.
+
+    Arguments:
+        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
+            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+
+    Returns:
+        parameters (dict, list): input but where each callable element in the dict(s) has been evaluated
+    """
+    if type(parameters) is dict:
+        return _evaluate_parameters_dict(parameters)
+    elif type(parameters) is list:
+        output = [evaluate_parameters(element) for element in parameters]
+        if len(output) == 1:
+            return output[0]
+        else:
+            return output
+    else:
+        raise ValueError('Input is not list or dict!')
 
 
 def _increment_parameters_dict(baselines, increments):
@@ -185,10 +220,9 @@ def _increment_parameters_dict(baselines, increments):
     # Loop through elements of increments and construct a corresponding entry in sequence
     for key in increments.keys():
         temp = deepcopy(baselines)
-        # Check if element is callable --- if so, we should apply the increment at evaluation time,
-        # otherwise apply now
+        # Check if elements of temp are callable, if so we call them now
         if callable(temp[key]):
-            temp[key] = _increment_parameter_callable(temp[key], increments[key])
+            temp[key] = temp[key]() + increments[key]
         else:
             temp[key] = temp[key] + increments[key]
         parameter_sequence.append(temp)
@@ -196,13 +230,13 @@ def _increment_parameters_dict(baselines, increments):
     return parameter_sequence
 
 
-def increment_parameters(baselines, increments):
+def increment_parameters(parameters, increments):
     """
     Takes a dict of parameter names and values (or possibly nested lists of these) and copies its elements multiple
     times. Each copy after the first contains one parameter with a small increment.
 
     Arguments:
-        baselines (dict, list): dict of baseline parameter names and values or a list. If a list, the elements can
+        parameters (dict, list): dict of baseline parameter names and values or a list. If a list, the elements can
             be dicts of parameters or lists. Lists are processed recursively until no lists remain.
 
         increments (dict): dict of parameter names and values to increment them by
@@ -211,11 +245,13 @@ def increment_parameters(baselines, increments):
         sequence: list of lists. Elements of lists are dicts. First dict is baselines, remaining dicts contain a
             single incremented parameter (with the size of the increment indicated in increments).
     """
+    # Before we increment any parameters, we should evaluate any callable parameters
+    parameters = evaluate_parameters(parameters)
     # Check if input is dict or list and process accordingly
-    if type(baselines) is dict:
-        return _increment_parameters_dict(baselines, increments)
-    elif type(baselines) is list:
-        output = [increment_parameters(element, increments) for element in baselines]
+    if type(parameters) is dict:
+        return _increment_parameters_dict(parameters, increments)
+    elif type(parameters) is list:
+        output = [increment_parameters(element, increments) for element in parameters]
         if len(output) == 1:
             return output[0]
         else:
@@ -224,16 +260,58 @@ def increment_parameters(baselines, increments):
         raise ValueError('Input is not list or dict!')
 
 
-def wiggle_parameters(baselines, parameter, values):
+def _repeat_dict(paramdict, n_rep):
+    """
+    Takes a dict of parameter names and values and returns a list containing multiple copies of the dict
+
+    Arguments:
+        paramdict (dict): dict of parameter names and values
+
+        n_rep (int): number of repetitions to encode by copying the param dicts
+
+    Returns:
+        output (list): List containing multiple copies of paramdict
+    """
+    return [deepcopy(paramdict) for rep in range(n_rep)]
+
+
+def repeat(parameters, n_rep):
+    """
+    Takes a dict of parameter names and values or a (possibly nested) list of these and replaces each dict with a list
+    containing multiple copies of that dict
+
+    Arguments:
+        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
+            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+
+        n_rep (int): number of repetitions to encode by copying the param dicts
+
+    Returns:
+        output (list): nested lists. Each element is corresponds to an element in the input parameters but is replaced
+             with a list containing multiple copies of that input
+    """
+    if type(parameters) is dict:
+        return _repeat_dict(parameters, n_rep)
+    elif type(parameters) is list:
+        output = [repeat(element, n_rep) for element in parameters]
+        if len(output) == 1:
+            return output[0]
+        else:
+            return output
+    else:
+        raise ValueError('Input is not list or dict!')
+
+
+def wiggle_parameters(parameters, parameter_to_wiggle, values):
     """
     Takes a dict of parameter names and values (or possibly nested lists of these) and copies its elements multiple
     times. Each copy after the first contains one parameter set to a new parameter value (wiggled).
 
     Arguments:
-        baselines (dict, list): dict of parameter names and values or a list. If a list, the elements can
+        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
             be dicts of parameters or lists. Lists are processed recursively until no lists remain.
 
-        parameter (string): name of parameter to wiggle
+        parameter_to_wiggle (string): name of parameter to wiggle
 
         values (list): values to which the parameter value is wiggled
 
@@ -242,10 +320,10 @@ def wiggle_parameters(baselines, parameter, values):
             single wiggled parameter.
     """
     # Check if input is dict or list and process accordingly
-    if type(baselines) is dict:
-        return _wiggle_parameters_dict(baselines, parameter, values)
-    elif type(baselines) is list:
-        output = [wiggle_parameters(element, parameter, values) for element in baselines]
+    if type(parameters) is dict:
+        return _wiggle_parameters_dict(parameters, parameter_to_wiggle, values)
+    elif type(parameters) is list:
+        output = [wiggle_parameters(element, parameter_to_wiggle, values) for element in parameters]
         if len(output) == 1:
             return output[0]
         else:

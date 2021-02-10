@@ -82,7 +82,7 @@ def test_puretone_incremented_sequence():
     synth = sy.PureTone()
     # Generate 1000 and 2000 Hz pure tones using synthesize_parameter_sequence
     results = synth.synthesize_sequence(
-        increment_parameters(baselines={'freq': 1000}, increments={'freq': 0.001}))
+        increment_parameters(parameters={'freq': 1000}, increments={'freq': 0.001}))
     # Generate references manually
     reference1 = sg.cosine_ramp(sg.scale_dbspl(sg.pure_tone(1000, 0, 1, int(48e3)), 50), 0.1, int(48e3))
     reference2 = sg.cosine_ramp(sg.scale_dbspl(sg.pure_tone(1000.001, 0, 1, int(48e3)), 50), 0.1, int(48e3))
