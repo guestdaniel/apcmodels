@@ -5,7 +5,8 @@ from copy import deepcopy
 
 class Simulator:
     """
-    Simulator is the core of apcmodels' API for modeling auditory system responses to acoustic stimuli
+    Simulator is the core of apcmodels' API for modeling auditory system responses and decoding or processing the
+    outputs of the models.
     """
     def __init__(self, default_runfunc=None):
         if default_runfunc is None:
@@ -13,11 +14,23 @@ class Simulator:
         else:
             self.default_runfunc = default_runfunc
 
+    def simulate(self, **kwargs):
+        """ Dummy method to provide an example runfunc for run() above. Subclasses should implement appropriate
+         runfuncs (see run() and run_batch() below). """
+        return None
+
     def run(self, batch, runfunc=None, parallel=True, n_thread=8):
-        """ Main logical core of Simulator, accepts a function (which defines the simulation and what returns its
-        output) and a batch (list of dicts whose elements are passed to the function as kwargs), runs the model over the
-        sequence, and returns the simulated results as specified in the function. In theory, the function is allowed to
-        have side effects (e.g., saving to disk).
+        """ Main logical core of Simulator. run() is designed to be a flexible method that supports running batches
+        of simulations using parallelization. run() takes the elements of its only required argument, batch, and
+        dispatches them to a function (either default or user-provided) either in a loop or using a multiprocessing
+        Pool. The elements of batch are assumed to be dicts that encode the information required to run simulations and
+        these dicts are unpacked so their elements can be passed as kwargs to the simulation function. Each dict
+        in batch results in a single return and all of these returns are bundled and returned as a list in the same
+        order as batch. In theory, the function used to implement the simulations is allowed to have side effects (e.g.,
+        saving to disk, writing to a log).
+
+        One disadvantage of the way that run() is currently implemented is that parallelization is only supported
+        between elements of batch. In other words, only a single core can work on a single element of batch.
 
         Arguments:
             batch (list): a list of dicts whose elements are passed to runfunc as kwargs
@@ -49,7 +62,7 @@ class Simulator:
         return results
 
     def run_batch(self, inputs, input_parameters, model_parameters, mode='product', parallel=True, n_thread=8,
-                  runfunc=None):
+                  runfunc=None, parameters_to_append=None):
         """
         Combines a set of inputs, a corresponding set of parameters, and set of model parameters into a combined single
         object encoding a series of simulations to be run. Runs the simulations and returns the results.
@@ -74,6 +87,9 @@ class Simulator:
 
             runfunc (func): function that accepts elements of a sequence as arguments and returns simulation results
 
+            parameters_to_append (dict): a dict of parameter names and values, each is appended to batch using
+                append_parameters
+
         Returns:
             results (list): list of results
         """
@@ -82,18 +98,17 @@ class Simulator:
             runfunc = self.default_runfunc
         # Generate batch
         batch = self.construct_batch(inputs, input_parameters, model_parameters, mode)
+        # Append any parameters
+        if parameters_to_append is not None:
+            for key in parameters_to_append.keys():
+                batch = append_parameters(batch, key, parameters_to_append[key])
         return self.run(batch, runfunc, parallel, n_thread)
-
-    def simulate(self, **kwargs):
-        """ Dummy method to provide an example runfunc for run() above. Subclasses should implement appropriate
-         runfuncs (see run() and run_batch() above). """
-        return None
 
     @staticmethod
     def construct_batch(inputs, input_parameters, model_parameters, mode='product'):
         """
-        Combines a set of inputs, a corresponding set of parameters, and set of model parameters into a combined single
-        object that can be handled by run() and encodes a series of simulations to run.
+        Combines a set of inputs, a corresponding set of input parameters, and set of model parameters into a combined
+        single object that encodes a series of simulations to run and is appropriate to pass to run()
 
         Arguments:
             inputs (list): list of inputs to run the model on. The elements of inputs can be virtually anything.
