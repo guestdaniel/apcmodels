@@ -80,6 +80,11 @@ def calculate_heinz2001_firing_rate(_input, fs, cfs=None, **kwargs):
 
     Warnings:
         - Note that arguments passed to **kwargs are discarded silently
+
+    Citations:
+        Heinz, M. G., Colburn, H. S., and Carney, L. H. (2001). "Evaluating auditory performance limits: I.
+        One-parameter discrimination using a computational model for the auditory nerve." *Neural computation* 13(10).
+        2273-2316.
     """
     # Check if cfs is None, if so set 1000 Hz single CF
     if cfs is None:
@@ -119,7 +124,7 @@ def _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L):
     P_G = 0.03
     P_L = 0.06
     PI_rest = 0.012
-    PI_max = 0.6
+    PI_max = 0.6  # not sure why this is unused in Heinz et al. (2001)
     C_G = 6666.7
     P_I = 0.0173 * np.log(1 + np.exp(34.657 * ihc))
 

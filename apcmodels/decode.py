@@ -27,13 +27,22 @@ def decode_ideal_observer(ratefunc):
         # Run ratefunc on kwargs and get firing rates for each input
         rates = run_rates_util(ratefunc, **kwargs)
 
-        # Compute partial derivative matrices for rates
-        pdms = [compute_partial_derivative_matrix(x, kwargs['fs'], kwargs['delta_theta'],
+        # Check to see if the elements of rates are ndarrays or lists... if they are not lists, we need to put
+        # rates inside a list so it can be processed by the list comprehension below
+        if type(rates[0]) is not list:
+            rates = [rates]
+
+        # Compute partial derivative matrices for rates for AI and then RP
+        pdms_AI = [compute_partial_derivative_matrix(x, kwargs['fs'], kwargs['delta_theta'],
                                                   kwargs['n_fiber_per_chan'], 'AI') for x in rates]
-        pdms = np.array(pdms)
+        pdms_AI = np.array(pdms_AI)
+
+        pdms_RP = [compute_partial_derivative_matrix(x, kwargs['fs'], kwargs['delta_theta'],
+                                                  kwargs['n_fiber_per_chan'], 'RP') for x in rates]
+        pdms_RP = np.array(pdms_RP)
 
         # Return ideal observer results
-        return calculate_threshold(pdms, kwargs['API'])
+        return calculate_threshold(pdms_AI, kwargs['API']), calculate_threshold(pdms_RP, kwargs['API'])
 
     def compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type):
         """
@@ -79,7 +88,7 @@ def decode_ideal_observer(ratefunc):
             return deriv_matrix
         elif _type == 'RP':
             # Calculate the duration of the response
-            t_max = baseline.shape[0] * 1/fs
+            t_max = baseline.shape[2] * 1/fs
             # Average results across time
             baseline = np.mean(baseline, axis=2)
             incremented = np.mean(incremented, axis=2)
