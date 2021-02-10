@@ -99,10 +99,8 @@ def calculate_fdl_vs_frequency(f_low, f_high, n_f):
     params_model = [{'cf_low': 100, 'cf_high': 10000, 'n_cf': 60}]
     batch = sim.construct_batch(inputs=stimuli, input_parameters=params,
                                 model_parameters=params_model, mode='product')
-    batch = si.append_parameters(batch, 'fs', int(500e3))
-    batch = si.append_parameters(batch, 'n_fiber_per_chan', 200)
-    batch = si.append_parameters(batch, 'delta_theta', [0.001])
-    batch = si.append_parameters(batch, 'API', np.zeros(1))
+    batch = si.append_parameters(batch, ['fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
+                                 [int(500e3), 200, [0.001], np.zeros(1)])
 
     # Run model
     output = sim.run(batch=batch,
@@ -185,10 +183,8 @@ def calculate_fdl_vs_dur(dur_low, dur_high, n_dur):
     params_model = [{'cf_low': 100, 'cf_high': 10000, 'n_cf': 60}]
     batch = sim.construct_batch(inputs=stimuli, input_parameters=params,
                                 model_parameters=params_model, mode='product')
-    batch = si.append_parameters(batch, 'fs', int(500e3))
-    batch = si.append_parameters(batch, 'n_fiber_per_chan', 200)
-    batch = si.append_parameters(batch, 'delta_theta', [0.001])
-    batch = si.append_parameters(batch, 'API', np.zeros(1))
+    batch = si.append_parameters(batch, ['fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
+                                 [int(500e3), 200, [0.001], np.zeros(1)])
 
     # Run model
     output = sim.run(batch=batch,
@@ -267,10 +263,8 @@ def calculate_fdl_vs_level(level_low, level_high, n_level):
     params_model = [{'cf_low': 100, 'cf_high': 10000, 'n_cf': 60}]
     batch = sim.construct_batch(inputs=stimuli, input_parameters=params,
                                 model_parameters=params_model, mode='product')
-    batch = si.append_parameters(batch, 'fs', int(500e3))
-    batch = si.append_parameters(batch, 'n_fiber_per_chan', 200)
-    batch = si.append_parameters(batch, 'delta_theta', [0.001])
-    batch = si.append_parameters(batch, 'API', np.zeros(1))
+    batch = si.append_parameters(batch, ['fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
+                                 [int(500e3), 200, [0.001], np.zeros(1)])
 
     # Run model
     output = sim.run(batch=batch,

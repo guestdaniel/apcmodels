@@ -164,16 +164,24 @@ def append_parameters(parameters, parameter_to_append, value):
         parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
             be dicts of parameters or lists. Lists are processed recursively until no lists remain.
 
-        parameter_to_append (string): name of parameter to add to each param dict
+        parameter_to_append (string, list): name of parameter to add to each param dict, or a list of such names
 
-        value: value to set new parameter to
+        value: value to set new parameter to, or a list of such values
 
     Returns:
         parameters: updated parameters
     """
     # Check if input is dict or list and process accordingly
     if type(parameters) is dict:
-        parameters[parameter_to_append] = value
+        if type(parameter_to_append) is list:
+            if type(value) is not list:
+                raise ValueError('value argument should be a list because parameter_to_append is list')
+            if len(parameter_to_append) != len(value):
+                raise ValueError('len of value and parameter_to_append should be equal')
+            for _param, _val in zip(parameter_to_append, value):
+                parameters[_param] = _val
+        else:
+            parameters[parameter_to_append] = value
         return parameters
     elif type(parameters) is list:
         return [append_parameters(element, parameter_to_append, value) for element in parameters]

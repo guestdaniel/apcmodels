@@ -44,14 +44,8 @@ def test_anf_rate_level_function():
     params = si.wiggle_parameters(params, parameter_to_wiggle='level', values=tone_levels)
     stimuli = synth.synthesize_sequence(params)
 
-    # Define model
-    params_model = {'cf_low': 1000, 'cf_high': 1000, 'n_cf': 1}
-    batch = sim.construct_batch(inputs=stimuli, input_parameters=params,
-                                model_parameters=[params_model])
-
     # Run model
-    output = sim.run(batch=batch,
-                     parallel=True)
+    output = sim.run_batch(stimuli, params, [{'cf_low': 1000, 'cf_high': 1000, 'n_cf': 1}])
 
     # Assert that output rates grow with frequency
     means = [np.mean(out) for out in output]

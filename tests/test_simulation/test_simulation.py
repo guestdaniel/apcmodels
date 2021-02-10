@@ -7,6 +7,41 @@ def test_append_parameters_single_element_input():
     assert type(si.append_parameters([{'hello': 'world'}], 'foo', 'bar')) == list
 
 
+def test_append_parameters_single_item_to_append():
+    """ Check that if we provide append_parameters with an reasonable input (a list of multiple dicts) that it correctly
+     appends a parameter to each dict """
+    params = [{'x': 1}, {'x': 2}, {'x': 3}]
+    params = si.append_parameters(params, 'y', 2)
+    assert params[0]['y'] == 2 and params[1]['y'] == 2
+
+
+def test_append_parameters_multiple_items_to_append():
+    """ Check that if we provide append_parameters with an reasonable input (a list of multiple dicts) that it correctly
+     appends multiple parameters to each dict """
+    params = [{'x': 1}, {'x': 2}, {'x': 3}]
+    params = si.append_parameters(params, ['y', 'z'], [2, 3])
+    assert params[0]['y'] == 2 and params[1]['y'] == 2 and params[0]['z'] == 3 and params[1]['z'] == 3
+
+
+def test_append_parameters_bad_inputs1():
+    """ Check that if we provide append_parameters with an reasonable input (a list of multiple dicts) but bad inputs
+     ( one list and one not list) that it raises the right errors """
+    try:
+        si.append_parameters({'x': 1}, ['y'], 2)
+        raise Exception('This should have failed!')
+    except ValueError:
+        return
+
+def test_append_parameters_bad_inputs2():
+    """ Check that if we provide append_parameters with an reasonable input (a list of multiple dicts) but bad inputs
+     (two lists of different lengths) that it raises the right errors """
+    try:
+        si.append_parameters({'x': 1}, ['y'], [1, 2, 3])
+        raise Exception('This should have failed!')
+    except ValueError:
+        pass
+
+
 def test_simulator_construct_batch_size():
     """ Check that construct batch accepts stimulus and parameter sequences of variable sizes and returns a list of the
     appropriate size"""
