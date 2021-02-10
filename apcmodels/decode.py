@@ -27,9 +27,12 @@ def decode_ideal_observer(ratefunc):
         # Run ratefunc on kwargs
         rates = run_rates_util(ratefunc, **kwargs)
 
-        # Implement the ideal observer
-        output = (1, 2)
-        return output
+        # Compute partial derivative matrix for rates
+        pdm = compute_partial_derivative_matrix(rates, kwargs['fs'], kwargs['delta_theta'], kwargs['n_fiber_per_chan'],
+                                                'AI')
+
+        # Return ideal observer results
+        return pdm
 
     def compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type):
         """

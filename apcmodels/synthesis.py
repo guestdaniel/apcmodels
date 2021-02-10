@@ -74,7 +74,7 @@ class PureTone(Synthesizer):
     def __init__(self):
         super().__init__(stimulus_name='Pure Tone')
 
-    def synthesize(self, freq=1000, level=50, phase=0, dur=1, dur_ramp=0.1, fs=int(48e3)):
+    def synthesize(self, freq=1000, level=50, phase=0, dur=1, dur_ramp=0.1, fs=int(48e3), **kwargs):
         """
         Synthesizes a single instance of a scaled copy of a pure tone with a raised-cosine ramp
 
