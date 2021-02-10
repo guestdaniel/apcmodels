@@ -2,6 +2,11 @@ import apcmodels.simulation as si
 import numpy as np
 
 
+def test_append_parameters_single_element_input():
+    """ Check that if we provide append_parameters with an input with just one element that it still returns a list """
+    assert type(si.append_parameters([{'hello': 'world'}], 'foo', 'bar')) == list
+
+
 def test_simulator_construct_batch_size():
     """ Check that construct batch accepts stimulus and parameter sequences of variable sizes and returns a list of the
     appropriate size"""

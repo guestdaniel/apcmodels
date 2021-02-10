@@ -176,11 +176,7 @@ def append_parameters(parameters, parameter_to_append, value):
         parameters[parameter_to_append] = value
         return parameters
     elif type(parameters) is list:
-        output = [append_parameters(element, parameter_to_append, value) for element in parameters]
-        if len(output) == 1:
-            return output[0]
-        else:
-            return output
+        return [append_parameters(element, parameter_to_append, value) for element in parameters]
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -217,11 +213,7 @@ def evaluate_parameters(parameters):
     if type(parameters) is dict:
         return _evaluate_parameters_dict(parameters)
     elif type(parameters) is list:
-        output = [evaluate_parameters(element) for element in parameters]
-        if len(output) == 1:
-            return output[0]
-        else:
-            return output
+        return [evaluate_parameters(element) for element in parameters]
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -265,11 +257,7 @@ def increment_parameters(parameters, increments):
     if type(parameters) is dict:
         return _increment_parameters_dict(parameters, increments)
     elif type(parameters) is list:
-        output = [increment_parameters(element, increments) for element in parameters]
-        if len(output) == 1:
-            return output[0]
-        else:
-            return output
+        return [increment_parameters(element, increments) for element in parameters]
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -325,11 +313,7 @@ def repeat(parameters, n_rep):
     if type(parameters) is dict:
         return _repeat_dict(parameters, n_rep)
     elif type(parameters) is list:
-        output = [repeat(element, n_rep) for element in parameters]
-        if len(output) == 1:
-            return output[0]
-        else:
-            return output
+        return [repeat(element, n_rep) for element in parameters]
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -370,11 +354,7 @@ def wiggle_parameters(parameters, parameter_to_wiggle, values):
     if type(parameters) is dict:
         return _wiggle_parameters_dict(parameters, parameter_to_wiggle, values)
     elif type(parameters) is list:
-        output = [wiggle_parameters(element, parameter_to_wiggle, values) for element in parameters]
-        if len(output) == 1:
-            return output[0]
-        else:
-            return output
+        return [wiggle_parameters(element, parameter_to_wiggle, values) for element in parameters]
     else:
         raise ValueError('Input is not list or dict!')
 

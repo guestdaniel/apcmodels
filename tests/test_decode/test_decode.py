@@ -53,3 +53,37 @@ def test_ideal_observer_single_input():
         raise Exception('This should have failed!')
     except ValueError:
         return
+
+
+def test_ideal_observer_single_input():
+    """ Test that if we provide a single stimulus to a ratefunc wrapped in decode_ideal_observer that some sort of
+     error is raised to indicate that an ideal observer can't be calculated based on a single simulation! """
+    # Initialize simulator object
+    sim = anf.AuditoryNerveHeinz2001Numba()
+
+    # Define stimulus parameters
+    fs = int(200e3)
+    def tone_level(): return np.random.uniform(25, 35, 1)
+    tone_dur = 0.1
+    tone_ramp_dur = 0.01
+    tone_freq = 1000
+
+    # Synthesize stimuli
+    synth = sy.PureTone()
+    params = {'level': tone_level, 'dur': tone_dur, 'dur_ramp': tone_ramp_dur, 'freq': tone_freq, 'fs': fs}
+    stimuli = synth.synthesize_sequence([params])
+
+    # Define model
+    params_model = [{'cf_low': 1000, 'cf_high': 1000, 'n_cf': 1}]
+
+    # Run model
+    try:
+        sim.run_batch(inputs=stimuli, input_parameters=[params], model_parameters=params_model,
+                      runfunc=decode_ideal_observer(sim.simulate), mode='zip',
+                      parameters_to_append={'fs': int(200e3),
+                                           'n_fiber_per_chan': 5,
+                                           'delta_theta': [0.001],
+                                           'API': np.zeros(1)})
+        raise Exception('This should have failed!')
+    except ValueError:
+        return
