@@ -28,23 +28,27 @@ def decode_ideal_observer(ratefunc):
         rates = run_rates_util(ratefunc, **kwargs)
 
         # Compute partial derivative matrix for rates
-        pdm = compute_partial_derivative_matrix(rates, kwargs['fs'], kwargs['delta_theta'], kwargs['n_fiber_per_chan'],
-                                                'AI')
+        pdm = compute_partial_derivative_matrix(rates, kwargs['fs'], kwargs['delta_theta'],
+                                                kwargs['n_fiber_per_chan'], 'AI')
 
         # Return ideal observer results
-        return pdm
+        return calculate_threshold(pdm, kwargs['API'])
 
     def compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type):
         """
         Given one list of simulations, computes a partial derivative matrix as in Siebert (1972).
-        Args:
+
+        Arguments:
             x (list): list of ndarrays containing firing-rate simulations in shape (n_channel x n_sample). The first
                 array should be a firing-rate simulation for baseline parameter values. The following arrays should
                 be firing-rate simulations where a single parameter has been incremented by a small amount.
+
             fs (int): sampling rate in Hz
+
             delta_theta (ndarray): 1d ndarray containing the increment size for each element of x after the first
             n_fiber_per_chan (array): array containing integers of len n_cf, each element indicates how many fibers
                 are theoretically represented by the single corresponding channel in x
+
             _type (str): either 'AI' or 'RP' for all-information or rate-place
 
         Returns:
@@ -86,6 +90,29 @@ def decode_ideal_observer(ratefunc):
             # Sum across fibers
             deriv_matrix = 0.5 * t_max * np.sum(n_fiber_per_chan * deriv_matrix, axis=0)  # shape: n_param x n_param
             return deriv_matrix
+
+    def calculate_threshold(FI, API):
+        """
+        Optimally decode firing-rate waveforms of ANFs using N-D generalization from Siebert (1972).
+
+        Arguments:
+            FI (ndarray): Fisher information matrices for parameters, of size n_param x n_param
+
+            API (ndarray): Fisher information for parameter distributions, of size n_param x n_param.
+
+        Returns:
+            threshold (float): threshold estimate
+        """
+        if FI.shape == ():
+            return np.sqrt(1 / FI)
+        elif np.ndim(FI) == 2:
+            J = FI + API
+            return np.sqrt(np.linalg.inv(J)[0, 0])
+        elif np.ndim(FI) == 3:
+            FI = np.mean(FI, axis=0)
+            J = FI + API
+            return np.sqrt(np.linalg.inv(J)[0, 0])
+
     return inner
 
 

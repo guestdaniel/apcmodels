@@ -3,14 +3,6 @@ import apcmodels.synthesis as sy
 import apcmodels.simulation as si
 import apcmodels.anf as anf
 
-def test_ideal_observer():
-    """ Make sure that we can wrap a standard ratefunc in decode ideal observer and get decoded thresholds out """
-    def dummy_ratefunc(_input, **kwargs):
-        return _input
-
-    kwargs = {'_input': [0, 1, 2, 3, 4], 'other_param': 2}
-    output = decode_ideal_observer(dummy_ratefunc)(**kwargs)
-    assert len(output) == 2
 
 def test_run_rates_util():
     """ Test to make sure that run_rates_util will correctly accept either a single input or a list of inputs and return
@@ -41,8 +33,8 @@ def test_ideal_observer_real_simulation():
     # Synthesize stimuli
     synth = sy.PureTone()
     params = {'level': tone_level, 'dur': tone_dur, 'dur_ramp': tone_ramp_dur, 'fs': fs}
-    params = si.wiggle_parameters(params, parameter_to_wiggle='freq', values=tone_freqs)
-    params = si.increment_parameters(params, increments={'freq': 0.001})
+    params = si.wiggle_parameters(params, 'freq', tone_freqs)
+    params = si.increment_parameters(params, {'freq': 0.001})
     stimuli = synth.synthesize_sequence(params)
 
     # Define model
@@ -52,6 +44,10 @@ def test_ideal_observer_real_simulation():
                     {'cf_low': 8000, 'cf_high': 8000, 'n_cf': 1}]
     batch = sim.construct_batch(inputs=stimuli, input_parameters=params,
                                 model_parameters=params_model, mode='zip')
+    batch = si.append_parameters(batch, 'fs', int(200e3))
+    batch = si.append_parameters(batch, 'n_fiber_per_chan', 5)
+    batch = si.append_parameters(batch, 'delta_theta', [0.001])
+    batch = si.append_parameters(batch, 'API', np.zeros(1))
 
     # Run model
     output = sim.run(batch=batch,
