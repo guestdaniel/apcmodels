@@ -102,6 +102,32 @@ def pure_tone(freq, phase, dur, fs):
     return np.sin(2*np.pi*freq*t+(2*np.pi/360*phase))
 
 
+def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
+    """
+    Synthesize single pure tone with sinusoidal amplitude modulation
+
+    Arguments:
+        freq (float): frequency of pure tone in Hz
+        phase (float): phase offset in degrees, must be between 0 and 360
+        freq_mod (float): frequency of modulator in Hz
+        phase_mod (float): phase offset of modulator in Hz
+        depth_mod (float): modulation depth in m, bounded from 0 to 1
+        dur (float): duration in seconds
+        fs (int): sampling rate in Hz
+
+    Returns:
+        output (array): pure tone
+    """
+    # Create empty array of time samples
+    t = np.linspace(0, dur, floor(dur*fs))
+    # Calculate carrier waveform
+    carrier = np.sin(2*np.pi*freq*t+(2*np.pi/360*phase))
+    # Calculate modulator waveform
+    modulator = depth_mod*np.sin(2*np.pi*freq_mod*t+(2*np.pi/360*phase_mod))
+    # Return carrier x modulator
+    return (1 + modulator) * carrier
+
+
 def rms(signal):
     """
     Computes root-mean-square (RMS) of signal
