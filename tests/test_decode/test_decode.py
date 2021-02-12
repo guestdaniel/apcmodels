@@ -55,3 +55,13 @@ def test_find_parameter():
     """ Test to make sure that find_parameter accepts a nested list of params and returns the appropriate value """
     params = [[{'a': 5, 'b': 3}], [{'c': 2}]]
     assert find_parameter(params, 'c') == 2
+
+
+def test_find_parameter_error():
+    """ Test to make sure that find_parameter returns a raises an error when we can't find a given parameter """
+    params = [[{'a': 5, 'b': 3}], [{'c': 2}]]
+    try:
+        find_parameter(params, 'd')
+        raise Exception('This should have failed!')
+    except LookupError:
+        return

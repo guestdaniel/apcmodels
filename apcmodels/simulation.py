@@ -55,9 +55,9 @@ class Simulator:
         if parallel:
             p = ProcessPool(n_thread)
             if progress:
-                results = p.imap(runfunc, tqdm(params))
+                results = list(p.imap(runfunc, tqdm(params)))
             else:
-                results = p.imap(runfunc, params)
+                results = p.map(runfunc, params)
         # If not parallel, simply iterate over and run each element of the sequence
         else:
             results = [runfunc(element) for element in params]
