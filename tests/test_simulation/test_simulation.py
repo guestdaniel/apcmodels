@@ -149,9 +149,30 @@ def test_wiggle_parameters_input_nested_list():
 
 
 def test_wiggle_parameters_repeated():
-    """ Check that increment_parameters accepts a nested list as input """
+    """ Check that wiggle_parameters accepts a nested list as input """
     si.wiggle_parameters(parameters=si.wiggle_parameters(parameters={'a': 1, 'b': 2},
                                                          parameter_to_wiggle='a',
                                                          values=[1, 2, 3, 4]),
                          parameter_to_wiggle='b',
                          values=[10, 20])
+
+
+def test_wiggle_parallel():
+    """ Check that wiggle_parameters_parallel will accept a list of parameters and values and wiggle them
+    together as specified in the docstring """
+    output = si.wiggle_parameters_parallel(parameters=[{'a': 1, 'b': 2}],
+                                           parameter_to_wiggle=['a', 'b'],
+                                           values=[[1, 2], [3, 4]])
+    assert output[0][0]['a'] == 1 and output[0][0]['b'] == 3 and output[0][1]['a'] == 2 and output[0][1]['b'] == 4
+
+
+def test_wiggle_parallel_error_gen():
+    """ Check that wiggle_parameters_parallel will accept a list of parameters and values but raise an error if the
+    length of the two lists differs """
+    try:
+        si.wiggle_parameters_parallel(parameters=[{'a': 1, 'b': 2}],
+                             parameter_to_wiggle=['a', 'b'],
+                             values=[[1, 2]])
+        raise Exception('This should have failed!')
+    except ValueError:
+        return

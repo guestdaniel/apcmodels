@@ -391,3 +391,79 @@ def _wiggle_parameters_dict(paramdict, parameter, values):
         parameter_sequence.append(temp)
     # Return sequence
     return parameter_sequence
+
+
+def wiggle_parameters_parallel(parameters, parameter_to_wiggle, values):
+    """
+    Takes a dict of parameter names and values (or possibly nested lists of these) and copies its elements multiple
+    times. Each copy after the first contains parameters set to new values (wiggled). This function differs from
+    wiggle_parameters() in that multiple parameter names (and corresponding sets of values) can be specified. In this
+    case, these values are wiggled "simultaneously", meaning that each copied dict will simultaneously have adjusted
+    all parameters specified by the user.
+
+    Arguments:
+        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
+            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+
+        parameter_to_wiggle (string, list): name of parameter to wiggle, or list of such names. If a list, its length
+            should match that of values.
+
+        values (list): values to which the parameter value is wiggled, or list of such lists. If a list, its length
+            should match that of parameters_to_wiggle.
+
+    Returns:
+        sequence: list of lists. Elements of lists are dicts. First dict is baselines, remaining dicts contain a
+            single wiggled parameter.
+    """
+    # Check if parameters_to_wiggle is a string or a list and handle accordingly
+    if type(parameter_to_wiggle) is list:
+        if len(parameter_to_wiggle) != len(values):
+            raise ValueError('parameters_to_wiggle and values should have the same length!')
+    # Check if input is dict or list and process accordingly
+    if type(parameters) is dict:
+        return _wiggle_parameters_parallel_dict(parameters, parameter_to_wiggle, values)
+    elif type(parameters) is list:
+        return [wiggle_parameters_parallel(element, parameter_to_wiggle, values) for element in parameters]
+    else:
+        raise ValueError('Input is not list or dict!')
+
+
+def _wiggle_parameters_parallel_dict(paramdict, parameter, values):
+    """
+    Takes a dict of parameter names and values and copies it multiple times. Each copy after the first contains
+    one or multiple parameters set to new values (wiggled).
+
+    Arguments:
+        paramdict (dict): dict of baseline parameter names and values
+
+        parameter (string, list): name of parameter to wiggle, or list of such names. If a list, its length
+            should match that of values.
+
+        values (list): values to which the parameter value is wiggled, or list of such lists. If a list, its length
+            should match that of parameters_to_wiggle.
+
+    Returns:
+        sequence: list of dicts
+    """
+    # Create emtpy storage for output
+    parameter_sequence = list()
+    # Check if parameter is a string or a list
+    if type(parameter) is str:
+        # Loop through values and construct a corresponding entry in sequence
+        for val in values:
+            temp = deepcopy(paramdict)
+            temp[parameter] = val
+            parameter_sequence.append(temp)
+    else:
+        # First, we construct transform values from a list of lists into a list of tuples where each tuple contains
+        # one element from each list in values
+        values = zip(*values)
+        # Second, we loop through all these tuples and create a copy of paramdict, update it with new parameter values,
+        # and then append it to parameter_sequence
+        for valtuple in values:
+            temp = deepcopy(paramdict)
+            for param_name, param_val in zip(parameter, valtuple):
+                temp[param_name] = param_val
+            parameter_sequence.append(temp)
+    # Return sequence
+    return parameter_sequence
