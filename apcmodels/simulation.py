@@ -323,7 +323,7 @@ def wiggle_parameters(parameters, parameter_to_wiggle, values):
 
         parameter_to_wiggle (string): name of parameter to wiggle
 
-        values (list): values to which the parameter value is wiggled
+        values (list, ndarray): values to which the parameter value is wiggled
 
     Returns:
         sequence: list of lists. Elements of lists are dicts. First dict is baselines, remaining dicts contain a

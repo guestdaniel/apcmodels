@@ -88,22 +88,22 @@ def calculate_fdl_vs_frequency(f_low, f_high, n_f):
     tone_ramp_dur = 0.02
     tone_freqs = 10**np.linspace(np.log10(f_low), np.log10(f_high), n_f)
 
-    # Synthesize stimuli
-    synth = PureToneHeinz2001()
+    # Encode stimulus parameters
     params = {'level': tone_level, 'dur': tone_dur, 'dur_ramp': tone_ramp_dur}
     params = si.wiggle_parameters(params, 'freq', tone_freqs)
-    params = si.increment_parameters(params, {'freq': 0.001})
-    stimuli = synth.synthesize_sequence(params)
 
-    # Define model
-    params_model = [{'cf_low': 100, 'cf_high': 10000, 'n_cf': 60}]
-    batch = sim.construct_batch(inputs=stimuli, input_parameters=params,
-                                model_parameters=params_model, mode='product')
-    batch = si.append_parameters(batch, ['fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
-                                 [int(500e3), 200, [0.001], np.zeros(1)])
+    # Encode model parameters
+    params = si.append_parameters(params, ['cf_low', 'cf_high', 'n_cf', 'fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
+                                  [100, 10000, 60, int(500e3), 200, [0.001], np.zeros(1)])
+
+    # Encode increment and synthesize
+    params = si.increment_parameters(params, {'freq': 0.001})
+    synth = PureToneHeinz2001()
+    stimuli = synth.synthesize_sequence(params)
+    params = si.stitch_parameters(params, '_input', stimuli)
 
     # Run model
-    output = sim.run(batch=batch,
+    output = sim.run(params,
                      parallel=True,
                      runfunc=dc.decode_ideal_observer(sim.simulate))
     t_AI = [x[0] for x in output]  # extract AI thresholds, which are always the first element of each tuple in results
@@ -146,6 +146,7 @@ have a slightly different curve (more concave than convex) than the Heinz et al.
 fairly minor.
 """
 
+
 def calculate_fdl_vs_dur(dur_low, dur_high, n_dur):
     """
     Calculates ideal observer FDL vs duration
@@ -172,22 +173,22 @@ def calculate_fdl_vs_dur(dur_low, dur_high, n_dur):
     tone_ramp_dur = 0.004
     tone_durs = 10**np.linspace(np.log10(dur_low), np.log10(dur_high), n_dur)
 
-    # Synthesize stimuli
-    synth = PureToneHeinz2001()
+    # Encode stimulus parameters
     params = {'level': tone_level, 'freq': tone_freq, 'dur_ramp': tone_ramp_dur}
     params = si.wiggle_parameters(params, 'dur', tone_durs)
-    params = si.increment_parameters(params, {'freq': 0.001})
-    stimuli = synth.synthesize_sequence(params)
 
-    # Define model
-    params_model = [{'cf_low': 100, 'cf_high': 10000, 'n_cf': 60}]
-    batch = sim.construct_batch(inputs=stimuli, input_parameters=params,
-                                model_parameters=params_model, mode='product')
-    batch = si.append_parameters(batch, ['fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
-                                 [int(500e3), 200, [0.001], np.zeros(1)])
+    # Encode model parameters
+    params = si.append_parameters(params, ['cf_low', 'cf_high', 'n_cf', 'fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
+                                  [100, 10000, 60, int(500e3), 200, [0.001], np.zeros(1)])
+
+    # Encode increment and synthesize
+    params = si.increment_parameters(params, {'freq': 0.001})
+    synth = PureToneHeinz2001()
+    stimuli = synth.synthesize_sequence(params)
+    params = si.stitch_parameters(params, '_input', stimuli)
 
     # Run model
-    output = sim.run(batch=batch,
+    output = sim.run(params,
                      parallel=True,
                      runfunc=dc.decode_ideal_observer(sim.simulate))
     t_AI = [x[0] for x in output]  # extract AI thresholds, which are always the first element of each tuple in results
@@ -195,6 +196,7 @@ def calculate_fdl_vs_dur(dur_low, dur_high, n_dur):
 
     # Return
     return np.array(t_AI), np.array(t_RP), tone_durs
+
 
 # Calculate figure 4b
 t_ai, t_rp, d = calculate_fdl_vs_dur(0.004, 0.50, 8)
@@ -252,22 +254,22 @@ def calculate_fdl_vs_level(level_low, level_high, n_level):
     tone_ramp_dur = 0.002
     tone_levels = np.linspace(level_low, level_high, n_level)
 
-    # Synthesize stimuli
-    synth = PureToneHeinz2001()
+    # Encode stimulus parameters
     params = {'dur': tone_dur, 'freq': tone_freq, 'dur_ramp': tone_ramp_dur}
     params = si.wiggle_parameters(params, 'level', tone_levels)
-    params = si.increment_parameters(params, {'freq': 0.001})
-    stimuli = synth.synthesize_sequence(params)
 
-    # Define model
-    params_model = [{'cf_low': 100, 'cf_high': 10000, 'n_cf': 60}]
-    batch = sim.construct_batch(inputs=stimuli, input_parameters=params,
-                                model_parameters=params_model, mode='product')
-    batch = si.append_parameters(batch, ['fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
-                                 [int(500e3), 200, [0.001], np.zeros(1)])
+    # Encode model parameters
+    params = si.append_parameters(params, ['cf_low', 'cf_high', 'n_cf', 'fs', 'n_fiber_per_chan', 'delta_theta', 'API'],
+                                  [100, 10000, 60, int(500e3), 200, [0.001], np.zeros(1)])
+
+    # Encode increment and synthesize
+    params = si.increment_parameters(params, {'freq': 0.001})
+    synth = PureToneHeinz2001()
+    stimuli = synth.synthesize_sequence(params)
+    params = si.stitch_parameters(params, '_input', stimuli)
 
     # Run model
-    output = sim.run(batch=batch,
+    output = sim.run(params,
                      parallel=True,
                      runfunc=dc.decode_ideal_observer(sim.simulate))
     t_AI = [x[0] for x in output]  # extract AI thresholds, which are always the first element of each tuple in results
