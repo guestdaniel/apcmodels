@@ -1,6 +1,6 @@
-from itertools import product
 from pathos.multiprocessing import ProcessPool
 from copy import deepcopy
+from tqdm import tqdm
 
 
 class Simulator:
@@ -19,7 +19,7 @@ class Simulator:
          runfuncs (see run() and run_batch() below). """
         return None
 
-    def run(self, params, runfunc=None, parallel=True, n_thread=8):
+    def run(self, params, runfunc=None, parallel=True, n_thread=8, progress=False):
         """ Main logical core of Simulator. run() is designed to be a flexible method that supports running batches
         of simulations using parallelization. run() takes the elements of its only required argument, params, and
         dispatches them to a function (either default or user-provided) either in a loop or using a multiprocessing
@@ -42,6 +42,8 @@ class Simulator:
 
             n_thread (int): number of threads to use in multiprocessing, ignored if parallel is false
 
+            progress (bool): flag to control if we want to display a tqdm progress bar
+
         Returns:
             results (list): list of results
         """
@@ -52,7 +54,10 @@ class Simulator:
         # If parallel, set up the pool and run sequence on pool
         if parallel:
             p = ProcessPool(n_thread)
-            results = p.map(runfunc, params)
+            if progress:
+                results = p.map(runfunc, tqdm(params))
+            else:
+                results = p.map(runfunc, params)
         # If not parallel, simply iterate over and run each element of the sequence
         else:
             results = [runfunc(element) for element in params]
