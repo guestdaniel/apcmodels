@@ -9,23 +9,26 @@ def decode_ideal_observer(ratefunc):
     Arguments:
         ratefunc (function): a function that accepts **kwargs and returns firing rates for a neural simulation
     """
-    def inner(**kwargs):
+    def inner(params):
         """
         Runs ratefunc on each input encoded in params, then estimates thresholds based on an ideal observer for a
         particular parameter. This requires some additional information to be encoded in params in the form of an
         a priori information matrix (API) and
 
         Arguments:
-            params (dict): parameters and inputs encoded in a dict. In the minimal case-scenario, params will contain
-                just an input element with a single input ndarray and some model parameters. In more complex scenarios,
-                the input element may contain multiple ndarrays. In either case, we use ratefunc to simulate firing
-                rates for all inputs in params and then apply ideal observer analysis to decode accordingly.
+            params (dict): parameters and inputs encoded in a dict or in a list of dicts. % TODO: explain possibilities
 
         Returns:
             thresholds (ndarray): predicted all-information and rate-place thresholds
         """
+        # Pull parameters from encoded list/dict of parameters
+        fs = find_parameter(params, 'fs')
+        delta_theta = find_parameter(params, 'delta_theta')
+        n_fiber_per_chan = find_parameter(params, 'n_fiber_per_chan')
+        API = find_parameter(params, 'API')
+
         # Run ratefunc on kwargs and get firing rates for each input
-        rates = run_rates_util(ratefunc, **kwargs)
+        rates = run_rates_util(ratefunc, params)
 
         # Check to see if the elements of rates are ndarrays or lists... if they are not lists, we need to put
         # rates inside a list so it can be processed by the list comprehension below
@@ -33,16 +36,14 @@ def decode_ideal_observer(ratefunc):
             rates = [rates]
 
         # Compute partial derivative matrices for rates for AI and then RP
-        pdms_AI = [compute_partial_derivative_matrix(x, kwargs['fs'], kwargs['delta_theta'],
-                                                  kwargs['n_fiber_per_chan'], 'AI') for x in rates]
+        pdms_AI = [compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, 'AI') for x in rates]
         pdms_AI = np.array(pdms_AI)
 
-        pdms_RP = [compute_partial_derivative_matrix(x, kwargs['fs'], kwargs['delta_theta'],
-                                                  kwargs['n_fiber_per_chan'], 'RP') for x in rates]
+        pdms_RP = [compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, 'RP') for x in rates]
         pdms_RP = np.array(pdms_RP)
 
         # Return ideal observer results
-        return calculate_threshold(pdms_AI, kwargs['API']), calculate_threshold(pdms_RP, kwargs['API'])
+        return calculate_threshold(pdms_AI, API), calculate_threshold(pdms_RP, API)
 
     def compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type):
         """
@@ -128,27 +129,53 @@ def decode_ideal_observer(ratefunc):
     return inner
 
 
-def run_rates_util(ratefunc, _input, **kwargs):
+def run_rates_util(ratefunc, params):
     """
-    Takes inputs and processes each element. If the element is just not a list, it passes it to ratefunc along with
-    kwargs. If the element *is* a list, it recursively passes it along with kwargs to run_rates_util(). This results
-    in ratefunc being evaluated on every "bottom-level" element of the possibly nested list of inputs.
+    Takes inputs and processes each element recursively.
 
     Arguments:
         ratefunc (function): a function that accepts input and other kwargs and returns model simulations
 
-        _input: an input or a list of inputs
+        params (dict, list): inputs and parameters encoded as a dict or list of dicts. If the input is just a single
+            dict, we unpack it and pass it directly to ratefunc. Otherwise, we operate recursively on it.
 
     Returns:
         output: results of applying ratefunc to each input in params
 
     """
     # If the input is not a list, just run ratefunc
-    if type(_input) is not list:
-        return ratefunc(_input=_input, **kwargs)
+    output = []
+    if type(params) is dict:
+        return ratefunc(params)
     # If the input *is* a list, process each input separately
+    elif type(params) is list:
+        for _input_element in params:
+            output.append(run_rates_util(ratefunc, _input_element))
     else:
-        output = []
-        for _input_element in _input:
-            output.append(run_rates_util(ratefunc, _input_element, **kwargs))
+        raise ValueError('params ought to be a dict or a list')
     return output
+
+
+def find_parameter(params, param_name):
+    """
+    Searches through params to locate any instance of param_name and returns its value
+
+    Arguments:
+        params (dict, list): dict or (possibly nested) list of dicts. Each dict contains parameter names and values.
+
+        param_name (str): parameter name to search for
+
+    Returns:
+        value: value of the param_name in the first dict it could be found in
+    """
+    value = None
+    if type(params) is dict:
+        if param_name in params.keys():
+            return params[param_name]
+        else:
+            return None
+    else:
+        for element in params:
+            value = find_parameter(element, param_name)
+            if value is not None:
+                return value

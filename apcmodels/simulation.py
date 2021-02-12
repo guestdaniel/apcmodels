@@ -14,26 +14,27 @@ class Simulator:
         else:
             self.default_runfunc = default_runfunc
 
-    def simulate(self, **kwargs):
+    def simulate(self, kwargs):
         """ Dummy method to provide an example runfunc for run() above. Subclasses should implement appropriate
          runfuncs (see run() and run_batch() below). """
         return None
 
-    def run(self, batch, runfunc=None, parallel=True, n_thread=8):
+    def run(self, params, runfunc=None, parallel=True, n_thread=8):
         """ Main logical core of Simulator. run() is designed to be a flexible method that supports running batches
-        of simulations using parallelization. run() takes the elements of its only required argument, batch, and
+        of simulations using parallelization. run() takes the elements of its only required argument, params, and
         dispatches them to a function (either default or user-provided) either in a loop or using a multiprocessing
-        Pool. The elements of batch are assumed to be dicts that encode the information required to run simulations and
+        Pool. The elements of params are assumed to be dicts that encode the information required to run simulations and
         these dicts are unpacked so their elements can be passed as kwargs to the simulation function. Each dict
-        in batch results in a single return and all of these returns are bundled and returned as a list in the same
-        order as batch. In theory, the function used to implement the simulations is allowed to have side effects (e.g.,
-        saving to disk, writing to a log).
+        in params results in a single return and all of these returns are bundled and returned as a list in the same
+        order as params. In theory, the function used to implement the simulations is allowed to have side effects
+        (e.g., saving to disk, writing to a log).
 
         One disadvantage of the way that run() is currently implemented is that parallelization is only supported
-        between elements of batch. In other words, only a single core can work on a single element of batch.
+        between elements of params. In other words, only a single core can work on a single element of params. A future
+        version plans to provide a way around this.
 
         Arguments:
-            batch (list): a list of dicts whose elements are passed to runfunc as kwargs
+            params (list): a list of dicts whose elements are passed to runfunc as kwargs
 
             runfunc (func): function that accepts kwargs and returns simulation results
 
@@ -48,117 +49,20 @@ class Simulator:
         if runfunc is None:
             runfunc = self.default_runfunc
 
-        # Now, wrap runfunc around a function that takes the elements of batch and unpacks them
-        def runfunc_wrapper(kwargs):
-            return runfunc(**kwargs)
-
         # If parallel, set up the pool and run sequence on pool
         if parallel:
             p = ProcessPool(n_thread)
-            results = p.map(runfunc_wrapper, batch)
+            results = p.map(runfunc, params)
         # If not parallel, simply iterate over and run each element of the sequence
         else:
-            results = [runfunc_wrapper(element) for element in batch]
+            results = [runfunc(element) for element in params]
         return results
-
-    def run_batch(self, inputs, input_parameters, model_parameters, mode='product', parallel=True, n_thread=8,
-                  runfunc=None, parameters_to_append=None):
-        """
-        Combines a set of inputs, a corresponding set of parameters, and set of model parameters into a combined single
-        object encoding a series of simulations to be run. Runs the simulations and returns the results.
-
-        Arguments:
-            inputs (list): list of inputs to run the model on. The elements of inputs can be virtually anything.
-
-            input_parameters (list): list of parameters corresponding to inputs. The elements of input_parameters can
-                be virtually anything, but if they are dicts they are unpacked.
-
-            model_parameters (list): list of parameter values to run the model at.
-
-            mode (string): controls how the input and parameter sequences are combined. In 'zip' mode,
-                parameter_sequence and input_sequence are combined into a unified sequence element-by-element, such
-                that the first element of input_sequence will be run at the parameter values specified in the first
-                element of parameter_sequence. In 'product' mode, every element of input_sequence will be run at
-                every element of parameter sequence.
-
-            parallel (bool): flag to control whether we run the sequence in parallel using pathos multiprocessing or not
-
-            n_thread (int): number of threads to use in multiprocessing, ignored if parallel is false
-
-            runfunc (func): function that accepts elements of a sequence as arguments and returns simulation results
-
-            parameters_to_append (dict): a dict of parameter names and values, each is appended to batch using
-                append_parameters
-
-        Returns:
-            results (list): list of results
-        """
-        # If runfunc is None, use default_runfunc
-        if runfunc is None:
-            runfunc = self.default_runfunc
-        # Generate batch
-        batch = self.construct_batch(inputs, input_parameters, model_parameters, mode)
-        # Append any parameters
-        if parameters_to_append is not None:
-            for key in parameters_to_append.keys():
-                batch = append_parameters(batch, key, parameters_to_append[key])
-        return self.run(batch, runfunc, parallel, n_thread)
-
-    @staticmethod
-    def construct_batch(inputs, input_parameters, model_parameters, mode='product'):
-        """
-        Combines a set of inputs, a corresponding set of input parameters, and set of model parameters into a combined
-        single object that encodes a series of simulations to run and is appropriate to pass to run()
-
-        Arguments:
-            inputs (list): list of inputs to run the model on. The elements of inputs can be virtually anything.
-            
-            input_parameters (list): list of parameters corresponding to inputs. The elements of input_parameters can 
-                be virtually anything, but if they are dicts they are unpacked. 
-
-            model_parameters (list): list of parameter values to run the model at. 
-
-            mode (string): controls how the input and parameter sequences are combined. In 'zip' mode,
-                parameter_sequence and input_sequence are combined into a unified sequence element-by-element, such
-                that the first element of input_sequence will be run at the parameter values specified in the first
-                element of parameter_sequence. In 'product' mode, every element of input_sequence will be run at
-                every element of parameter sequence.
-
-        Returns:
-            batch: list of dicts containing (1) model parameters, (2) inputs, and (3) corresponding input parameters.
-                All of these are stored as elements of the dicts.
-        """
-        # Check that input_sequence and input_parameter_sequence are the same length
-        assert len(inputs) == len(input_parameters)
-        # Create empty list that will contain a master sequence of combined stimuli and parameters
-        batch = []
-        # Fork based on whether we're going to 'zip' or 'permute'
-        if mode == 'zip':
-            # Since we're in zip mode, check to make sure all of the inputs have the same length
-            assert len(inputs) == len(model_parameters)
-            # Now, loop through zipped up combos of elements of inputs, input_parameters, and model_parameters
-            for _input, input_params, model_params in zip(inputs, input_parameters, model_parameters):
-                temp = deepcopy(model_params)
-                temp['_input'] = _input
-                temp['input_params'] = input_params
-                batch.append(temp)
-        elif mode == 'product':
-            # Loop through product of zipped up combos of elements of inputs and input_parameters with model_parameters
-            for _temp, model_params in product(zip(inputs, input_parameters), model_parameters):
-                temp = deepcopy(model_params)
-                temp['_input'] = _temp[0]
-                temp['input_params'] = _temp[1]
-                batch.append(temp)
-        else:
-            raise ValueError('Unknown mode!')
-        # Return
-        return batch
 
 
 def append_parameters(parameters, parameter_to_append, value):
     """
-    Takes a dict of parameter names and values (or possibly nested lists of these) and adds a new key and value combo
-    to each dict
+    Takes a dict of parameter names and values (or possibly nested lists of these) and adds the same new key and value
+    combo to each dict. Useful for encoding the same information in each element of parameters.
 
     Arguments:
         parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
@@ -189,9 +93,41 @@ def append_parameters(parameters, parameter_to_append, value):
         raise ValueError('Input is not list or dict!')
 
 
+def combine_parameters(parameters_1, parameters_2):
+    """
+    Accepts two lists of dicts of equal length and combines them together. Useful for combining together two types of
+    parameter lists (e.g., stimulus and model parameters) of the same length.
+
+    Arguments:
+        parameters_1 (list): list of dicts
+        parameters_2 (list): list of dicts, equal in length to parameters_1
+
+    Returns:
+        output (list): a list of dicts, each dict contains all elements from both dicts. Conflicting elements (i.e.,
+            keys are in both input dicts) are both included by resolved by appending '_2' to the second dict's key.
+    """
+    # Check to make sure that the two lists are the same length
+    if len(parameters_1) != len(parameters_2):
+        raise ValueError('parameters_1 and parameters_2 should be the same length.')
+    # Create empty output list
+    output = list()
+    # Loop through pairs of elements from parameters_1 and parameters_2, copy parameters_1 element and then add all
+    # key-value combos from parameters_2 element
+    for params_1, params_2 in zip(parameters_1, parameters_2):
+        # Loop through elements of params_2
+        for key in params_2.keys():
+            if key in params_1.keys():
+                params_1[key + '_2'] = params_2[key]
+            else:
+                params_1[key] = params_2[key]
+        output.append(params_1)
+    # Return
+    return output
+
+
 def flatten_parameters(parameters):
     """
-    Takes a (possibly nested) list of parameter dicts and flattens it into a single list
+    Takes a (possibly nested) list of parameter dicts and flattens it into a single list.
 
     Arguments:
         parameters (list): possibly nested list of parameters dicts
@@ -247,7 +183,8 @@ def _evaluate_parameters_dict(paramdict):
 def increment_parameters(parameters, increments):
     """
     Takes a dict of parameter names and values (or possibly nested lists of these) and copies its elements multiple
-    times. Each copy after the first contains one parameter with a small increment.
+    times. Each copy after the first contains one parameter with a small increment. Useful for setting up simulations
+    for ideal observer analysis.
 
     Arguments:
         parameters (dict, list): dict of baseline parameter names and values or a list. If a list, the elements can
@@ -306,7 +243,7 @@ def _increment_parameters_dict(baselines, increments):
 def repeat(parameters, n_rep):
     """
     Takes a dict of parameter names and values or a (possibly nested) list of these and replaces each dict with a list
-    containing multiple copies of that dict
+    containing multiple copies of that dict. Useful for encoding repeated simulations at the same parameter values.
 
     Arguments:
         parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
@@ -341,10 +278,44 @@ def _repeat_dict(paramdict, n_rep):
     return [deepcopy(paramdict) for rep in range(n_rep)]
 
 
+def stitch_parameters(parameters, parameter_to_stitch, values):
+    """
+    Takes a (possibly nested) list of parameter names and values, a name of a new parameter, and a (possible nested)
+    list of values for that parameter to add to each corresponding element of the parameter list. Useful for encoding
+    new unique information in each element of parameters.
+
+    Arguments:
+        parameters (list): list of dicts of parameter names and values, or a nested list of such lists
+
+        parameter_to_stitch (str): new parameter name
+
+        values (list): list where each element is a value for the new parameter to be set to, or a nested list of such
+            lists. The length/hierarchy of parameters and values must match exactly.
+
+    Returns:
+        output (list): list of dicts of parameter names and values
+    """
+    # Check to make sure inputs are the same length
+    if len(parameters) != len(values):
+        raise ValueError('parameters and values should be the same length')
+    # Add values to each element in parameters
+    output = list()
+    for paramdict, val in zip(parameters, values):
+        # Check to see what types we're handling
+        if type(paramdict) is list and type(val) is list:
+            output.append(stitch_parameters(paramdict, parameter_to_stitch, val))
+        else:
+            paramdict[parameter_to_stitch] = val
+            output.append(paramdict)
+    # Return
+    return output
+
+
 def wiggle_parameters(parameters, parameter_to_wiggle, values):
     """
     Takes a dict of parameter names and values (or possibly nested lists of these) and copies its elements multiple
-    times. Each copy after the first contains one parameter set to a new parameter value (wiggled).
+    times. Each copy after the first contains one parameter set to a new parameter value (wiggled). Useful for
+    constructing batches of simulations over a range of parameter values.
 
     Arguments:
         parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
