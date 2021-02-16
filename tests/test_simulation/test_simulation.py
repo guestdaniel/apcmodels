@@ -1,5 +1,11 @@
 import apcmodels.simulation as si
-import numpy as np
+
+
+def test_parameters_init():
+    """ Check to make sure that Parameters.__init__() accepts kwargs that are turned into entries in its params
+    attribute """
+    params = si.Parameters(hello='world', foo='bar')
+    assert params[0]['hello'] == 'world' and params[0]['foo'] == 'bar'
 
 
 def test_append_parameters_single_element_input():
@@ -31,6 +37,7 @@ def test_append_parameters_bad_inputs1():
         raise Exception('This should have failed!')
     except ValueError:
         return
+
 
 def test_append_parameters_bad_inputs2():
     """ Check that if we provide append_parameters with an reasonable input (a list of multiple dicts) but bad inputs

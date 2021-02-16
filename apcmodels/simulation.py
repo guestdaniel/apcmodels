@@ -64,6 +64,72 @@ class Simulator:
         return results
 
 
+class Parameters:
+    """
+    Parameters provides an object-oriented interface to the xxx_parameters functions below that facilitate the
+    construction of parameter lists.
+    """
+    def __init__(self, **kwargs):
+        """
+        Arguments:
+            **kwargs: when Parameters is initialized, each kwarg passed to __init__ is included as an entry in a seed
+            dictionary.
+        """
+        self.params = [kwargs]
+
+    def __getitem__(self, item):
+        return self.params[item]
+
+    def __iter__(self):
+        for elem in self.params:
+            yield elem
+
+    def append(self, parameter_to_append, value):
+        """ See documentation for append_parameters() """
+        self.params = append_parameters(self.params, parameter_to_append, value)
+
+    def add_inputs(self, inputs):
+        """
+        Uses the stitch_parameters() function to add a list of inputs to params with the key '_input'
+
+        Arguments:
+            inputs (list): list of inputs with equal length to self.params
+        """
+        self.params = stitch_parameters(self.params, '_input', inputs)
+
+    def combine(self, parameters_2):
+        """ See documentation for combine_parameters() """
+        self.params = combine_parameters(self.params, parameters_2)
+
+    def flatten(self):
+        """ See documentation for flatten_parameters() """
+        self.params = flatten_parameters(self.params)
+
+    def evaluate(self):
+        """ See documentation for evaluate_parameters() """
+        self.params = evaluate_parameters(self.params)
+
+    def increment(self, increments):
+        """ See documentation for increment_parameters() """
+        self.params = increment_parameters(self.params, increments)
+
+    def repeat(self, n_rep):
+        """ See documentation for repeat_parameters() """
+        self.params = repeat_parameters(self.params, n_rep)
+
+    def stitch(self, parameter_to_stitch, values):
+        """ See documentation for stitch_parameters() """
+        self.params = stitch_parameters(self.params, parameter_to_stitch, values)
+
+    def wiggle(self, parameter_to_wiggle, values):
+        """ See documentation for wiggle_parameters() """
+        self.params = wiggle_parameters(self.params, parameter_to_wiggle, values)
+
+    def wiggle_parallel(self, parameter_to_wiggle, values):
+        """ See documentation for wiggle_parameters_parallel() """
+        self.params = wiggle_parameters_parallel(self.params, parameter_to_wiggle, values)
+
+
 def append_parameters(parameters, parameter_to_append, value):
     """
     Takes a dict of parameter names and values (or possibly nested lists of these) and adds the same new key and value
@@ -245,7 +311,7 @@ def _increment_parameters_dict(baselines, increments):
     return parameter_sequence
 
 
-def repeat(parameters, n_rep):
+def repeat_parameters(parameters, n_rep):
     """
     Takes a dict of parameter names and values or a (possibly nested) list of these and replaces each dict with a list
     containing multiple copies of that dict. Useful for encoding repeated simulations at the same parameter values.
@@ -263,7 +329,7 @@ def repeat(parameters, n_rep):
     if type(parameters) is dict:
         return _repeat_dict(parameters, n_rep)
     elif type(parameters) is list:
-        return [repeat(element, n_rep) for element in parameters]
+        return [repeat_parameters(element, n_rep) for element in parameters]
     else:
         raise ValueError('Input is not list or dict!')
 

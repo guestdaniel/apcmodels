@@ -69,7 +69,7 @@ def test_ideal_observer_real_simulation_with_level_roving():
                                   [int(200e3), 1, 5, [0.001, 0.001], np.array([[0, 0], [0, 1/6**2]])])
 
     # Encode repeats and increments
-    params = si.repeat(params, 10)
+    params = si.repeat_parameters(params, 10)
     params = si.increment_parameters(params, {'freq': 0.001, 'level': 0.001})
 
     # Synthesize stimuli and encode in params
