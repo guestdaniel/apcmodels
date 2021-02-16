@@ -178,7 +178,11 @@ def append_parameters(parameters, parameter_to_append, value):
     elif type(parameters) is list:
         return [append_parameters(element, parameter_to_append, value) for element in parameters]
     elif type(parameters) is np.ndarray:
-        return np.array(list(map(lambda x: append_parameters(x, parameter_to_append, value), parameters)))
+        temp = np.empty(parameters.shape, dtype=object)
+        with np.nditer(parameters, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
+            for x in it:
+                temp[it.multi_index] = append_parameters(x.item(), parameter_to_append, value)
+        return temp
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -252,7 +256,11 @@ def evaluate_parameters(parameters):
     elif type(parameters) is list:
         return [evaluate_parameters(element) for element in parameters]
     elif type(parameters) is np.ndarray:
-        return np.array(list(map(evaluate_parameters, parameters)))
+        temp = np.empty(parameters.shape, dtype=object)
+        with np.nditer(parameters, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
+            for x in it:
+                temp[it.multi_index] = evaluate_parameters(x.item())
+        return temp
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -538,8 +546,7 @@ def wiggle_parameters_parallel(parameters, parameter_to_wiggle, values):
     elif type(parameters) is list:
         return [wiggle_parameters_parallel(element, parameter_to_wiggle, values) for element in parameters]
     elif type(parameters) is np.ndarray:
-        return np.squeeze(np.array(list(map(lambda x: wiggle_parameters_parallel(x, parameter_to_wiggle, values),
-                                            parameters))))
+        return np.squeeze(np.array(list(map(lambda x: wiggle_parameters_parallel(x, parameter_to_wiggle, values), parameters))))
     else:
         raise ValueError('Input is not list or dict!')
 
