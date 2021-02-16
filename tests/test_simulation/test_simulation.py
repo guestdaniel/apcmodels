@@ -25,10 +25,42 @@ def test_simulator_run():
 
 
 def test_simulator_run_parallel():
-    """ Check that run() correctly accepts a list of dicts and returns a corresponding number of responses"""
+    """ Check that run() correctly accepts a list of dicts and returns a corresponding number of responses """
     sim = si.Simulator()
     results = sim.run([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}], sim.simulate, parallel=True)
     assert len(results) == 2
+
+
+def test_simulator_run_array():
+    """ Check that run() correctly accepts an array of dicts and returns a corresponding number of responses """
+    sim = si.Simulator()
+    results = sim.run(np.array([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}]), sim.simulate, parallel=False)
+    assert results.shape == (2,)
+
+
+def test_simulator_run_array_2d():
+    """ Check that run() correctly accepts a 2d array of dicts and returns a corresponding 2d array of responses """
+    sim = si.Simulator()
+    results = sim.run(np.array([[{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}],
+                                [{'foo': 1, 'bar': 20}, {'foo': 3, 'bar': 40}]]), parallel=False)
+    assert results.shape == (2, 2)
+
+
+def test_simulator_run_array_parallel():
+    """ Check that run() correctly accepts an array of dicts and returns a corresponding number of responses while
+    using multiprocessing """
+    sim = si.Simulator()
+    results = sim.run(np.array([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}]), sim.simulate, parallel=True)
+    assert results.shape == (2,)
+
+
+def test_simulator_run_array_2d_parallel():
+    """ Check that run() correctly accepts a 2d array of dicts and returns a corresponding 2d array of responses while
+    using multiprocessing """
+    sim = si.Simulator()
+    results = sim.run(np.array([[{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}],
+                                [{'foo': 1, 'bar': 20}, {'foo': 3, 'bar': 40}]]), parallel=False)
+    assert results.shape == (2, 2)
 
 
 def test_parameters_init():

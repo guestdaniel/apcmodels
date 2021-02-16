@@ -1,4 +1,5 @@
 import apcmodels.signal as sg
+import numpy as np
 
 
 class Synthesizer:
@@ -15,7 +16,7 @@ class Synthesizer:
         """
         Method to synthesize the stimulus at set parameter values, re-implemented by subclasses
         """
-        return None
+        return kwargs
 
     def _synthesize_preprocess_inputs(self, parameter_vector, **kwargs):
         """
@@ -38,33 +39,36 @@ class Synthesizer:
         # Call synthesize
         return self.synthesize(**parameter_vector, **kwargs)
 
-    def synthesize_sequence(self, parameter_sequence, **kwargs):
+    def synthesize_sequence(self, parameters, **kwargs):
         """
         Repeatedly synthesizes copies of the stimulus based on the sequence of parameters provided by
         parameter_sequence. kwargs allows the user to pass additional keyword arguments to synthesize()
 
         Arguments:
-            parameter_sequence (list): list of parameter values to synthesize. Each element of the list is either a dict
-                of parameter names and values that match the expected keyword arguments in synthesize() or a list
-                itself. If the element is a list, synthesize_parameter_sequence is applied recursively until no lists
-                remain.
+            parameters (dict, list, ndarray): dict of parameter names and values, or a list or ndarray of such
+                dicts. If the element is a list, synthesize_parameter_sequence is applied recursively.
 
         Returns:
-            results: list containing synthesized copies of the stimulus. The list structure will mimic that of the
-                input parameter sequence. Each dict in parameter_sequence becomes a single ndarray in results.
+            results (list, ndarray): list or array containing synthesized copies of the stimulus. The list/array
+                structure will mimic that of the input parameter sequence. Each dict in parameter_sequence becomes a
+                single ndarray in results.
         """
-        # Create empty storage for synthesized copies of stimulus
-        results = []
         # Loop through the parameter sequence and pass it to synthesize(), unpacking the parameter dict after evaluating
         # callable elements of the dict
-        for parameter_vector in parameter_sequence:
-            if type(parameter_vector) is list:
-                # Pass the list back to synthesize_sequence()
-                results.append(self.synthesize_sequence(parameter_vector, **kwargs))
-            else:
-                # Pass parameter vector onto synthesize()
-                results.append(self._synthesize_preprocess_inputs(parameter_vector, **kwargs))
-        return results
+        if type(parameters) is np.ndarray:
+            temp = np.empty(parameters.shape, dtype=object)
+            with np.nditer(parameters, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
+                for x in it:
+                    temp[it.multi_index] = self.synthesize_sequence(x.item(), **kwargs)
+            return temp
+        elif type(parameters) is list:
+            # Pass the list back to synthesize_sequence()
+            return [self.synthesize_sequence(params, **kwargs) for params in parameters]
+        elif type(parameters) is dict:
+            # Pass parameter vector onto synthesize()
+            return self._synthesize_preprocess_inputs(parameters, **kwargs)
+        else:
+            raise TypeError('parameter_sequence should be an array, a list, or a dict')
 
 
 class PureTone(Synthesizer):

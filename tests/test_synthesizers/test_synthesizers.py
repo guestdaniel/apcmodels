@@ -17,7 +17,7 @@ def test_synthesizer_synthesize_parameter_sequence_with_kwarg():
     of stimuli while also allowing the user to pass additional keyword arguments"""
     synth = sy.Synthesizer()
     results = synth.synthesize_sequence([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}], qux='hello world')
-    assert len(results) == 2
+    assert len(results) == 2 and results[0]['qux'] == 'hello world'
 
 
 def test_synthesizer_synthesize_parameter_sequence_with_duplicated_kwarg():
@@ -32,6 +32,42 @@ def test_synthesizer_synthesize_parameter_sequence_with_duplicated_kwarg():
         return
 
 
+def test_synthesizer_synthesize_parameter_sequence_array():
+    """ Check that synthesize_sequence() correctly accepts an array of dicts and returns a corresponding number
+    of stimuli """
+    synth = sy.Synthesizer()
+    results = synth.synthesize_sequence(np.array([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}]))
+    assert len(results) == 2
+
+
+def test_synthesizer_synthesize_parameter_sequence_array_with_kwarg():
+    """ Check that synthesize_sequence() correctly accepts an array of dicts and returns a corresponding number
+    of stimuli and if we pass an extra kwarg that it gets passed correctly """
+    synth = sy.Synthesizer()
+    results = synth.synthesize_sequence(np.array([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}]), qux='hello world')
+    assert len(results) == 2 and results[0]['qux'] == 'hello world'
+
+
+def test_synthesizer_synthesize_parameter_sequence_array_2d():
+    """ Check that synthesize_sequence() correctly accepts a 2d array of dicts and returns a corresponding number
+    of stimuli """
+    synth = sy.Synthesizer()
+    results = synth.synthesize_sequence(np.array([[{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}],
+                                                  [{'foo': 10, 'bar': 20}, {'foo': 30, 'bar': 40}]]))
+    assert results.shape == (2, 2)
+
+
+def test_synthesizer_synthesize_parameter_sequence_array_nested():
+    """ Check that synthesize_sequence() correctly accepts an array of a list of dicts and returns a corresponding number
+    of stimuli """
+    synth = sy.Synthesizer()
+    params = np.array([{'a': 1}])
+    params = increment_parameters(params, {'a': 0.01})
+    results = synth.synthesize_sequence(params)
+    
+    assert results.shape == (1,) and type(results[0]) == list
+
+
 def test_synthesizer_synthesize_parameter_sequence_nested():
     """ Check that synthesize_sequence() correctly accepts a lists of lists and returns a properly nested
     list of lists """
@@ -41,9 +77,8 @@ def test_synthesizer_synthesize_parameter_sequence_nested():
     assert len(results) == 2 and len(results[0]) == 2 and len(results[1]) == 3
 
 
-def test_synthesizer_flatten_parameters():
+def test_flatten_parameters():
     """ Check that the flatten method correctly flattens arbitrary lists """
-    synth = sy.Synthesizer()
     assert len(flatten_parameters([1, 2, 3])) == 3 and \
            len(flatten_parameters([1, [2, 3], [4, 5], [[6, 7, 8]]])) == 8
 
@@ -94,16 +129,16 @@ def test_puretone_random_level():
     called. We check this by making sure that the output RMS level is not the same from one sample to another. """
     synth = sy.PureTone()
     tempfunc = lambda: np.random.uniform(40, 60, 1)
-    assert sg.rms(synth.synthesize_sequence(parameter_sequence=[{'level': tempfunc}])[0]) != \
-           sg.rms(synth.synthesize_sequence(parameter_sequence=[{'level': tempfunc}])[0])
+    assert sg.rms(synth.synthesize_sequence(parameters=[{'level': tempfunc}])[0]) != \
+           sg.rms(synth.synthesize_sequence(parameters=[{'level': tempfunc}])[0])
 
 
 def test_puretone_incremented_level():
     """ Check that pure tone can accept a level with an increment and return appropriately scaled pure tones """
     synth = sy.PureTone()
     params = increment_parameters({'level': 20}, {'level': 1})
-    np.testing.assert_approx_equal(sg.dbspl_pascal(synth.synthesize_sequence(parameter_sequence=params)[0]) -
-                                   sg.dbspl_pascal(synth.synthesize_sequence(parameter_sequence=params)[1]),
+    np.testing.assert_approx_equal(sg.dbspl_pascal(synth.synthesize_sequence(parameters=params)[0]) -
+                                   sg.dbspl_pascal(synth.synthesize_sequence(parameters=params)[1]),
                                    -1, 5)
 
 
@@ -113,8 +148,8 @@ def test_puretone_incremented_level_with_random_level():
     synth = sy.PureTone()
     tempfunc = lambda: np.random.uniform(50, 50, 1)
     params = increment_parameters({'level': tempfunc}, {'level': 1})
-    np.testing.assert_approx_equal(sg.dbspl_pascal(synth.synthesize_sequence(parameter_sequence=params)[0]) -
-                                   sg.dbspl_pascal(synth.synthesize_sequence(parameter_sequence=params)[1]),
+    np.testing.assert_approx_equal(sg.dbspl_pascal(synth.synthesize_sequence(parameters=params)[0]) -
+                                   sg.dbspl_pascal(synth.synthesize_sequence(parameters=params)[1]),
                                    -1, 5)
 
 def test_puretone_wiggled_level_with_random_variables():
@@ -123,5 +158,5 @@ def test_puretone_wiggled_level_with_random_variables():
     synth = sy.PureTone()
     params = wiggle_parameters(dict(), 'level', [lambda: np.random.uniform(35, 45, 1),
                                                  lambda: np.random.uniform(45, 55, 1)])
-    outs = synth.synthesize_sequence(parameter_sequence=params)
+    outs = synth.synthesize_sequence(parameters=params)
     assert sg.rms(outs[0]) < sg.rms(outs[1])

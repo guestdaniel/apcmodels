@@ -18,16 +18,16 @@ class Simulator:
     def simulate(self, kwargs):
         """ Dummy method to provide an example runfunc for run() above. Subclasses should implement appropriate
          runfuncs (see run() and run_batch() below). """
-        return None
+        return kwargs
 
-    def run(self, params, runfunc=None, parallel=True, n_thread=8, progress=False):
+    def run(self, params, runfunc=None, parallel=True, n_thread=8, hide_progress=False):
         """ Main logical core of Simulator. run() is designed to be a flexible method that supports running batches
         of simulations using parallelization. run() takes the elements of its only required argument, params, and
         dispatches them to a function (either default or user-provided) either in a loop or using a multiprocessing
-        Pool. The elements of params are assumed to be dicts that encode the information required to run simulations and
-        these dicts are unpacked so their elements can be passed as kwargs to the simulation function. Each dict
-        in params results in a single return and all of these returns are bundled and returned as a list in the same
-        order as params. In theory, the function used to implement the simulations is allowed to have side effects
+        Pool. The elements of params are assumed to be dicts that encode the information required to run simulations or
+        to be (possibly nested) lists of such dicts. Each element of params results in a single return and all of these
+        returns are bundled and returned either as a list in the same order as params or as an array in the same shape
+        as params. In theory, the function used to implement the simulations is allowed to have side effects
         (e.g., saving to disk, writing to a log).
 
         One disadvantage of the way that run() is currently implemented is that parallelization is only supported
@@ -35,7 +35,7 @@ class Simulator:
         version plans to provide a way around this.
 
         Arguments:
-            params (ndarray): an ndarray of dicts whose elements are passed to runfunc as kwargs
+            params (list, ndarray): a list or ndarray whose elements are passed to runfunc
 
             runfunc (func): function that accepts kwargs and returns simulation results
 
@@ -43,34 +43,41 @@ class Simulator:
 
             n_thread (int): number of threads to use in multiprocessing, ignored if parallel is false
 
-            progress (bool): flag to control if we want to display a tqdm progress bar
+            hide_progress (bool): flag to control if we want to display a tqdm progress bar
 
         Returns:
-            results (list): list of results
+            results (list, ndarray): list or ndarray of results
         """
         # If runfunc is None, use the default
         if runfunc is None:
             runfunc = self.default_runfunc
-
         # If parallel, set up the pool and run sequence on pool
         if parallel:
             p = ProcessPool(n_thread)
-            if progress:
-                results = list(p.imap(runfunc, tqdm(params)))
+            if type(params) is list:
+                results = list(p.imap(runfunc, tqdm(params, disable=hide_progress)))
+            elif type(params) is np.ndarray:
+                results = np.array(list(p.imap(runfunc, tqdm(params, disable=hide_progress))))
             else:
-                results = p.map(runfunc, params)
+                raise ValueError('params should be a list or an array')
         # If not parallel, simply iterate over and run each element of the sequence
         else:
-            results = [runfunc(element) for element in params]
+            if type(params) is list:
+                results = [runfunc(element) for element in params]
+            elif type(params) is np.ndarray:
+                results = np.array(list(map(runfunc, params)))
+            else:
+                raise ValueError('params should be a list or an array')
         return results
 
 
 class Parameters:
     """
     Parameters provides an object-oriented interface to the xxx_parameters functions below that facilitate the
-    construction of parameter lists. The key concept of Parameters() is a the params attribute, which encodes a
+    construction of parameter lists. The key feature of Parameters() is the params attribute, which encodes a
     series of simulations via an array of dicts (or possibly nested list of dicts). __iter__ and __getitem__ methods
-    are implemented to allow users to seamlessly loop or index.
+    are implemented to allow users to seamlessly loop or index, and a shape property is implemented to allow the user
+    to access the shape of the array directly.
     """
     def __init__(self, **kwargs):
         """
@@ -80,12 +87,19 @@ class Parameters:
         """
         self.params = np.array([kwargs])
 
-    def __getitem__(self, item):
-        return self.params[item]  # TODO: fix this
+    def __getitem__(self, index):
+        return self.params[index]
 
     def __iter__(self):
         for elem in self.params:
             yield elem
+
+    def __str__(self):
+        return self.params.__str__()
+
+    @property
+    def shape(self):
+        return self.params.shape
 
     def append(self, parameter_to_append, value):
         """ See documentation for append_parameters() """
@@ -96,9 +110,10 @@ class Parameters:
         Uses the stitch_parameters() function to add a list of inputs to params with the key '_input'
 
         Arguments:
-            inputs (list): list of inputs with equal length to self.params
+            inputs (list, ndarray): list or array of inputs with equal length/shape to self.params.
+                Lists will be coerced to arrays.
         """
-        self.params = stitch_parameters(self.params, '_input', inputs)
+        self.params = stitch_parameters(self.params, '_input', np.array(inputs, dtype=object))
 
     def combine(self, parameters_2):
         """ See documentation for combine_parameters() """
