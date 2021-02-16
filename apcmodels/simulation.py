@@ -1,6 +1,7 @@
 from pathos.multiprocessing import ProcessPool
 from copy import deepcopy
 from tqdm import tqdm
+import numpy as np
 
 
 class Simulator:
@@ -34,7 +35,7 @@ class Simulator:
         version plans to provide a way around this.
 
         Arguments:
-            params (list): a list of dicts whose elements are passed to runfunc as kwargs
+            params (ndarray): an ndarray of dicts whose elements are passed to runfunc as kwargs
 
             runfunc (func): function that accepts kwargs and returns simulation results
 
@@ -67,7 +68,9 @@ class Simulator:
 class Parameters:
     """
     Parameters provides an object-oriented interface to the xxx_parameters functions below that facilitate the
-    construction of parameter lists.
+    construction of parameter lists. The key concept of Parameters() is a the params attribute, which encodes a
+    series of simulations via an array of dicts (or possibly nested list of dicts). __iter__ and __getitem__ methods
+    are implemented to allow users to seamlessly loop or index.
     """
     def __init__(self, **kwargs):
         """
@@ -75,10 +78,10 @@ class Parameters:
             **kwargs: when Parameters is initialized, each kwarg passed to __init__ is included as an entry in a seed
             dictionary.
         """
-        self.params = [kwargs]
+        self.params = np.array([kwargs])
 
     def __getitem__(self, item):
-        return self.params[item]
+        return self.params[item]  # TODO: fix this
 
     def __iter__(self):
         for elem in self.params:
@@ -132,12 +135,11 @@ class Parameters:
 
 def append_parameters(parameters, parameter_to_append, value):
     """
-    Takes a dict of parameter names and values (or possibly nested lists of these) and adds the same new key and value
-    combo to each dict. Useful for encoding the same information in each element of parameters.
+    Takes a dict of parameter names and values (or an ndarray of these) and adds the same new key
+    and value combo to each dict. Useful for encoding the same information in each element of parameters.
 
     Arguments:
-        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
-            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+        parameters (dict, list, ndarray): dict of parameter names and values, or a list or array of such dicts.
 
         parameter_to_append (string, list): name of parameter to add to each param dict, or a list of such names
 
@@ -160,28 +162,33 @@ def append_parameters(parameters, parameter_to_append, value):
         return parameters
     elif type(parameters) is list:
         return [append_parameters(element, parameter_to_append, value) for element in parameters]
+    elif type(parameters) is np.ndarray:
+        return np.array(list(map(lambda x: append_parameters(x, parameter_to_append, value), parameters)))
     else:
         raise ValueError('Input is not list or dict!')
 
 
 def combine_parameters(parameters_1, parameters_2):
     """
-    Accepts two lists of dicts of equal length and combines them together. Useful for combining together two types of
-    parameter lists (e.g., stimulus and model parameters) of the same length.
+    Accepts two lists or arrays of dicts of equal length/shape and combines them together. Useful for combining together
+    two types of parameter lists (e.g., stimulus and model parameters) of the same length.
 
     Arguments:
-        parameters_1 (list): list of dicts
-        parameters_2 (list): list of dicts, equal in length to parameters_1
+        parameters_1 (list, ndarray): list or ndarray of dicts
+        parameters_2 (list, ndarray): list or ndarray of dicts, equal in length/length to parameters_1
 
     Returns:
-        output (list): a list of dicts, each dict contains all elements from both dicts. Conflicting elements (i.e.,
-            keys are in both input dicts) are both included by resolved by appending '_2' to the second dict's key.
+        output (list, ndarray): a list or ndarray of dicts, each dict contains all elements from both dicts. Conflicting
+         elements (i.e., keys are in both input dicts) are both included by resolved by appending '_2' to the second
+         dict's key.
     """
     # Check to make sure that the two lists are the same length
-    if len(parameters_1) != len(parameters_2):
-        raise ValueError('parameters_1 and parameters_2 should be the same length.')
-    # Create empty output list
-    output = list()
+    if type(parameters_1) == list:
+        if len(parameters_1) != len(parameters_2):
+            raise ValueError('parameters_1 and parameters_2 should be the same length.')
+    elif type(parameters_1) == np.ndarray:
+        if not np.all(parameters_1.shape == parameters_2.shape):
+            raise ValueError('parameters_1 and parameters_2 should be the same shape.')
     # Loop through pairs of elements from parameters_1 and parameters_2, copy parameters_1 element and then add all
     # key-value combos from parameters_2 element
     for params_1, params_2 in zip(parameters_1, parameters_2):
@@ -191,9 +198,8 @@ def combine_parameters(parameters_1, parameters_2):
                 params_1[key + '_2'] = params_2[key]
             else:
                 params_1[key] = params_2[key]
-        output.append(params_1)
     # Return
-    return output
+    return parameters_1
 
 
 def flatten_parameters(parameters):
@@ -219,16 +225,19 @@ def evaluate_parameters(parameters):
     in the dicts.
 
     Arguments:
-        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
-            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+        parameters (dict, list, ndarray): dict of parameter names and values or a list or ndarray of such dicts. If a
+        list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the
+        elements can be dicts or lists. Lists are processed recursively.
 
     Returns:
-        parameters (dict, list): input but where each callable element in the dict(s) has been evaluated
+        parameters (dict, list, ndarray): input but where each callable element in the dict(s) has been evaluated
     """
     if type(parameters) is dict:
         return _evaluate_parameters_dict(parameters)
     elif type(parameters) is list:
         return [evaluate_parameters(element) for element in parameters]
+    elif type(parameters) is np.ndarray:
+        return np.array(list(map(evaluate_parameters, parameters)))
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -253,19 +262,21 @@ def _evaluate_parameters_dict(paramdict):
 
 def increment_parameters(parameters, increments):
     """
-    Takes a dict of parameter names and values (or possibly nested lists of these) and copies its elements multiple
-    times. Each copy after the first contains one parameter with a small increment. Useful for setting up simulations
-    for ideal observer analysis.
+    Takes a dict of parameter names and values or a (possibly nested) list or an ndarray of such dicts and and copies
+    its elements multiple times. Each copy after the first contains one parameter with a small increment. The copies
+    are then returned as a list. Useful for setting up simulations for ideal observer analysis.
 
     Arguments:
-        parameters (dict, list): dict of baseline parameter names and values or a list. If a list, the elements can
-            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+        parameters (dict, list, ndarray): dict of baseline parameter names and values or a list or ndarray of such
+        dicts. If a list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an
+        ndarray, the elements can be dicts or lists. Lists are processed recursively.
 
         increments (dict): dict of parameter names and values to increment them by
 
     Returns:
-        sequence: list of lists. Elements of lists are dicts. First dict is baselines, remaining dicts contain a
-            single incremented parameter (with the size of the increment indicated in increments).
+        sequence (list, ndarray): The input, except each dict has been replaced by a list of dicts. First dict
+        encodes a baseline while the remaining dicts encode small deviations in a single parameter from that baseline
+        (in the same order as specified in increments).
     """
     # Before we increment any parameters, we should evaluate any callable parameters
     parameters = evaluate_parameters(parameters)
@@ -274,6 +285,12 @@ def increment_parameters(parameters, increments):
         return _increment_parameters_dict(parameters, increments)
     elif type(parameters) is list:
         return [increment_parameters(element, increments) for element in parameters]
+    elif type(parameters) is np.ndarray:
+        temp = np.empty(parameters.shape, dtype=object)
+        with np.nditer(parameters, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
+            for x in it:
+                temp[it.multi_index] = increment_parameters(x.item(), increments)
+        return temp
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -313,23 +330,31 @@ def _increment_parameters_dict(baselines, increments):
 
 def repeat_parameters(parameters, n_rep):
     """
-    Takes a dict of parameter names and values or a (possibly nested) list of these and replaces each dict with a list
-    containing multiple copies of that dict. Useful for encoding repeated simulations at the same parameter values.
+    Takes a dict of parameter names and values or a (possibly nested) list or an ndarray of these and replaces each dict
+    with a list containing multiple copies of that dict. Useful for encoding repeated simulations at the same parameter
+    values.
 
     Arguments:
-        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
-            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+        parameters (dict, list, ndarray): dict of parameter names and values or a list. If a list, the elements can
+            be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the elements can be dicts
+            or lists.
 
         n_rep (int): number of repetitions to encode by copying the param dicts
 
     Returns:
-        output (list): nested lists. Each element is corresponds to an element in the input parameters but is replaced
-             with a list containing multiple copies of that input
+        output (list, ndarray): nested lists or ndarray. Each element is corresponds to an element in the input
+        parameters but where dicts were replaced with lists containing multiple copies of that dict
     """
     if type(parameters) is dict:
         return _repeat_dict(parameters, n_rep)
     elif type(parameters) is list:
         return [repeat_parameters(element, n_rep) for element in parameters]
+    elif type(parameters) is np.ndarray:
+        temp = np.empty(parameters.shape, dtype=object)
+        with np.nditer(parameters, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
+            for x in it:
+                temp[it.multi_index] = repeat_parameters(x.item(), n_rep)
+        return temp
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -351,46 +376,66 @@ def _repeat_dict(paramdict, n_rep):
 
 def stitch_parameters(parameters, parameter_to_stitch, values):
     """
-    Takes a (possibly nested) list of parameter names and values, a name of a new parameter, and a (possible nested)
-    list of values for that parameter to add to each corresponding element of the parameter list. Useful for encoding
-    new unique information in each element of parameters.
+    Takes a (possibly nested) list or an array of dicts containing parameter names and values, a name of a new
+    parameter, and a list of  values or an ndarray of values to add to each dict. Useful for encoding
+    new unique information in each dict.
 
     Arguments:
-        parameters (list): list of dicts of parameter names and values, or a nested list of such lists
+        parameters (list, ndarray): list or ndarray of dicts of parameter names and values or lists of such dicts
 
         parameter_to_stitch (str): new parameter name
 
-        values (list): list where each element is a value for the new parameter to be set to, or a nested list of such
-            lists. The length/hierarchy of parameters and values must match exactly.
+        values (list, ndarray): list where each element is a value for the new parameter to be set to, or a nested list
+            of such lists. The length/hierarchy of parameters and values must match exactly. Alternatively, it can be
+            an ndarray of the same shape as the input
 
     Returns:
-        output (list): list of dicts of parameter names and values
+        output (list, ndarray): input except with parameter_to_stitch encoded in each dict
     """
-    # Check to make sure inputs are the same length
-    if len(parameters) != len(values):
-        raise ValueError('parameters and values should be the same length')
+    # Check to make sure that the two lists are the same length
+    if type(parameters) is list:
+        if len(parameters) != len(values):
+            raise ValueError('parameters and values should be the same length.')
+    elif type(parameters) is np.ndarray:
+        if not np.all(parameters.shape == values.shape):
+            raise ValueError('parameters and values should be the same shape.')
     # Add values to each element in parameters
-    output = list()
-    for paramdict, val in zip(parameters, values):
-        # Check to see what types we're handling
-        if type(paramdict) is list and type(val) is list:
-            output.append(stitch_parameters(paramdict, parameter_to_stitch, val))
-        else:
-            paramdict[parameter_to_stitch] = val
-            output.append(paramdict)
-    # Return
-    return output
+    if type(parameters) is list:
+        output = list()
+        for paramdict, val in zip(parameters, values):
+            # Check to see what types we're handling
+            if type(paramdict) is list and type(val) is list:
+                output.append(stitch_parameters(paramdict, parameter_to_stitch, val))
+            else:
+                paramdict[parameter_to_stitch] = val
+                output.append(paramdict)
+        # Return
+        return output
+    elif type(parameters) is np.ndarray:
+        output = np.empty(parameters.shape, dtype=object)
+        with np.nditer(parameters, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
+            for x in it:
+                if type(x) is list and type(values[it.multi_index]) is list:
+                    output[it.multi_index] = stitch_parameters(x, parameter_to_stitch, values[it.multi_index])
+                else:
+                    output[it.multi_index] = dict(**x.item(), **{parameter_to_stitch: values[it.multi_index]})
+        return output
+    else:
+        raise ValueError('parameters is of unexpected type')
 
 
 def wiggle_parameters(parameters, parameter_to_wiggle, values):
     """
-    Takes a dict of parameter names and values (or possibly nested lists of these) and copies its elements multiple
-    times. Each copy after the first contains one parameter set to a new parameter value (wiggled). Useful for
-    constructing batches of simulations over a range of parameter values.
+    Takes a dict of parameter names and values (or possibly nested lists or arrays of these) and copies its elements
+    multiple times. Each copy after the first contains one parameter set to a new parameter value (wiggled). The copies
+    are returned. Useful for constructing batches of simulations over a range of parameter values.
 
     Arguments:
-        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
-            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+        parameters (dict, list, ndarray): dict of parameter names and values or a list or ndarray of such dicts. If a
+        list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the
+        elements can be dicts or lists. Lists are processed recursively. Wiggled parameters are added as new dimensions
+        to the ndarray, which is squeezed on output to avoid singleton dimensions. This functionality is useful to
+        encode a series of wiggled parameters as a multi-dimensional array.
 
         parameter_to_wiggle (string): name of parameter to wiggle
 
@@ -399,12 +444,19 @@ def wiggle_parameters(parameters, parameter_to_wiggle, values):
     Returns:
         sequence: list of lists. Elements of lists are dicts. First dict is baselines, remaining dicts contain a
             single wiggled parameter.
+
+    Notes:
+        Generally, we assume that wiggling will be done before any repeats/increments... however, wiggle_parameters() is
+        written in an agnostic form such that this assumption is not rigidly enforced. A future version may avoid this
+        as it can produce undesireable functionality. # TODO: address this issue
     """
     # Check if input is dict or list and process accordingly
     if type(parameters) is dict:
         return _wiggle_parameters_dict(parameters, parameter_to_wiggle, values)
     elif type(parameters) is list:
         return [wiggle_parameters(element, parameter_to_wiggle, values) for element in parameters]
+    elif type(parameters) is np.ndarray:
+        return np.squeeze(np.array(list(map(lambda x: wiggle_parameters(x, parameter_to_wiggle, values), parameters))))
     else:
         raise ValueError('Input is not list or dict!')
 
@@ -437,21 +489,25 @@ def _wiggle_parameters_dict(paramdict, parameter, values):
 
 def wiggle_parameters_parallel(parameters, parameter_to_wiggle, values):
     """
-    Takes a dict of parameter names and values (or possibly nested lists of these) and copies its elements multiple
-    times. Each copy after the first contains parameters set to new values (wiggled). This function differs from
-    wiggle_parameters() in that multiple parameter names (and corresponding sets of values) can be specified. In this
-    case, these values are wiggled "simultaneously", meaning that each copied dict will simultaneously have adjusted
+    Takes a dict of parameter names and values (or possibly nested lists or arrays of these) and copies its elements
+    multiple times. Each copy after the first contains one parameter set to a new parameter value (wiggled). The copies
+    are returned. Useful for constructing batches of simulations over a range of parameter values. This function differs
+    from wiggle_parameters() in that multiple parameter names (and corresponding sets of values) can be specified. In
+    this case, these values are wiggled "simultaneously", meaning that each copied dict will simultaneously have adjusted
     all parameters specified by the user.
 
     Arguments:
-        parameters (dict, list): dict of parameter names and values or a list. If a list, the elements can
-            be dicts of parameters or lists. Lists are processed recursively until no lists remain.
+        parameters (dict, list, ndarray): dict of parameter names and values or a list or ndarray of such dicts. If a
+            list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the
+            elements can be dicts or lists. Lists are processed recursively. Wiggled parameters are added as new
+            dimensions to the ndarray, which is squeezed on output to avoid singleton dimensions. This functionality is
+            useful to encode a series of wiggled parameters as a multi-dimensional array.
 
         parameter_to_wiggle (string, list): name of parameter to wiggle, or list of such names. If a list, its length
             should match that of values.
 
-        values (list): values to which the parameter value is wiggled, or list of such lists. If a list, its length
-            should match that of parameters_to_wiggle.
+        values (list, ndarray): values to which the parameter value is wiggled, or list of such lists. If a list, its
+            length should match that of parameters_to_wiggle. The lists can also be 1d arrays.
 
     Returns:
         sequence: list of lists. Elements of lists are dicts. First dict is baselines, remaining dicts contain a
@@ -466,6 +522,9 @@ def wiggle_parameters_parallel(parameters, parameter_to_wiggle, values):
         return _wiggle_parameters_parallel_dict(parameters, parameter_to_wiggle, values)
     elif type(parameters) is list:
         return [wiggle_parameters_parallel(element, parameter_to_wiggle, values) for element in parameters]
+    elif type(parameters) is np.ndarray:
+        return np.squeeze(np.array(list(map(lambda x: wiggle_parameters_parallel(x, parameter_to_wiggle, values),
+                                            parameters))))
     else:
         raise ValueError('Input is not list or dict!')
 
