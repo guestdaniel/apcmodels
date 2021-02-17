@@ -51,13 +51,20 @@ class Simulator:
         # If runfunc is None, use the default
         if runfunc is None:
             runfunc = self.default_runfunc
+        # If we pass Parameters object, extract underlying data and discard object shell
+        if type(params) is Parameters:
+            params = params.params
         # If parallel, set up the pool and run sequence on pool
         if parallel:
             p = ProcessPool(n_thread)
             if type(params) is list:
                 results = list(p.imap(runfunc, tqdm(params, disable=hide_progress)))
             elif type(params) is np.ndarray:
-                results = np.array(list(p.imap(runfunc, tqdm(params, disable=hide_progress))))
+                # For array params, we need flatten the array and then un-flatten it after output
+                old_size = params.shape
+                params = np.reshape(params, (params.size,))
+                results = list_to_array(list(p.imap(runfunc, tqdm(params, disable=hide_progress))))
+                results = np.reshape(results, old_size)
             else:
                 raise ValueError('params should be a list or an array')
         # If not parallel, simply iterate over and run each element of the sequence
@@ -65,7 +72,11 @@ class Simulator:
             if type(params) is list:
                 results = [runfunc(element) for element in params]
             elif type(params) is np.ndarray:
-                results = np.array(list(map(runfunc, params)))
+                # For array params, we need flatten the array and then un-flatten it after output
+                old_size = params.shape
+                params = np.reshape(params, (params.size,))
+                results = list_to_array(list(map(runfunc, params)))
+                results = np.reshape(results, old_size)
             else:
                 raise ValueError('params should be a list or an array')
         return results
@@ -101,6 +112,10 @@ class Parameters:
     def shape(self):
         return self.params.shape
 
+    @property
+    def size(self):
+        return self.params.size
+
     def append(self, parameter_to_append, value):
         """ See documentation for append_parameters() """
         self.params = append_parameters(self.params, parameter_to_append, value)
@@ -118,10 +133,6 @@ class Parameters:
     def combine(self, parameters_2):
         """ See documentation for combine_parameters() """
         self.params = combine_parameters(self.params, parameters_2)
-
-    def flatten(self):
-        """ See documentation for flatten_parameters() """
-        self.params = flatten_parameters(self.params)
 
     def evaluate(self):
         """ See documentation for evaluate_parameters() """
@@ -590,3 +601,16 @@ def _wiggle_parameters_parallel_dict(paramdict, parameter, values):
             parameter_sequence.append(temp)
     # Return sequence
     return parameter_sequence
+
+
+def list_to_array(_list):
+    """
+    Accepts a list and turns it into an ndarray with 'object' dtype of shape (len,)
+
+    Arguments:
+        _list (list)
+    """
+    new_array = np.empty(shape=(len(_list), ), dtype='object')
+    for ii in range(len(_list)):
+        new_array[ii] = _list[ii]
+    return new_array

@@ -2,6 +2,77 @@ import apcmodels.simulation as si
 import numpy as np
 
 
+def test_parameters_init():
+    """ Check to make sure that Parameters.__init__() accepts kwargs that are turned into entries in its params
+    attribute """
+    params = si.Parameters(hello='world', foo='bar')
+    assert params[0]['hello'] == 'world' and params[0]['foo'] == 'bar'
+
+
+def test_parameters_append():
+    params = si.Parameters(hello='world')
+    params.append('foo', 'bar')
+    assert params[0]['hello'] == 'world' and params[0]['foo'] == 'bar'
+
+
+def test_parameters_append_2d():
+    params = si.Parameters(hello='world')
+    params.wiggle('hello', ['world', 'mundo'])
+    params.wiggle('goodbye', ['world', 'mundo'])
+    params.append('foo', 'bar')
+    assert params[0, 0]['hello'] == 'world' and params[1, 1]['goodbye'] == 'mundo'
+
+
+def test_parameters_add_inputs():
+    params = si.Parameters(hello='world')
+    params.add_inputs(np.array(['bar']))
+    assert params[0]['hello'] == 'world' and params[0]['_input'] == 'bar'
+
+
+def test_parameters_combine():
+    params = si.Parameters(hello='world')
+    params.combine(si.Parameters(foo='bar'))
+    assert params[0]['hello'] == 'world' and params[0]['foo'] == 'bar'
+
+
+def test_parameters_evaluate():
+    def tempfunc():
+        return 'world'
+    params = si.Parameters(hello=tempfunc)
+    params.evaluate()
+    assert params[0]['hello'] == 'world'
+
+
+def test_parameters_increment():
+    params = si.Parameters(hello=1)
+    params.increment({'hello': 0.01})
+    assert params[0][0]['hello'] == 1 and params[0][1]['hello'] == 1.01
+
+
+def test_parameters_repeat():
+    params = si.Parameters(hello='world')
+    params.repeat(2)
+    assert params[0][0]['hello'] == 'world' and params[0][1]['hello'] == 'world'
+
+
+def test_parameters_stitch():
+    params = si.Parameters(hello='world')
+    params.stitch('foo', np.array(['bar']))
+    assert params[0]['hello'] == 'world' and params[0]['foo'] == 'bar'
+
+
+def test_parameters_wiggle():
+    params = si.Parameters(hello='world')
+    params.wiggle('foo', [1, 2, 3])
+    assert params[0]['foo'] == 1 and params[2]['foo'] == 3
+
+
+def test_parameters_wiggle_parallel():
+    params = si.Parameters(hello='world')
+    params.wiggle_parallel(['foo', 'bloop'], [[1, 2, 3], [4, 5, 6]])
+    assert params[0]['foo'] == 1 and params[2]['foo'] == 3 and params[0]['bloop'] == 4 and params[2]['bloop'] == 6
+
+
 def test_simulator_run_simple_batch():
     """ Check that run can handle arbitrary inputs """
     # Create dummy function that returns input as output --- thus, the output of run() should be identical to its input
@@ -61,13 +132,6 @@ def test_simulator_run_array_2d_parallel():
     results = sim.run(np.array([[{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}],
                                 [{'foo': 1, 'bar': 20}, {'foo': 3, 'bar': 40}]]), parallel=False)
     assert results.shape == (2, 2)
-
-
-def test_parameters_init():
-    """ Check to make sure that Parameters.__init__() accepts kwargs that are turned into entries in its params
-    attribute """
-    params = si.Parameters(hello='world', foo='bar')
-    assert params[0]['hello'] == 'world' and params[0]['foo'] == 'bar'
 
 
 def test_append_parameters_single_element_input():
