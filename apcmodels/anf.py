@@ -3,27 +3,58 @@ from gammatone import filters
 from scipy.signal import butter, lfilter
 from apcmodels.simulation import Simulator
 from numba import jit
+from cochlea.zilany2014.zilany2014_rate import run_zilany2014_rate
 
 
 class AuditoryNerveHeinz2001Numba(Simulator):
-    """
-    Synthesizes a pure tone with raised-cosine ramps.
-    """
     def __init__(self):
         super().__init__()
 
     def simulate(self, params):
         """
-        Passes kwargs to the Heinz (2001) firing rate simulation and returns the firing rates
+        Passes params to the Heinz et al. (2001) firing rate simulation as kwargs and returns the firing rates
 
         Arguments:
             params: encoded parameters, should be a dict containing parameter names and values
 
         Returns:
-            output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
-
+            output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
         """
         return calculate_heinz2001_firing_rate(**params)
+
+
+class AuditoryNerveZilany2014(Simulator):
+    def __init__(self):
+        super().__init__()
+
+    def simulate(self, params):
+        """
+        Passes params to the Zilany et al. (2014) firing rate simulation as kwargs and returns the firing rates
+
+        Arguments:
+            params: encoded parameters, should be a dict containing parameter names and values
+
+        Returns:
+            output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
+        """
+        return calculate_zilany2014_firing_rate(**params)
+
+
+class AuditoryNerveVerhulst2018(Simulator):
+    def __init__(self):
+        super().__init__()
+
+    def simulate(self, params):
+        """
+        Passes params to the Verhulst et al. (2001) firing rate simulation as kwargs and returns the firing rates
+
+        Arguments:
+            params: encoded parameters, should be a dict containing parameter names and values
+
+        Returns:
+            output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
+        """
+        return calculate_verhulst2018_firing_rate(**params)
 
 
 def calculate_auditory_nerve_firing_rate(nerve_model):
@@ -144,3 +175,38 @@ def _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L):
 
     # Return
     return P_I * C_I
+
+
+@calculate_auditory_nerve_firing_rate
+def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fiber_types='hsr', **kwargs):
+    """
+    Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation.
+
+    Arguments:
+        _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
+
+        fs (int): sampling rate in Hz
+
+        cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
+
+        fiber_types (list, str): list of fiber types to simulate, or a single fiber type to simulate (from 'hsr', 'msr',
+             'lsr'). Requesting multiple types naturally multiplies the number of output channels.
+
+    Returns:
+        output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
+
+    Warnings:
+        - Note that arguments passed to **kwargs are discarded silently
+
+    Citations:
+        Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
+        model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
+    """
+    # Check if cfs is None, if so set 1000 Hz single CF
+    if cfs is None:
+        cfs = np.array([1000])
+
+    rates = run_zilany2014_rate(_input, fs, anf_types=fiber_types, cf=cfs, cohc=1, cihc=1, species=species,
+                                powerlaw='actual', ffGn=False)
+    rates = np.array(rates).T
+    return rates
