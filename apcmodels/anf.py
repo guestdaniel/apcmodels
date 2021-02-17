@@ -4,6 +4,13 @@ from scipy.signal import butter, lfilter
 from apcmodels.simulation import Simulator
 from numba import jit
 from cochlea.zilany2014.zilany2014_rate import run_zilany2014_rate
+import sys
+sys.path.append('/home/daniel/apc_code/scripts/Verhulstetal2018Model')
+from run_model2018 import Verhulst2018CochleaIHC
+from run_model2018 import Verhulst2018ANF
+
+# TODO: both Zilany (2014) and Verhulst (2018) code depend on custom tweaks applied to published code... need to find
+# TODO: a more elegant way to pacakge these tools!
 
 
 class AuditoryNerveHeinz2001Numba(Simulator):
@@ -184,16 +191,14 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
 
     Arguments:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
-
         fs (int): sampling rate in Hz
-
         cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
-
+        species (str): species of simulation, either cat or human
         fiber_types (list, str): list of fiber types to simulate, or a single fiber type to simulate (from 'hsr', 'msr',
              'lsr'). Requesting multiple types naturally multiplies the number of output channels.
 
     Returns:
-        output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
+        output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
 
     Warnings:
         - Note that arguments passed to **kwargs are discarded silently
@@ -206,7 +211,51 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
     if cfs is None:
         cfs = np.array([1000])
 
+    # Run firing rate simulation using cochlea package
     rates = run_zilany2014_rate(_input, fs, anf_types=fiber_types, cf=cfs, cohc=1, cihc=1, species=species,
                                 powerlaw='actual', ffGn=False)
-    rates = np.array(rates).T
+    rates = np.array(rates).T  # transpose to (n_cf, n_sample)
     return rates
+
+
+@calculate_auditory_nerve_firing_rate
+def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
+    """
+    Implements Verhulst, Altoe, and Vasilikov (2018) auditory nerve simulation.
+
+    Arguments:
+        _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
+        fs (int): sampling rate in Hz
+        cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses. Note that the
+            Verhulst model returns responses at a hardcoded range of ~1000 CFs... for each requested CF, we return
+            the closest available CF. This can produce significant distortion along the tonotopic axis or can even
+            result in the same response from a single CF being returned multiple times.
+    Returns:
+        output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
+
+    Warnings:
+        - Note that arguments passed to **kwargs are discarded silently
+        - The CFs provided by the model appear to be somewhat arbitrary and not exactly aligned with the true underlying
+        CFs of the model
+
+    TODO:
+        - Replace the nearest-neighbors CF interpolation with some sort of smooth interpolation
+
+    Citations:
+        Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
+        model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
+    """
+    # Check if cfs is None, if so set 1000 Hz single CF
+    if cfs is None:
+        cfs = np.array([1000])
+
+    # Run firing rate simulations
+    vm, fs_res, cfs_model = Verhulst2018CochleaIHC(_input, fs)
+    rates = Verhulst2018ANF(vm, fs_res, 2)
+    rates = rates / (1 / fs_res)
+    rates = np.flip(rates, axis=1)  # flip tonotopic axis left-right
+    rates = rates.T  # transpose to (n_cf, n_sample)
+
+    # Only return rates at requested "CFs"
+    idxs = np.array([np.argmin(np.abs(cfs_model - cf_requested)) for cf_requested in cfs])
+    return rates[idxs, :]
