@@ -6,8 +6,7 @@ from numba import jit
 from cochlea.zilany2014.zilany2014_rate import run_zilany2014_rate
 import sys
 sys.path.append('/home/daniel/apc_code/scripts/Verhulstetal2018Model')
-from run_model2018 import Verhulst2018CochleaIHC
-from run_model2018 import Verhulst2018ANF
+from run_model2018 import Verhulst2018Cochlea
 
 # TODO: both Zilany (2014) and Verhulst (2018) code depend on custom tweaks applied to published code... need to find
 # TODO: a more elegant way to pacakge these tools!
