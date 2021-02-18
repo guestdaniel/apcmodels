@@ -1,5 +1,6 @@
 import apcmodels.signal as sg
 import numpy as np
+from apcmodels.simulation import Parameters
 
 
 class Synthesizer:
@@ -53,19 +54,21 @@ class Synthesizer:
                 structure will mimic that of the input parameter sequence. Each dict in parameter_sequence becomes a
                 single ndarray in results.
         """
-        # Loop through the parameter sequence and pass it to synthesize(), unpacking the parameter dict after evaluating
-        # callable elements of the dict
+        # If we have a Parameters object, extract params
+        if type(parameters) is Parameters:
+            parameters = parameters.params
+        # If parameters is an array, loop through it using nditer
         if type(parameters) is np.ndarray:
             temp = np.empty(parameters.shape, dtype=object)
             with np.nditer(parameters, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
                 for x in it:
                     temp[it.multi_index] = self.synthesize_sequence(x.item(), **kwargs)
             return temp
+        # If parameters is a list, process with list comprehension recursively
         elif type(parameters) is list:
-            # Pass the list back to synthesize_sequence()
             return [self.synthesize_sequence(params, **kwargs) for params in parameters]
+        # If parameters is a dict, synthesize the stimulus
         elif type(parameters) is dict:
-            # Pass parameter vector onto synthesize()
             return self._synthesize_preprocess_inputs(parameters, **kwargs)
         else:
             raise TypeError('parameter_sequence should be an array, a list, or a dict')

@@ -210,6 +210,10 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
     # Check if cfs is None, if so set 1000 Hz single CF
     if cfs is None:
         cfs = np.array([1000])
+    # Set CFs that are too high or too low to min/max values
+    cfs[cfs < 125] = 125
+    cfs[cfs > 20000] = 20000
+    # TODO: add warning for this behavior
 
     # Run firing rate simulation using cochlea package
     rates = run_zilany2014_rate(_input, fs, anf_types=fiber_types, cf=cfs, cohc=1, cihc=1, species=species,
@@ -256,6 +260,6 @@ def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
     rates = np.flip(rates, axis=1)  # flip tonotopic axis left-right
     rates = rates.T  # transpose to (n_cf, n_sample)
 
-    # Only return rates at requested "CFs"
-    idxs = np.array([np.argmin(np.abs(cfs_model - cf_requested)) for cf_requested in cfs])
+    # Only return rates at requested "CFs" (while not forgetting to flip model CFs)
+    idxs = np.array([np.argmin(np.abs(np.flip(cfs_model) - cf_requested)) for cf_requested in cfs])
     return rates[idxs, :]

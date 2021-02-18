@@ -73,6 +73,8 @@ def decode_ideal_observer(ratefunc):
         # Transform from list to ndarray
         x = np.array(x)
         x = np.transpose(x, [1, 0, 2])  # shape: n_cf x (n_param + 1) x n_sample
+        # Add small baseline firing rate to avoid issues with zeros and NaNs
+        x += 1
         # Construct one ndarray of baseline values and another of incremented values
         baseline = np.tile(x[:, 0, :], [n_param, 1, 1])
         baseline = np.transpose(baseline, [1, 0, 2])  # shape: n_cf x n_param x n_sample
