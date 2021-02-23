@@ -3,10 +3,11 @@ from gammatone import filters
 from scipy.signal import butter, lfilter
 from apcmodels.simulation import Simulator
 from numba import jit
-from cochlea.zilany2014.zilany2014_rate import run_zilany2014_rate
+from external.zilany2014.run_zilany import run_zilany2014_rate
+#from cochlea.zilany2014.zilany2014_rate import run_zilany2014_rate
 import sys
 sys.path.append('/home/daniel/apc_code/scripts/Verhulstetal2018Model')
-from run_model2018 import Verhulst2018Cochlea
+from run_model2018 import Verhulst2018CochleaIHC
 
 # TODO: both Zilany (2014) and Verhulst (2018) code depend on custom tweaks applied to published code... need to find
 # TODO: a more elegant way to pacakge these tools!
@@ -184,7 +185,7 @@ def _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L):
 
 
 @calculate_auditory_nerve_firing_rate
-def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fiber_types='hsr', **kwargs):
+def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fiber_type='hsr', **kwargs):
     """
     Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation.
 
@@ -193,7 +194,7 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
         fs (int): sampling rate in Hz
         cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
         species (str): species of simulation, either cat or human
-        fiber_types (list, str): list of fiber types to simulate, or a single fiber type to simulate (from 'hsr', 'msr',
+        fiber_type (list, str): list of fiber types to simulate, or a single fiber type to simulate (from 'hsr', 'msr',
              'lsr'). Requesting multiple types naturally multiplies the number of output channels.
 
     Returns:
@@ -215,7 +216,7 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
     # TODO: add warning for this behavior
 
     # Run firing rate simulation using cochlea package
-    rates = run_zilany2014_rate(_input, fs, anf_types=fiber_types, cf=cfs, cohc=1, cihc=1, species=species,
+    rates = run_zilany2014_rate(_input, fs, anf_types=fiber_type, cf=cfs, cohc=1, cihc=1, species=species,
                                 powerlaw='actual', ffGn=False)
     rates = np.array(rates).T  # transpose to (n_cf, n_sample)
     return rates

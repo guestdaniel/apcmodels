@@ -61,6 +61,14 @@ def test_parameters_stitch():
     assert params[0]['hello'] == 'world' and params[0]['foo'] == 'bar'
 
 
+def test_parameters_stitch_nested():
+    params = si.Parameters(hello='world')
+    params.repeat(5)
+    x = np.empty((1,), dtype=object)
+    x[0] = [1, 2, 3, 4, 5]
+    params.add_inputs(x)
+
+
 def test_parameters_wiggle():
     params = si.Parameters(hello='world')
     params.wiggle('foo', [1, 2, 3])

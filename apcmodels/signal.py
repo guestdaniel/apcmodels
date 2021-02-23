@@ -254,6 +254,6 @@ def te_noise(duration, fs, lco, hco, level):
 
     noise = noise * np.sqrt(2*fftpts) / (10**(magnitude_ratio_dB/20)) * 10**(ratio_1k_dB/20)
 
-    noise = noise * 10**(level/20)
+    noise = scale_dbspl(noise, level)  # TODO: figure out proper level scaling for TEN
 
     return noise

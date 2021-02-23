@@ -2,6 +2,7 @@ from pathos.multiprocessing import ProcessPool
 from copy import deepcopy
 from tqdm import tqdm
 import numpy as np
+import re
 
 
 class Simulator:
@@ -137,6 +138,23 @@ class Parameters:
     def evaluate(self):
         """ See documentation for evaluate_parameters() """
         self.params = evaluate_parameters(self.params)
+
+    def flatten(self):
+        """ Takes the params array and flattens it into a single 1d array. We assume that each element of self.params is
+         of the same type and of the same structure.
+         TODO: add tests?
+         """
+        # First, we loop through each element of self.params and flatten them out if needed
+        temp = np.empty(self.params.shape, dtype=object)
+        with np.nditer(self.params, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
+                for x in it:
+                    x = x.item()
+                    if type(x) is list:
+                        temp[it.multi_index] = flatten_parameters(x)
+                    else:
+                        temp[it.multi_index] = x
+        # Next, we concatenate together all the elements of temp and return them
+        self.params = np.concatenate(temp)
 
     def increment(self, increments):
         """ See documentation for increment_parameters() """
@@ -349,15 +367,29 @@ def _increment_parameters_dict(baselines, increments):
     parameter_sequence.append(deepcopy(baselines))
     # Loop through elements of increments and construct a corresponding entry in sequence
     for key in increments.keys():
-        temp = deepcopy(baselines)
-        # Check if elements of temp are callable, if so we call them now
-        if callable(temp[key]):
-            temp[key] = temp[key]() + increments[key]
+        if len(re.findall('^\(\d+\)', key)) > 0:
+            new_key = key[(len(key.split('_')[0])+1):]
+            # Create copy of baseline
+            temp = deepcopy(baselines)
+            # Check if elements of temp are callable, if so we call them now
+            if callable(temp[new_key]):
+                temp[new_key] = temp[new_key]() + increments[key]
+            else:
+                temp[new_key] = temp[new_key] + increments[key]
+            # Add in a record of the size of the increment
+            temp['increment_size'] = increments[key]
+            parameter_sequence.append(temp)
         else:
-            temp[key] = temp[key] + increments[key]
-        # Add in a record of the size of the increment
-        temp['increment_size'] = increments[key]
-        parameter_sequence.append(temp)
+            # Create copy of baseline
+            temp = deepcopy(baselines)
+            # Check if elements of temp are callable, if so we call them now
+            if callable(temp[key]):
+                temp[key] = temp[key]() + increments[key]
+            else:
+                temp[key] = temp[key] + increments[key]
+            # Add in a record of the size of the increment
+            temp['increment_size'] = increments[key]
+            parameter_sequence.append(temp)
     # Return sequence
     return parameter_sequence
 
@@ -430,7 +462,7 @@ def stitch_parameters(parameters, parameter_to_stitch, values):
     if type(parameters) is list:
         if len(parameters) != len(values):
             raise ValueError('parameters and values should be the same length.')
-    elif type(parameters) is np.ndarray:
+    elif type(parameters) is np.ndarray or type(parameters) is Parameters:
         if not np.all(parameters.shape == values.shape):
             raise ValueError('parameters and values should be the same shape.')
     # Add values to each element in parameters
@@ -449,10 +481,11 @@ def stitch_parameters(parameters, parameter_to_stitch, values):
         output = np.empty(parameters.shape, dtype=object)
         with np.nditer(parameters, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
             for x in it:
+                x = x.item()
                 if type(x) is list and type(values[it.multi_index]) is list:
                     output[it.multi_index] = stitch_parameters(x, parameter_to_stitch, values[it.multi_index])
                 else:
-                    output[it.multi_index] = dict(**x.item(), **{parameter_to_stitch: values[it.multi_index]})
+                    output[it.multi_index] = dict(**x, **{parameter_to_stitch: values[it.multi_index]})
         return output
     else:
         raise ValueError('parameters is of unexpected type')
