@@ -2,8 +2,8 @@ from __future__ import division, print_function, absolute_import
 import itertools
 import numpy as np
 import pandas as pd
-from external.zilany2014 import _zilany2014
-from external.zilany2014.util import calc_cfs
+from apcmodels.external.zilany2014 import _zilany2014
+from apcmodels.external.zilany2014.util import calc_cfs
 
 
 def run_zilany2014_spikes(sound, fs, anf_num, cf, species, seed, cohc=1, cihc=1, powerlaw='approximate', ffGn=False):

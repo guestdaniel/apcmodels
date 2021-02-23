@@ -3,11 +3,10 @@ from gammatone import filters
 from scipy.signal import butter, lfilter
 from apcmodels.simulation import Simulator
 from numba import jit
-from external.zilany2014.run_zilany import run_zilany2014_rate
-#from cochlea.zilany2014.zilany2014_rate import run_zilany2014_rate
+from apcmodels.external.zilany2014.run_zilany import run_zilany2014_rate
 import sys
 sys.path.append('/home/daniel/apc_code/scripts/Verhulstetal2018Model')
-from run_model2018 import Verhulst2018CochleaIHC
+from run_model2018 import Verhulst2018CochleaIHC, Verhulst2018ANF
 
 # TODO: both Zilany (2014) and Verhulst (2018) code depend on custom tweaks applied to published code... need to find
 # TODO: a more elegant way to pacakge these tools!
@@ -246,8 +245,8 @@ def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
         - Replace the nearest-neighbors CF interpolation with some sort of smooth interpolation
 
     Citations:
-        Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
-        model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
+        Verhulst, S., Altoè, A., & Vasilkov, V. (2018). Computational modeling of the human auditory periphery:
+        Auditory-nerve responses, evoked potentials and hearing loss. Hearing research, 360, 55-75.
     """
     # Check if cfs is None, if so set 1000 Hz single CF
     if cfs is None:

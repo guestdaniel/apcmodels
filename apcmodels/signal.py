@@ -1,6 +1,5 @@
 import numpy as np
 from math import floor
-import math
 from scipy.interpolate import interp1d
 from copy import deepcopy
 
@@ -10,8 +9,8 @@ def amplify(signal, dB):
     Amplify or attenuate signal in terms of power by specified amount in decibels
 
     Arguments:
-        signal (ndarray): input sound pressure signal
-        dB (float): dB amount to amplify by
+        signal (ndarray): input sound pressure signal, of shape (n_sample, ) or (n_sample, n_signal)
+        dB (float, ndarray): dB amount to amplify by, of shape (1, ) or (n_signal)
     Returns:
         output (array): output sound pressure signal
     """
@@ -34,14 +33,8 @@ def complex_tone(freqs, levels, phases, dur, fs):
     Returns:
         output (array): complex tone
     """
-    # Check to make sure argument lengths match up
-    if not (len(freqs) == len(levels) and len(freqs) == len(phases)):
-        raise Exception("Length of freqs, amps, and phases should match")
-    # Create empty output vector
-    output = np.zeros((floor(dur*fs)))
-    # Synthesize each component pure tone and add to output vector
-    for (freq, amp, phase) in zip(freqs, levels, phases):
-        output = output + scale_dbspl(pure_tone(freq, phase, dur, fs), amp)
+    # Synthesize components in parallel
+    output = np.sum(scale_dbspl(pure_tone(freqs, phases, dur, fs), levels), axis=1)
     return output
 
 
@@ -72,13 +65,14 @@ def dbspl_pascal(signal):
     Returns the expected dB SPL level of a time-domain signal
 
     Arguments:
-        signal (ndarray): input sound pressure signal
+        signal (ndarray): input sound pressure signal, either shape of (n_sample, ) or (n_sample, n_signal). In the
+            latter case, each signal is processed separately.
 
     Returns:
-        output (float): dB SPL of signal
+        output (float): dB SPL of signal, of shape (1, ) or (n_signal, )
     """
     # Check to make sure that our signal is not all zeros
-    if rms(signal) == 0:
+    if np.any(rms(signal) == 0):
         raise ValueError('RMS of signal iz zero and has no dB value.')
     # Calibrate reference at 20 micropascals
     ref = 20e-6
@@ -91,18 +85,18 @@ def pure_tone(freq, phase, dur, fs):
     Synthesize single pure tone
 
     Arguments:
-        freq (float): frequency of pure tone in Hz
-        phase (float): phase offset in degrees, must be between 0 and 360
-        dur (float): duration in seconds
+        freq (float, ndarray): frequency of pure tone in Hz
+        phase (float, ndarray): phase offset in degrees, must be between 0 and 360
+        dur (float, ndarray): duration in seconds
         fs (int): sampling rate in Hz
 
     Returns:
-        output (array): pure tone
+        output (array): pure tone, of shape (n_sample, ) or (n_sample, n_pure_tone)
     """
     # Create empty array of time samples
     t = np.linspace(0, dur, floor(dur*fs))
     # Calculate and return pure tone
-    return np.sin(2*np.pi*freq*t+(2*np.pi/360*phase))
+    return np.sin(2*np.pi*np.outer(t, freq)+(2*np.pi/360*phase))
 
 
 def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
@@ -131,17 +125,18 @@ def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
     return (1 + modulator) * carrier
 
 
-def rms(signal):
+def rms(signal, axis=0):
     """
     Computes root-mean-square (RMS) of signal
 
     Arguments:
-        signal (ndarray): time-domain signal
+        signal (ndarray): time-domain signal, of shape (n_sample, ) or (n_sample, n_signal)
+        axis (int): axis along which to calculate RMS, defaults to 0
 
     Returns:
         output (float): RMS value of signal
     """
-    return np.sqrt(np.mean(signal**2))
+    return np.sqrt(np.mean(signal**2, axis=axis))
 
 
 def scale_dbspl(signal, dB):

@@ -24,8 +24,9 @@ def save_to_csv(results, params, filename, **kwargs):
         raise ValueError('params and results should have the same length!')
     # Loop through results and params
     for result, paramdict in zip(results, params):
-        # Filter out _input from paramdict
-        paramdict.pop('_input')
+        # Filter out _input from paramdict, since it clutters up the CSV considerably
+        if '_input' in paramdict.keys():
+            paramdict.pop('_input')
         # Append result to paramdict
         paramdict['result'] = result
         # Go through all kwargs and add to row
