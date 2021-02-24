@@ -33,9 +33,15 @@ def complex_tone(freqs, levels, phases, dur, fs):
     Returns:
         output (array): complex tone
     """
+    # Check to make sure inputs are of the right shape
+    if freqs.shape != levels.shape or freqs.shape != phases.shape:
+        raise ValueError('Freqs, levels, and phases must all be the same size')
     # Synthesize components in parallel
-    output = np.sum(scale_dbspl(pure_tone(freqs, phases, dur, fs), levels), axis=1)
-    return output
+    output = scale_dbspl(pure_tone(freqs, phases, dur, fs), levels)
+    if output.ndim == 1:
+        return output  # if we only have one component, return it alone
+    else:
+        return np.sum(output, axis=1)  # if we have multiple components, sum across them
 
 
 def cosine_ramp(signal, dur_ramp, fs):
@@ -43,13 +49,16 @@ def cosine_ramp(signal, dur_ramp, fs):
     Applies a raised-cosine ramp to a time-domain signal.
 
     Arguments:
-        signal (np.ndarray): time-domain signal to be ramped
+        signal (np.ndarray): time-domain signal to be ramped, of shape (n_samples, )
         dur_ramp (float): duration of the ramp in seconds
         fs (int): sampling rate in Hz
 
     Returns:
         output (array): time-domain signal with ramp
     """
+    # Check to make sure that the duration of the ramp is less than 1/2 of the stimulus duration
+    if dur_ramp > len(signal)/2:
+        raise ValueError('The ramp cannot be longer than the stimulus!')
     # Determine length of the ramp
     n_ramp = floor(fs*dur_ramp)
     # Calculate shape of ramp
@@ -73,7 +82,7 @@ def dbspl_pascal(signal):
     """
     # Check to make sure that our signal is not all zeros
     if np.any(rms(signal) == 0):
-        raise ValueError('RMS of signal iz zero and has no dB value.')
+        raise ValueError('RMS of at least one signal in input is zero and has no dB value.')
     # Calibrate reference at 20 micropascals
     ref = 20e-6
     # Calculate and return dB SPL value
@@ -95,8 +104,8 @@ def pure_tone(freq, phase, dur, fs):
     """
     # Create empty array of time samples
     t = np.linspace(0, dur, floor(dur*fs))
-    # Calculate and return pure tone
-    return np.sin(2*np.pi*np.outer(t, freq)+(2*np.pi/360*phase))
+    # Calculate pure tone
+    return np.squeeze(np.sin(2*np.pi*np.outer(t, freq)+(2*np.pi/360*phase)))
 
 
 def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
@@ -114,6 +123,8 @@ def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
 
     Returns:
         output (array): pure tone
+
+    TODO: add tests and vectorize
     """
     # Create empty array of time samples
     t = np.linspace(0, dur, floor(dur*fs))

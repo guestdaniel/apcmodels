@@ -181,5 +181,3 @@ def find_parameter(params, param_name):
             value = find_parameter(element, param_name)
             if value is not None:
                 return value
-    # Since we have looked through the entirety of params and we haven't found what we're looking for, raise an error
-    raise LookupError('params does not contain any keys corresponding to param_name ' + param_name)
