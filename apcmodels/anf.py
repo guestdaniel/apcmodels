@@ -79,10 +79,10 @@ def calculate_auditory_nerve_firing_rate(nerve_model):
         if 'fs' not in kwargs:
             kwargs['fs'] = int(200e3)  # if no fs, set to default of 200 kHz
 
-        # Append 10 ms silence to the beginning of the acoustic input and the end of acoustic input
-        kwargs['_input'] = np.concatenate([np.zeros(int(kwargs['fs']*0.01)),
+        # Append 5 ms silence to the beginning of the acoustic input and 40 ms to the end of acoustic input
+        kwargs['_input'] = np.concatenate([np.zeros(int(kwargs['fs']*0.005)),
                                           kwargs['_input'],
-                                          np.zeros(int(kwargs['fs']*0.01))])
+                                          np.zeros(int(kwargs['fs']*0.040))])
 
         # If a user passes 'cfs' and 'cf_low' or 'cf_high', reject the input combination as invalid
         if ('cfs' in kwargs and 'cf_low' in kwargs) or ('cfs' in kwargs and 'cf_high' in kwargs):

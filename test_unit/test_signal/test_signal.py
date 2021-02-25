@@ -60,9 +60,16 @@ def test_ramp_error():
         return
 
 
-def test_dbspl_pure_tone():
+def test_dbspl_pure_tone_peak1():
     """ Check that pure tone with peak 1 calibrates to 90.9 dB SPL"""
     np.testing.assert_approx_equal(sg.dbspl_pascal(sg.pure_tone(1000, 0, 1, int(48e3))), 90.9, significant=1)
+
+
+def test_dbspl_pure_tone_rms1():
+    """ Check that pure tone with RMS 1 calibrates to 90.9 dB SPL"""
+    x = sg.pure_tone(1000, 0, 1, int(48e3))
+    x = x/sg.rms(x)
+    np.testing.assert_approx_equal(sg.dbspl_pascal(x), 100, significant=1)
 
 
 def test_dbspl_error_empty_array():

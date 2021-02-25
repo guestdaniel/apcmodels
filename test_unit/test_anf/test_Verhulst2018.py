@@ -26,4 +26,4 @@ from apcmodels.anf import calculate_verhulst2018_firing_rate
 # def test_output_dimensionality():
 #     """ Test to make sure that if model simulates multiple channels that they output with the correct shape """
 #     results = calculate_verhulst2018_firing_rate(_input=np.zeros(4000), cfs=np.array([1000, 2000, 3000]))
-#     assert results.shape == (3, 8000)
+#     assert results.shape == (3, 13000)

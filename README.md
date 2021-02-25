@@ -1,14 +1,14 @@
 # apcmodels
 
-`apcmodels` is a Python library developed by Daniel Guest in the [Auditory Perception and Cognition Lab](http://apc.psych.umn.edu/) at the University of Minnesota. `apcmodels` implements computational models of the auditory system, simulates responses for these models to acoustic stimuli, and analyzes the outputs of these models. `apcmodels` utilizes code from a range of existing Python packages/code in the auditory modeling domain and provides a single unified API to access these models. Moreover, `apcmodels` features extensive unit testing and thorough documentation to ensure validity of its outputs and ease of use.
+`apcmodels` is a Python 3 library developed by Daniel Guest in the [Auditory Perception and Cognition Lab](http://apc.psych.umn.edu/) at the University of Minnesota. `apcmodels` implements computational models of the auditory system, simulates responses for these models to acoustic stimuli, and analyzes the outputs of these models. `apcmodels` utilizes code from a range of existing Python packages/code in the auditory modeling domain and provides a single unified API to access these models. Moreover, `apcmodels` features extensive unit testing and thorough documentation to ensure validity of its outputs and ease of use.
 
 # Features
 
-- Access multiple auditory peripheral models with a unified interface
+- Access multiple auditory models with a unified interface
 - Rapidly generate batch simulations over ranges of parameters or combinations of parameters
 - Automatically utilize parallel processing for batch simulations
 - Decode responses with ideal observers ([Heinz, Colburn, and Carney, 2001](https://doi.org/10.1162/089976601750541804))
-- Ensure reliability and validity of results with extensive unit testing
+- Ensure reliability and validity of results with extensive testing
 
 # Implemented models
 
@@ -17,31 +17,6 @@
 | [Heinz, Colburn, and Carney (2001)](https://doi.org/10.1162/089976601750541804) | Auditory nerve | Firing rate
 | [Zilany, Bruce, and Carney (2014)](https://doi.org/10.1121/1.4837815) | Auditory nerve | Firing rate, spikes
 | [Verhulst, Altoe, and Vasilkov (2018)](https://doi.org/10.1016/j.heares.2017.12.018) | Basilar membrane, inner hair cells, auditory nerve | Vibration, potentials, firing rate, spikes
-
-# File structure
-
-`apcmodels` is organized as one main package (`apcmodels`) and a handful of subpackages which implement functionality adapted from external libraries/packages (`external`). Unit tests are maintained in a separate folder (`tests`) which has mirror structure to the main package structure.
-
-```
-.  
-├── apcmodels                # Primary package directory
-│   ├── external             # Submodule that contains code from external sources (e.g., other packages)
-│   │   ├── zilany2014       # Code adapted from cochlea package to implement Zilany et al. (2014) AN model
-│   │   └── verhulst2018     # Code adapted from CoNNear package to implement Verhulst et al. (2018) AN model
-│   ├── __init__.py          
-│   ├── anf.py               # Auditory nerve models 
-│   ├── decode.py            # Ideal observer analysis 
-│   ├── signal.py            # Signal processing essentials and some psychophysics stimuli
-│   ├── simulation.py        # Core simulation interface 
-│   ├── synthesis.py         # Core acoustic stimulus generation interface
-│   ├── util.py              # Miscellaneous functions and utilities
-│   └── ...      
-├── tests                    # Unit tests (organized with mirror structure to apcmodels)
-├── validation               # More elaborate tests against published results in literature
-├── LICENSE                  # License file for the code contained in this repository
-├── README.md                # This README file
-└── setup.py                 # Setup/install file
-```
 
 # Examples
 
@@ -87,13 +62,45 @@ plt.xlabel('Level (dB SPL)')
 plt.ylabel('Response (sp/s)')
 ```
 
-# Simulation tools
+# File structure
 
-logic of how to construct batches
-- Start with an empty dict
-- Use wiggle() to create desired combinations of parameters to test
-- Use flatten() to flatten the constructed parameters list 
-- Use repeat() to specify how many repetitions you want simulated for each combination of parameters
-- Use evaluate() to evaluate any random variables in the parameters
-- Use increment() to specify any incremented parameters to test at the bottom level
+`apcmodels` is organized as one main package (`apcmodels`) and a handful of subpackages that implement functionality adapted from external libraries/packages (`external`). Tests are located in three subfolders; unit tests are in `test_unit`, acceptance tests are in `test_acceptance`, and replications of figures or results from the literature are in `test_replication`. 
+
+```
+.  
+├── apcmodels                # Primary package directory
+│   ├── external             # Submodule that contains code from external sources (e.g., other packages)
+│   │   ├── zilany2014       # Code adapted from cochlea package to implement Zilany et al. (2014) AN model
+│   │   └── verhulst2018     # Code adapted from CoNNear package to implement Verhulst et al. (2018) AN model
+│   ├── __init__.py          
+│   ├── anf.py               # Auditory nerve models 
+│   ├── decode.py            # Ideal observer analysis 
+│   ├── signal.py            # Signal processing essentials and some psychophysics stimuli
+│   ├── simulation.py        # Core simulation interface 
+│   ├── synthesis.py         # Core acoustic stimulus generation interface
+│   ├── util.py              # Miscellaneous functions and utilities
+│   └── ...      
+├── test_acceptance          # Acceptance tests
+├── test_unit                # Unit tests
+├── test_replication         # Replications from literature
+├── LICENSE                  # License file for the code contained in this repository
+├── README.md                # This README file
+└── setup.py                 # Setup/install file
+```
+
+# Installation
+
+To install `apcmodels`, simply download this Git repository and run `python setup.py install` in the root directory. We generally recommend that you install `apcmodels` in a virtual environment (e.g., Conda) to insulate it from your system Python install. A number of Python packages are required but should be installed automatically by the install script. One notable exception is the [`gammatone`](https://github.com/detly/gammatone) package, which must be manually installed or installed via:
+
+```
+pip install git+https://github.com/detly/gammatone.git
+```
+
+# Similar tools and resources
+
+Many other resources exist for performing auditory computational modeling. Most of these resources are written in MATLAB, although some are also written in Python. Some examples are listed below.
+
+- [Matlab Auditory Periphery (MAP)](http://www.essexpsychology.webmate.me/HearingLab/modelling.html)
+- [Auditory Modeling Toolbox](http://amtoolbox.sourceforge.net/)
+- [cochlea](https://github.com/mrkrd/cochlea)
 

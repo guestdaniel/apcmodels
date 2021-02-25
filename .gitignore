@@ -4,3 +4,6 @@
 *.xml
 *.iml
 build
+dist
+.pytest_cache
+apcmodels.egg-info
