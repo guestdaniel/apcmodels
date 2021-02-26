@@ -188,28 +188,26 @@ def te_noise(duration, fs, lco, hco, level):
     if hco > fs/2:
         raise ValueError('hco should be below Nyquist frequency')
 
-    # Synthesize noise
+    # Calculate the number of samples in the stimulus
     dur_smp = floor(duration * fs)
 
-    fftpts = dur_smp
-
-    binfactor = fftpts/fs
+    # Calculate Hz/sample and the indices corresponding to the noise cutoffs
+    binfactor = dur_smp/fs
     LPbin = round(lco*binfactor)
     HPbin = round(hco*binfactor)
 
-    a = np.zeros((fftpts))
-    b = np.zeros((fftpts))
-
+    # Synthesize normally distributed random complex numbers for all frequency bins in noise band
+    a = np.zeros((dur_smp))
+    b = np.zeros((dur_smp))
     a[LPbin:HPbin] = np.random.randn(HPbin-LPbin)
     b[LPbin:HPbin] = np.random.randn(HPbin-LPbin)
-
     fspec = a + b*1j
 
-    local_freq_bin = np.arange(LPbin, HPbin)
-    frequency = ((local_freq_bin)/binfactor)/1000
-    all_freqs = (np.arange(0, fftpts)/binfactor)/1000
+    # Calculate the frequencies of each FFT bin in kHz
+    f_kHz = (np.arange(0, dur_smp)/binfactor)/1000
 
-    # From personal correspondence with B. C. J. Moore via A. J. Oxenham
+    # Define the signal-to-noise ratio at the output of auditory filters required to achieve detection threshold across
+    # frequency range under power spectrum model (From personal correspondence with B. C. J. Moore via A. J. Oxenham)
     K = np.array([[0.0500, 13.5000],
                   [0.0630, 10.0000],
                   [0.0800, 7.2000],
@@ -232,34 +230,33 @@ def te_noise(duration, fs, lco, hco, level):
                   [10.0000, -3.0000],
                   [15.0000, -3.0000]])
 
-    # Interpolate K values between 0.125 and 15 kHz
-    f = interp1d(x=K[:, 0], y=K[:, 1], kind="cubic", fill_value="extrapolate")
-    KdB = f(all_freqs)
+    # Interpolate K at all frequencies in noise band
+    K_interp = interp1d(x=K[:, 0], y=K[:, 1], kind="slinear", fill_value="extrapolate")
+    KdB = K_interp(f_kHz)
 
     # Calculate ERB at each freq
-    ERB = 24.7 * ((4.37 * all_freqs) + 1)
+    ERB = 24.7 * ((4.37 * f_kHz) + 1)
+
+    # Calculate P_s/N_o = K*ERB, i.e., ratio of signal power at threshold to noise power spectrum level
     cr_erb = KdB + (10*np.log10(ERB))
     TEN_No = -cr_erb
 
-    def indices(a, func):
-        return [i for (i, val) in enumerate(a) if func(val)]
-    index1kERB = indices(all_freqs, lambda x: 0.935 < x < 1.0681)  # cams for 1 kHz +- 0.5 Cams
-    total_level_dB = 10*np.log10(np.sum(10**(TEN_No/10)))
-    total_level_1k = 10*np.log10(np.sum(10**(TEN_No[index1kERB]/10)))
-    ratio_1k_dB = total_level_dB - total_level_1k
+    # Identify indices included in ERB centered at 1 kHz
+    idx_1kHz_ERB = np.logical_and(0.935 < f_kHz, f_kHz < 1.0681)
 
-    magnitude_TEN = np.mean(10**(TEN_No/10))
-    magnitude_ratio_dB = 10*np.log10(magnitude_TEN) + 3
-
+    # Create copy of noise and then filter it
     fspecfilt = deepcopy(fspec)
-
     fspecfilt[LPbin:HPbin] = fspecfilt[LPbin:HPbin] * 10**(TEN_No[LPbin:HPbin]/20)
 
+    # Calculate rms in the 1 kHz ERB
+    rms_1kHz_ERB = np.sqrt(np.sum(np.abs(fspecfilt[idx_1kHz_ERB])**2) / dur_smp**2)
+    # Convert to level in dB SPL
+    level_1kHz_ERB = 20*np.log10(rms_1kHz_ERB/20e-6)
+
+    # Take real part of ifft to synthesize the noise
     noise = np.fft.ifft(fspecfilt)
     noise = np.real(noise[0:dur_smp])
 
-    noise = noise * np.sqrt(2*fftpts) / (10**(magnitude_ratio_dB/20)) * 10**(ratio_1k_dB/20)
-
-    noise = scale_dbspl(noise, level)  # TODO: figure out proper level scaling for TEN
-
+    # Scale the noise such that the new level in the 1 kHz ERB matches the requested level
+    noise = amplify(noise, level-level_1kHz_ERB+3)  # scale by 3 dB b/c we only synthesized LHS spectrum
     return noise
