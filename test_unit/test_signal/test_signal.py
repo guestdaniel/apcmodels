@@ -133,5 +133,18 @@ def test_scale_dbspl_pure_tone():
     np.testing.assert_approx_equal(sg.dbspl_pascal(scaled_signal), 43, significant=3)
 
 
+def test_te_noise():
+    """ Synthesize a sample of threshold equalizing noise and check that the level in the 1 kHz ERB is equal to the
+    requested level """
+    level = 50
+    fs = int(48e3)
+    x = sg.te_noise(0.5, int(fs), 0, fs/2, level)  # calculate TE noise
+    f = np.linspace(0, fs, x.shape[0])  # calculate frequency bins
+    X = np.fft.fft(x)  # Calculate FFT
+    X_sub = X[np.logical_and(0.935 < f/1000, f/1000 < 1.0681)]  # extract only those bins that are in 1 kHz ERB
+    rms = np.sqrt(np.sum(np.abs(X_sub)**2) / x.shape[0]**2)  # calculate rms from selected bins
+    level = 20*np.log10(rms/20e-6) + 3  # calculate level and adjust for fact that we're only looking at LHS of spectrum
 
+    # Check assertion
+    np.testing.assert_approx_equal(level, 50, significant=3)
 
