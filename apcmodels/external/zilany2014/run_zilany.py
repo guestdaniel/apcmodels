@@ -6,7 +6,7 @@ from apcmodels.external.zilany2014 import _zilany2014
 from apcmodels.external.zilany2014.util import calc_cfs
 
 
-def run_zilany2014_spikes(sound, fs, anf_num, cf, species, seed, cohc=1, cihc=1, powerlaw='approximate', ffGn=False):
+def run_zilany2014_spikes(sound, fs, anf_num, cf, species, cohc=1, cihc=1, powerlaw='approximate', ffGn=False):
     """
     Run the inner ear model of Zilany et al. (2014). This model is based on the original implementation provided by the
     authors. The MEX specific code was replaced by Python code in C files. This variant returns spike trains.
@@ -21,7 +21,7 @@ def run_zilany2014_spikes(sound, fs, anf_num, cf, species, seed, cohc=1, cihc=1,
              have exactly 3 elements (min_cf, max_cf, num_cf) and the frequencies are calculated using the Greenwood
              function.
         species (str): Species of the simulation, either 'cat', 'human', or'human_glasberg1990'
-        seed (int): Random seed for the spike generator.
+        seed (int): Random seed for the spike generator.  % TODO: sort out spike seed
         cohc (float): Degradation of the outer hair cells in [0, 1]
         cihc (float): Degradation of the inner hair cells in [0, 1]
         powerlaw (str) Defines which power law implementation should be used, either 'actual' or 'approximate'
@@ -39,14 +39,14 @@ def run_zilany2014_spikes(sound, fs, anf_num, cf, species, seed, cohc=1, cihc=1,
         raise ValueError('Species is not recognized')
 
     # Set random seed
-    np.random.seed(seed)
+    #np.random.seed(seed)
 
     # Calculate CFs
     cfs = calc_cfs(cf, species)
 
     # Set the parameters for each channel
     channel_args = [{'signal': sound, 'cf': cf, 'fs': fs, 'cohc': cohc, 'cihc': cihc, 'anf_num': anf_num,
-                     'powerlaw': powerlaw, 'seed': seed, 'species': species, 'ffGn': ffGn} for cf in cfs]
+                     'powerlaw': powerlaw, 'species': species, 'ffGn': ffGn} for cf in cfs]
 
     # Run model for each channel
     nested = map(_run_channel_spikes, channel_args)
@@ -128,7 +128,7 @@ def _run_channel_spikes(args):
     cohc = args['cohc']
     cihc = args['cihc']
     powerlaw = args['powerlaw']
-    seed = args['seed']
+    #seed = args['seed']
     anf_num = args['anf_num']
     species = args['species']
     ffGn = args['ffGn']

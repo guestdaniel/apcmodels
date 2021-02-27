@@ -3,7 +3,7 @@ from gammatone import filters
 from scipy.signal import butter, lfilter
 from apcmodels.simulation import Simulator
 from numba import jit
-from apcmodels.external.zilany2014.run_zilany import run_zilany2014_rate
+from apcmodels.external.zilany2014.run_zilany import run_zilany2014_rate, run_zilany2014_spikes
 import sys
 sys.path.append('/home/daniel/apc_code/scripts/Verhulstetal2018Model')
 from run_model2018 import Verhulst2018CochleaIHC, Verhulst2018ANF
@@ -44,6 +44,18 @@ class AuditoryNerveZilany2014(Simulator):
             output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
         """
         return calculate_zilany2014_firing_rate(**params)
+
+    def simulate_spikes(self, params):
+        """
+        Passes params to the Zilany et al. (2014) simulation as kwargs and returns the spike times
+
+        Arguments:
+            params: encoded parameters, should be a dict containing parameter names and values
+
+        Returns:
+            output (pd.dataframe): output dataframe of spike times, of shape (n_cf*n_fiber, ...)
+        """
+        return calculate_zilany2014_spikes(**params)
 
 
 class AuditoryNerveVerhulst2018(Simulator):
@@ -219,6 +231,42 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
                                 powerlaw='actual', ffGn=False)
     rates = np.array(rates).T  # transpose to (n_cf, n_sample)
     return rates
+
+
+@calculate_auditory_nerve_firing_rate
+def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(1, 0, 0), **kwargs):
+    """
+    Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation (spikes instead of rates).
+
+    Arguments:
+        _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
+        fs (int): sampling rate in Hz
+        cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
+        species (str): species of simulation, either cat or human
+        anf_num (tuple): tuple indicating how many of each fiber type to simulate ('hsr', 'msr', 'lsr')
+
+    Returns:
+        output (pd.dataframe): output dataframe of spike times, of shape (n_cf*n_fiber, ...)
+
+    Warnings:
+        - Note that arguments passed to **kwargs are discarded silently
+
+    Citations:
+        Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
+        model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
+    """
+    # Check if cfs is None, if so set 1000 Hz single CF
+    if cfs is None:
+        cfs = np.array([1000])
+    # Set CFs that are too high or too low to min/max values
+    cfs[cfs < 125] = 125
+    cfs[cfs > 20000] = 20000
+    # TODO: add warning for this behavior
+
+    # Run firing rate simulation using cochlea package
+    spikes = run_zilany2014_spikes(_input, fs, anf_num=anf_num, cf=cfs, cohc=1, cihc=1, species=species,
+                                powerlaw='actual', ffGn=False)
+    return spikes
 
 
 @calculate_auditory_nerve_firing_rate

@@ -18,6 +18,12 @@
 | [Zilany, Bruce, and Carney (2014)](https://doi.org/10.1121/1.4837815) | Auditory nerve | Firing rate, spikes
 | [Verhulst, Altoe, and Vasilkov (2018)](https://doi.org/10.1016/j.heares.2017.12.018) | Basilar membrane, inner hair cells, auditory nerve | Vibration, potentials, firing rate, spikes
 
+# Upcoming models
+
+| Model | Locus | Outputs |
+| ------ | ------ | ------ |
+| [Krips and Furst (2009)](https://www.mitpressjournals.org/doi/full/10.1162/neco.2009.07-07-563) | "Midbrain"-type neurons | Firing rate
+
 # Examples
 
 ### Rate-level function
@@ -45,8 +51,8 @@ cf_high = 1000                          # cf of auditory nerve, Hz
 n_cf = 1                                # how many auditory nerves to test, int
 
 # Encode parameters in Parameters
-params = si.Parameters(freq=tone_freq, dur=tone_dur, dur_ramp=tone_ramp_dur, fs=fs, cf_low=cf_low, cf_high=cf_high,
-                       n_cf=n_cf)
+params = si.Parameters(freq=tone_freq, dur=tone_dur, dur_ramp=tone_ramp_dur,
+                       fs=fs, cf_low=cf_low, cf_high=cf_high, n_cf=n_cf)
 params.wiggle('level', tone_levels)
 
 # Add stimuli to Parameters
@@ -90,7 +96,11 @@ plt.ylabel('Response (sp/s)')
 
 # Installation
 
-To install `apcmodels`, simply download this Git repository and run `python setup.py install` in the root directory. We generally recommend that you install `apcmodels` in a virtual environment (e.g., Conda) to insulate it from your system Python install. A number of Python packages are required but should be installed automatically by the install script. One notable exception is the [`gammatone`](https://github.com/detly/gammatone) package, which must be manually installed or installed via:
+To install `apcmodels`, simply download this Git repository and run `python setup.py install` in the root directory. Alternatively, you can simply install the package directly from git using `pip` as...
+```
+pip install git+https://github.com/guestdaniel/apcmodels.git
+```
+We generally recommend that you install `apcmodels` in a virtual environment (e.g., Conda) to insulate it from your system Python install. A number of Python packages are required but should be installed automatically by the install script. One notable exception is the [`gammatone`](https://github.com/detly/gammatone) package, which must be manually installed or installed via `pip` as...
 
 ```
 pip install git+https://github.com/detly/gammatone.git
