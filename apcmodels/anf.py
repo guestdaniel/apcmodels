@@ -1,21 +1,22 @@
 import numpy as np
 from gammatone import filters
 from scipy.signal import butter, lfilter
-from apcmodels.simulation import Simulator
+from apcmodels.simulation import Simulator, check_args
 from numba import jit
 from apcmodels.external.zilany2014.run_zilany import run_zilany2014_rate, run_zilany2014_spikes
 import sys
 sys.path.append('/home/daniel/apc_code/scripts/Verhulstetal2018Model')
 from run_model2018 import Verhulst2018CochleaIHC, Verhulst2018ANF
-
-# TODO: both Zilany (2014) and Verhulst (2018) code depend on custom tweaks applied to published code... need to find
-# TODO: a more elegant way to pacakge these tools!
+import warnings
 
 
 class AuditoryNerveHeinz2001Numba(Simulator):
     def __init__(self):
         super().__init__()
+        # Declare recognized parameters for this model
+        self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
+    @check_args([])
     def simulate(self, params):
         """
         Passes params to the Heinz et al. (2001) firing rate simulation as kwargs and returns the firing rates
@@ -32,7 +33,10 @@ class AuditoryNerveHeinz2001Numba(Simulator):
 class AuditoryNerveZilany2014(Simulator):
     def __init__(self):
         super().__init__()
+        # Declare recognized parameters
+        self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
+    @check_args(['species', 'fiber_type'])
     def simulate(self, params):
         """
         Passes params to the Zilany et al. (2014) firing rate simulation as kwargs and returns the firing rates
@@ -45,6 +49,7 @@ class AuditoryNerveZilany2014(Simulator):
         """
         return calculate_zilany2014_firing_rate(**params)
 
+    @check_args(['species', 'anf_num'])
     def simulate_spikes(self, params):
         """
         Passes params to the Zilany et al. (2014) simulation as kwargs and returns the spike times
@@ -61,7 +66,10 @@ class AuditoryNerveZilany2014(Simulator):
 class AuditoryNerveVerhulst2018(Simulator):
     def __init__(self):
         super().__init__()
+        # Declare recognized parameters
+        self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
+    @check_args([])
     def simulate(self, params):
         """
         Passes params to the Verhulst et al. (2001) firing rate simulation as kwargs and returns the firing rates
@@ -77,7 +85,7 @@ class AuditoryNerveVerhulst2018(Simulator):
 
 def calculate_auditory_nerve_firing_rate(nerve_model):
     """
-    A function wrapper around functions that simulate auditory nerve firing rates to handle parameters
+    A wrapper around functions that simulate auditory nerve firing rates to handle parameters
 
     Arguments:
         nerve_model (function): a function that implements a firing rate simulation for an auditory nerve model
@@ -222,9 +230,12 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
     if cfs is None:
         cfs = np.array([1000])
     # Set CFs that are too high or too low to min/max values
-    cfs[cfs < 125] = 125
-    cfs[cfs > 20000] = 20000
-    # TODO: add warning for this behavior
+    if np.min(cfs) < 125:
+        cfs[cfs < 125] = 125
+        warnings.warn('CFs below 125 Hz were set to 125 Hz!!')
+    if np.max(cfs) > 20000:
+        cfs[cfs > 20000] = 20000
+        warnings.warn('CFs above 20 kHz were set to 20 kHz!!')
 
     # Run firing rate simulation using cochlea package
     rates = run_zilany2014_rate(_input, fs, anf_types=fiber_type, cf=cfs, cohc=1, cihc=1, species=species,
@@ -259,9 +270,12 @@ def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(
     if cfs is None:
         cfs = np.array([1000])
     # Set CFs that are too high or too low to min/max values
-    cfs[cfs < 125] = 125
-    cfs[cfs > 20000] = 20000
-    # TODO: add warning for this behavior
+    if np.min(cfs) < 125:
+        cfs[cfs < 125] = 125
+        warnings.warn('CFs below 125 Hz were set to 125 Hz!!')
+    if np.max(cfs) > 20000:
+        cfs[cfs > 20000] = 20000
+        warnings.warn('CFs above 20 kHz were set to 20 kHz!!')
 
     # Run firing rate simulation using cochlea package
     spikes = run_zilany2014_spikes(_input, fs, anf_num=anf_num, cf=cfs, cohc=1, cihc=1, species=species,

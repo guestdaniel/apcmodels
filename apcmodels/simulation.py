@@ -3,6 +3,7 @@ from copy import deepcopy
 from tqdm import tqdm
 import numpy as np
 import re
+import warnings
 
 
 class Simulator:
@@ -18,7 +19,7 @@ class Simulator:
 
     def simulate(self, kwargs):
         """ Dummy method to provide an example runfunc for run() above. Subclasses should implement appropriate
-         runfuncs (see run() and run_batch() below). """
+         runfuncs """
         return kwargs
 
     def run(self, params, runfunc=None, parallel=True, n_thread=8, hide_progress=False):
@@ -81,6 +82,35 @@ class Simulator:
             else:
                 raise ValueError('params should be a list or an array')
         return results
+
+
+def check_args(known_params):
+    """
+    Decorator around functions that accept params and raises warnings if params are passed that are not recognized
+
+    Arguments:
+        known_params (list): list of known parameter names
+
+    Returns:
+        inner (function): func but with the additional functionality specified in the docstring
+    """
+    def outer(func):
+        def inner(sim, params):
+            """
+            Checks whether params contains keys that are not in known_params
+            Args:
+                sim (simulation.Simulator): Simulator object
+                params (dict): dict of parameter names and values
+            """
+            # Check through known_params and if any keys in params are not recognized, raise a warning
+            for param_name in list(params.keys()):
+                if param_name not in known_params + sim.known_params:
+                    # Provide warning if the parameter name is not recognized
+                    warnings.warn(param_name + ' was passed but is not a recognized parameter name.',
+                                  UserWarning)
+            return func(sim, params)
+        return inner
+    return outer
 
 
 class Parameters:

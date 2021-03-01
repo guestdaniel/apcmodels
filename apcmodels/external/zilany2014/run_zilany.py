@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from apcmodels.external.zilany2014 import _zilany2014
 from apcmodels.external.zilany2014.util import calc_cfs
+import random
 
 
 def run_zilany2014_spikes(sound, fs, anf_num, cf, species, cohc=1, cihc=1, powerlaw='approximate', ffGn=False):
@@ -21,7 +22,6 @@ def run_zilany2014_spikes(sound, fs, anf_num, cf, species, cohc=1, cihc=1, power
              have exactly 3 elements (min_cf, max_cf, num_cf) and the frequencies are calculated using the Greenwood
              function.
         species (str): Species of the simulation, either 'cat', 'human', or'human_glasberg1990'
-        seed (int): Random seed for the spike generator.  % TODO: sort out spike seed
         cohc (float): Degradation of the outer hair cells in [0, 1]
         cihc (float): Degradation of the inner hair cells in [0, 1]
         powerlaw (str) Defines which power law implementation should be used, either 'actual' or 'approximate'
@@ -39,7 +39,7 @@ def run_zilany2014_spikes(sound, fs, anf_num, cf, species, cohc=1, cihc=1, power
         raise ValueError('Species is not recognized')
 
     # Set random seed
-    #np.random.seed(seed)
+    np.random.seed(random.randint(0, 2**32))
 
     # Calculate CFs
     cfs = calc_cfs(cf, species)
@@ -72,7 +72,7 @@ def run_zilany2014_rate(sound, fs, anf_types, cf, species, cohc=1, cihc=1, power
             frequency channel. If array_like (e.g. list or ndarray), then the frequencies are used. If tuple, then must
              have exactly 3 elements (min_cf, max_cf, num_cf) and the frequencies are calculated using the Greenwood
              function.
-        species (str): Species of the simulation, either 'cat', 'human', or'human_glasberg1990'
+        species (str): Species of the simulation, either 'cat', 'human', or 'human_glasberg1990'
         cohc (float): Degradation of the outer hair cells in [0, 1]
         cihc (float): Degradation of the inner hair cells in [0, 1]
         powerlaw (str) Defines which power law implementation should be used, either 'actual' or 'approximate'
@@ -128,7 +128,6 @@ def _run_channel_spikes(args):
     cohc = args['cohc']
     cihc = args['cihc']
     powerlaw = args['powerlaw']
-    #seed = args['seed']
     anf_num = args['anf_num']
     species = args['species']
     ffGn = args['ffGn']
