@@ -6,7 +6,7 @@ import pytest
 import warnings
 
 
-@pytest.mark.parametrize('anf_model', [anf.AuditoryNerveHeinz2001Numba, anf.AuditoryNerveZilany2014])
+@pytest.mark.parametrize('anf_model', [anf.AuditoryNerveHeinz2001, anf.AuditoryNerveZilany2014])
 def test_anf_simulator(anf_model):
     """ Test to make sure that each anf Simulator object can be set up and run on a single input and does not raise any
     errors """
@@ -17,7 +17,7 @@ def test_anf_simulator(anf_model):
     output = sim.run(params=dummy_input)
 
 
-@pytest.mark.parametrize('anf_model', [anf.AuditoryNerveHeinz2001Numba, anf.AuditoryNerveZilany2014])
+@pytest.mark.parametrize('anf_model', [anf.AuditoryNerveHeinz2001, anf.AuditoryNerveZilany2014])
 def test_anf_check_no_output_channels_simulator(anf_model):
     """ Test to make sure that a basic anf simulation can be set up and run on a single input and that the output
     has the right number of output channels """
@@ -29,7 +29,7 @@ def test_anf_check_no_output_channels_simulator(anf_model):
     assert output[0].shape[0] == 20
 
 
-@pytest.mark.parametrize('anf_model', [anf.AuditoryNerveHeinz2001Numba, anf.AuditoryNerveZilany2014])
+@pytest.mark.parametrize('anf_model', [anf.AuditoryNerveHeinz2001, anf.AuditoryNerveZilany2014])
 def test_check_params_simulator(anf_model):
     """ Test to make sure that warnings are generated if models' default runfuncs see unexpected parameters """
     with pytest.warns(UserWarning):

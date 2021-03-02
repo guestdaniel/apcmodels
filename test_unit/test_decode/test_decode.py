@@ -24,7 +24,7 @@ def test_ideal_observer_single_input():
     """ Test that if we provide a single stimulus to a ratefunc wrapped in decode_ideal_observer that some sort of
      error is raised to indicate that an ideal observer can't be calculated based on a single simulation! """
     # Initialize simulator object
-    sim = anf.AuditoryNerveHeinz2001Numba()
+    sim = anf.AuditoryNerveHeinz2001()
 
     # Define stimulus parameters
     fs = int(200e3)

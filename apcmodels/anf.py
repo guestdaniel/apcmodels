@@ -10,14 +10,14 @@ from run_model2018 import Verhulst2018CochleaIHC, Verhulst2018ANF
 import warnings
 
 
-class AuditoryNerveHeinz2001Numba(Simulator):
+class AuditoryNerveHeinz2001(Simulator):
     def __init__(self):
         super().__init__()
         # Declare recognized parameters for this model
         self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
     @check_args([])
-    def simulate(self, params):
+    def do_simulate(self, params):
         """
         Passes params to the Heinz et al. (2001) firing rate simulation as kwargs and returns the firing rates
 
@@ -37,7 +37,7 @@ class AuditoryNerveZilany2014(Simulator):
         self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
     @check_args(['species', 'fiber_type'])
-    def simulate(self, params):
+    def do_simulate(self, params):
         """
         Passes params to the Zilany et al. (2014) firing rate simulation as kwargs and returns the firing rates
 
@@ -49,8 +49,15 @@ class AuditoryNerveZilany2014(Simulator):
         """
         return calculate_zilany2014_firing_rate(**params)
 
+
+class AuditoryNerveZilany2014Spikes(Simulator):
+    def __init__(self):
+        super().__init__()
+        # Declare recognized parameters
+        self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
+
     @check_args(['species', 'anf_num'])
-    def simulate_spikes(self, params):
+    def do_simulate(self, params):
         """
         Passes params to the Zilany et al. (2014) simulation as kwargs and returns the spike times
 
@@ -70,7 +77,7 @@ class AuditoryNerveVerhulst2018(Simulator):
         self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
     @check_args([])
-    def simulate(self, params):
+    def do_simulate(self, params):
         """
         Passes params to the Verhulst et al. (2001) firing rate simulation as kwargs and returns the firing rates
 

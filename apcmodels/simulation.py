@@ -7,20 +7,57 @@ import warnings
 
 
 class Simulator:
-    """
-    Simulator is the core of apcmodels' API for modeling auditory system responses and decoding or processing the
-    outputs of the models.
-    """
-    def __init__(self, default_runfunc=None):
-        if default_runfunc is None:
-            self.default_runfunc = self.simulate
-        else:
-            self.default_runfunc = default_runfunc
+    """ Simulator is apcmodels' core interface for modeling auditory system responses.
 
-    def simulate(self, kwargs):
-        """ Dummy method to provide an example runfunc for run() above. Subclasses should implement appropriate
-         runfuncs """
-        return kwargs
+    Simulator consists of three core methods: do_simulate(), simulate(), and run().
+        - do_simulate() is a hook that is overwritten by subclasses. This method should perform the logic of
+            accepting parameters encoded in a dictionary and running a model.
+        - simulate() is a wrapper around do_simulate that handles some logic pertaining to whether or not the
+            simulation has a frontend (i.e., a model that should run on the inputs before the present simulation).
+        - run() handles the process of dispatching collections of dicts to threads to be processed by simulate(). It
+            supports both standard loops and multithreaded loops.
+
+    Args:
+        frontend (None, Simulator): optional parameter that allows a user to specify a frontend that should be
+            run before this simulation.
+    """
+    def __init__(self, frontend=None):
+        self.frontend = frontend
+
+    def do_simulate(self, params):
+        """ Accepts a single positional input and returns a simulation result.
+
+        This is a dummy method that should be overwritten by subclasses.
+
+        Args:
+            params: any object that encodes a simulation and can be handled by do_simulate to return a single result
+
+        Returns:
+            result: the result of a simulation on params
+        """
+        return params
+
+    def simulate(self, params):
+        """ Accepts a single positional input and returns a simulation result.
+
+        This is a wrapper around do_simulate() that handles logic pertaining to frontends. Frontends are models that
+        should be run before the present model. params is passed to self.frontend (if it is not None), which is
+        expected to be a subclass of Simulator(). Thus, it accepts params and returns a single model result. This output
+        is then encoded in params as the new _input before params is passed to self.do_simulate() and its output is
+        returned from the present function. This approach, combined with Simulator's __add__(), permits users to string
+        together arbitrarily long chains of Simulator objects seamlessly.
+
+        Args:
+            params: any object that encodes a simulation and can be handled by do_simulate to return a single result
+
+        Returns:
+            result: the result of a simulation on params
+        """
+        if self.frontend is None:
+            return self.do_simulate(params)
+        else:
+            params['_input'] = self.frontend.simulate(params)
+            return self.do_simulate(params)
 
     def run(self, params, runfunc=None, parallel=True, n_thread=8, hide_progress=False):
         """ Main logical core of Simulator. run() is designed to be a flexible method that supports running batches
@@ -33,26 +70,22 @@ class Simulator:
         (e.g., saving to disk, writing to a log).
 
         One disadvantage of the way that run() is currently implemented is that parallelization is only supported
-        between elements of params. In other words, only a single core can work on a single element of params. A future
-        version plans to provide a way around this.
+        between elements of params. In other words, only a single thread can work on a single element of params.
 
         Arguments:
             params (list, ndarray): a list or ndarray whose elements are passed to runfunc
-
-            runfunc (func): function that accepts kwargs and returns simulation results
-
+            runfunc (func): function that accepts kwargs and returns simulation results. If None is passed, the
+                simulate() method bound to this object is used instead.
             parallel (bool): flag to control if we run the sequence in parallel using pathos multiprocessing
-
             n_thread (int): number of threads to use in multiprocessing, ignored if parallel is false
-
             hide_progress (bool): flag to control if we want to display a tqdm progress bar
 
         Returns:
             results (list, ndarray): list or ndarray of results
         """
-        # If runfunc is None, use the default
+        # If runfunc is None, just use simulate() directly
         if runfunc is None:
-            runfunc = self.default_runfunc
+            runfunc = self.simulate
         # If we pass Parameters object, extract underlying data and discard object shell
         if type(params) is Parameters:
             params = params.params
@@ -82,6 +115,17 @@ class Simulator:
             else:
                 raise ValueError('params should be a list or an array')
         return results
+
+    def __add__(self, other):
+        """ Method to combine two Simulator objects together into a sequence of simulations
+
+        Args:
+            other (Simulator): another Simulator object with a defined simulate() method
+
+        Returns:
+
+        """
+        return other.__class__(frontend=self)
 
 
 def check_args(known_params):
