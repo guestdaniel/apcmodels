@@ -11,6 +11,13 @@ import warnings
 
 
 class AuditoryNerveHeinz2001Numba(Simulator):
+    """ Provides an interface to the Heinz, Colburn, and Carney (2001) auditory nerve model.
+
+    Citations:
+        Heinz, M. G., Colburn, H. S., and Carney, L. H. (2001). "Evaluating auditory performance limits: I.
+        One-parameter discrimination using a computational model for the auditory nerve." *Neural computation* 13(10).
+        2273-2316.
+    """
     def __init__(self):
         super().__init__()
         # Declare recognized parameters for this model
@@ -19,7 +26,7 @@ class AuditoryNerveHeinz2001Numba(Simulator):
     @check_args([])
     def simulate(self, params):
         """
-        Passes params to the Heinz et al. (2001) firing rate simulation as kwargs and returns the firing rates
+        Runs the Heinz et al. (2001) firing rate simulation and returns the firing rates
 
         Arguments:
             params: encoded parameters, should be a dict containing parameter names and values
