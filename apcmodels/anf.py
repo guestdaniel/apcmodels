@@ -15,7 +15,7 @@ class AuditoryNerveHeinz2001Numba(Simulator):
 
     Citations:
         Heinz, M. G., Colburn, H. S., and Carney, L. H. (2001). "Evaluating auditory performance limits: I.
-        One-parameter discrimination using a computational model for the auditory nerve." *Neural computation* 13(10).
+        One-parameter discrimination using a computational model for the auditory nerve." Neural Computation 13(10).
         2273-2316.
     """
     def __init__(self):
@@ -25,19 +25,34 @@ class AuditoryNerveHeinz2001Numba(Simulator):
 
     @check_args([])
     def simulate(self, params, **kwargs):
-        """
-        Runs the Heinz et al. (2001) firing rate simulation and returns the firing rates
+        """ Runs the Heinz et al. (2001) auditory nerve simulation and return firing rates
 
-        Arguments:
-            params: encoded parameters, should be a dict containing parameter names and values
+        Args:
+            params (dict): encoded parameters, should be a dict containing parameter names and values
+            kwargs: keyword arguments not encoded in params, passed through to firing rate calculation function below
 
         Returns:
             output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
+
+        Notes:
+            - check_args() decorator above raises warnings if any keys in params/kwargs are not in the signature of
+                calculate_heinz2001_firing_rate. If you have warnings enabled, you may see these warnings. This is
+                useful for debugging in cases where you are not sure if certain parameters are being accepted/used by
+                downstream functions.
         """
         return calculate_heinz2001_firing_rate(**params, **kwargs)
 
 
 class AuditoryNerveZilany2014(Simulator):
+    """ Provides an interface to the Zilany, Bruce and Carney (2014) auditory nerve model.
+
+    The Zilany et al. (2014) model is implemented via code adapted from the cochlea package
+    (https://github.com/mrkrd/cochlea)
+
+    Citations:
+        Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
+        model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
+    """
     def __init__(self):
         super().__init__()
         # Declare recognized parameters
@@ -45,27 +60,39 @@ class AuditoryNerveZilany2014(Simulator):
 
     @check_args(['species', 'fiber_type'])
     def simulate(self, params, **kwargs):
-        """
-        Passes params to the Zilany et al. (2014) firing rate simulation as kwargs and returns the firing rates
+        """ Runs the Zilany et al. (2014) auditory nerve simulation and return firing rates
 
-        Arguments:
-            params: encoded parameters, should be a dict containing parameter names and values
+        Args:
+            params (dict): encoded parameters, should be a dict containing parameter names and values
+            kwargs: keyword arguments not encoded in params, passed through to firing rate calculation function below
 
         Returns:
             output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
+
+        Notes:
+            - check_args() decorator above raises warnings if any keys in params/kwargs are not in the signature of
+                calculate_heinz2001_firing_rate. If you have warnings enabled, you may see these warnings. This is
+                useful for debugging in cases where you are not sure if certain parameters are being accepted/used by
+                downstream functions.
         """
         return calculate_zilany2014_firing_rate(**params, **kwargs)
 
     @check_args(['species', 'anf_num'])
     def simulate_spikes(self, params, **kwargs):
-        """
-        Passes params to the Zilany et al. (2014) simulation as kwargs and returns the spike times
+        """ Runs the Zilany et al. (2014) auditory nerve simulation and return spikes
 
-        Arguments:
-            params: encoded parameters, should be a dict containing parameter names and values
+        Args:
+            params (dict): encoded parameters, should be a dict containing parameter names and values
+            kwargs: keyword arguments not encoded in params, passed through to spikes calculation function below
 
         Returns:
             output (pd.dataframe): output dataframe of spike times, of shape (n_cf*n_fiber, ...)
+
+        Notes:
+            - check_args() decorator above raises warnings if any keys in params/kwargs are not in the signature of
+                calculate_heinz2001_firing_rate. If you have warnings enabled, you may see these warnings. This is
+                useful for debugging in cases where you are not sure if certain parameters are being accepted/used by
+                downstream functions.
         """
         return calculate_zilany2014_spikes(**params, **kwargs)
 
@@ -78,11 +105,10 @@ class AuditoryNerveVerhulst2018(Simulator):
 
     @check_args([])
     def simulate(self, params, **kwargs):
-        """
-        Passes params to the Verhulst et al. (2001) firing rate simulation as kwargs and returns the firing rates
+        """ Runs the Verhulst et al. (2018) auditory nerve simulation and returns firing rates
 
-        Arguments:
-            params: encoded parameters, should be a dict containing parameter names and values
+        Args:
+            params (dict): encoded parameters, should be a dict containing parameter names and values
 
         Returns:
             output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
@@ -90,12 +116,19 @@ class AuditoryNerveVerhulst2018(Simulator):
         return calculate_verhulst2018_firing_rate(**params, **kwargs)
 
 
-def calculate_auditory_nerve_firing_rate(nerve_model):
-    """
-    A wrapper around functions that simulate auditory nerve firing rates to handle parameters
+def calculate_auditory_nerve_response(nerve_model):
+    """ A wrapper around functions that simulate auditory nerve responses to handle parameters
 
-    Arguments:
-        nerve_model (function): a function that implements a firing rate simulation for an auditory nerve model
+    Examines the kwargs passed to nerve_model() and handles a number of potential issues/case scenarios in the inputs:
+        - If cfs is not a kwarg, then cfs is constructed from cf_low, cf_high, and n_cf
+        - If cfs is a kwarg, but any of cf_low, cf_high, and n_cf are also kwargs, an error is raised
+        - A default sampling rate of 200 kHz is set if none is provided (a bit dangerous to rely on this)
+        - 5 ms of silence is appended to the beginning of the stimulus
+        - 40 ms of silence is appended to the end of the stimulus
+
+    Args:
+        nerve_model (function): a function that implements an auditory nerve model simulation, accepting various kwargs
+            and returning anything
 
     Returns:
         run_model (function): the wrapped function
@@ -130,70 +163,91 @@ def calculate_auditory_nerve_firing_rate(nerve_model):
     return run_model
 
 
-@calculate_auditory_nerve_firing_rate
-def calculate_heinz2001_firing_rate(_input, fs, cfs=None, **kwargs):
-    """
-    Implements Heinz, Colburn, and Carney (2001) auditory nerve simulation.
+@calculate_auditory_nerve_response
+def calculate_heinz2001_firing_rate(_input, fs, cfs, **kwargs):
+    """ Implements Heinz, Colburn, and Carney (2001) auditory nerve model.
 
-    Arguments:
+    Implements the Heinz et al. (2001) auditory nerve model. This model contains the following steps:
+        - A gammatone frontend is implemented via the gammatone package (https://github.com/detly/gammatone)
+        - A saturating nonlinearity simulating the actions of the inner hair cells (IHC) is applied
+        - The IHC responses are lowpass filtered with 7 first-order Butterworth filters
+        - Auditory nerve responses to the IHC inputs are simulated - this stage is implemented via Numba for speed.
+            The implementation described in Heinz et al. (2001) is a slightly simplified version of three-stage
+            diffusion as in Westerman and Smith (1988).
+
+    Most of the parameter descriptions below in the inline documentation are taken directly from Heinz et al. (2001).
+
+    Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
-
         fs (int): sampling rate in Hz
-
         cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
 
     Returns:
         output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
 
     Warnings:
-        - Note that arguments passed to **kwargs are discarded silently
+        - Note that arguments passed via **kwargs are silently unused
 
     Citations:
         Heinz, M. G., Colburn, H. S., and Carney, L. H. (2001). "Evaluating auditory performance limits: I.
-        One-parameter discrimination using a computational model for the auditory nerve." *Neural computation* 13(10).
+        One-parameter discrimination using a computational model for the auditory nerve." Neural Computation, 13(10).
         2273-2316.
-    """
-    # Check if cfs is None, if so set 1000 Hz single CF
-    if cfs is None:
-        cfs = np.array([1000])
 
-    # Run peripheral filters
+        Westerman, L. A., & Smith, R. L. (1988). A diffusion model of the transient response of the cochlear inner hair
+        cell synapse. The Journal of the Acoustical Society of America, 83(6), 2266-2276.
+    """
+    # Calculate peripheral filter outputs
     bm = filters.erb_filterbank(_input, filters.make_erb_filters(fs, cfs))
 
-    # Saturating nonlinearity
-    K = 1225
-    beta = -1
+    # Apply saturating nonlinearity
+    K = 1225   # controls sensitivity
+    beta = -1  # sets 3:1 asymmetric bias
     ihc = (np.arctan(K * bm + beta) - np.arctan(beta)) / (np.pi / 2 - np.arctan(beta))
 
-    # Lowpass
+    # Apply lowpass filter
     [b, a] = butter(1, 4800 / (fs / 2))
     for ii in range(7):
         ihc = lfilter(b, a, ihc, axis=1)
 
-    # Neural adaptation
+    # Apply auditory nerve + neural adaptation stage
     dims = ihc.shape
-    C_I = np.zeros_like(ihc)
-    C_L = np.zeros_like(ihc)
+    C_I = np.zeros_like(ihc)  # immediate concentration ("spikes/volume")
+    C_L = np.zeros_like(ihc)  # local concentration ("spikes/volume")
     return _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L)
 
 
 @jit
 def _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L):
-    """ Function to implement neural adaptation stage of Heinz (2001) auditory nerve model. Separate from main function
-    so that it can be processed with Numba """
+    """ Implements the auditory nerve fiber stage adaptation stage of Heinz (2001) auditory nerve model
+
+    This function simulated auditory nerve fibers as in Heinz et al. (2001), and is separate from main function that
+    implementes the basilar membrane and inner hair cell frontend to permit fast implementation via Numba's jit()
+    decorator.
+
+    Args:
+        dims (tuple): shape of the IHC input
+        fs (int): sampling rate in Hz
+        ihc (ndarray): array of inner hair cells responses, of shape (n_chan, n_sample)
+        C_I (ndarray): empty array of same shape as ihc
+        C_L (ndarray): empty array of same sahpe as ihc
+
+    Returns:
+        output (ndarray): output array of same size as ihc, instantaneous firing rate of high spontaneous rate auditory
+            nerve fibers at each time sample
+    """
     # Neural adaptation
     len_t = dims[1]
     len_f = dims[0]
-    T_s = 1 / fs
-    r_o = 50
-    V_I = 0.0005
-    V_L = 0.005
-    P_G = 0.03
-    P_L = 0.06
-    PI_rest = 0.012
-    PI_max = 0.6  # not sure why this is unused in Heinz et al. (2001)
-    C_G = 6666.7
-    P_I = 0.0173 * np.log(1 + np.exp(34.657 * ihc))
+    T_s = 1 / fs     # sampling period
+    r_o = 50         # spontaneous discharge rate
+    V_I = 0.0005     # immediate "volume"
+    V_L = 0.005      # local "volume"
+    P_G = 0.03       # global permeability ("volume"/s)
+    P_L = 0.06       # local permeability ("volume"/s)
+    PI_rest = 0.012  # resting immediate permeability ("volume"/s)
+    PI_max = 0.6     # maximum immediate permeability ("volume"/s")... not sure why this is unused in paper eq.
+    C_G = 6666.7     # global concentration ("spikes/volume")
+    P_I = 0.0173 * np.log(1 + np.exp(34.657 * ihc))  # immediate permeability ("volume"/s)
 
     C_I[:, 0] = r_o / PI_rest
     C_L[:, 0] = C_I[:, 0] * (PI_rest + P_L) / P_L
@@ -210,16 +264,21 @@ def _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L):
     return P_I * C_I
 
 
-@calculate_auditory_nerve_firing_rate
+@calculate_auditory_nerve_response
 def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fiber_type='hsr', **kwargs):
-    """
-    Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation.
+    """ Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation, returning firing rates.
 
-    Arguments:
+    The Zilany et al. (2014) model is implemented via code adapted from the cochlea package
+    (https://github.com/mrkrd/cochlea). Specifically, the adapted code provides a Python interface to a slightly
+    modified version of the original implementation of the Zilany et al. (2014) model in C.
+
+    Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
         fs (int): sampling rate in Hz
-        cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
-        species (str): species of simulation, either cat or human
+        cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses. Note that the
+            Zilany model for humans cannot support cfs that are below 125 Hz or above 20 kHz. If a user passes CFs in
+            that range, they are clipped to within [125, 20000] and a warning is raised accordingly.
+        species (str): species of simulation, either 'cat' or 'human'
         fiber_type (list, str): list of fiber types to simulate, or a single fiber type to simulate (from 'hsr', 'msr',
              'lsr'). Requesting multiple types naturally multiplies the number of output channels.
 
@@ -227,15 +286,12 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
         output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
 
     Warnings:
-        - Note that arguments passed to **kwargs are discarded silently
+        - Note that arguments passed via **kwargs are silently unused
 
     Citations:
         Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
         model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
     """
-    # Check if cfs is None, if so set 1000 Hz single CF
-    if cfs is None:
-        cfs = np.array([1000])
     # Set CFs that are too high or too low to min/max values
     if np.min(cfs) < 125:
         cfs[cfs < 125] = 125
@@ -246,17 +302,20 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
 
     # Run firing rate simulation using cochlea package
     rates = run_zilany2014_rate(_input, fs, anf_types=fiber_type, cf=cfs, cohc=1, cihc=1, species=species,
-                                powerlaw='actual', ffGn=False)
+                                powerlaw='approximate', ffGn=False)  # note power law and ffGn are fast versions
     rates = np.array(rates).T  # transpose to (n_cf, n_sample)
     return rates
 
 
-@calculate_auditory_nerve_firing_rate
+@calculate_auditory_nerve_response
 def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(1, 0, 0), **kwargs):
-    """
-    Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation (spikes instead of rates).
+    """ Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation, returning spike times.
 
-    Arguments:
+    The Zilany et al. (2014) model is implemented via code adapted from the cochlea package
+    (https://github.com/mrkrd/cochlea). Specifically, the adapted code provides a Python interface to a slightly
+    modified version of the original implementation of the Zilany et al. (2014) model in C.
+
+    Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
         fs (int): sampling rate in Hz
         cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
@@ -273,9 +332,6 @@ def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(
         Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
         model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
     """
-    # Check if cfs is None, if so set 1000 Hz single CF
-    if cfs is None:
-        cfs = np.array([1000])
     # Set CFs that are too high or too low to min/max values
     if np.min(cfs) < 125:
         cfs[cfs < 125] = 125
@@ -286,29 +342,33 @@ def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(
 
     # Run firing rate simulation using cochlea package
     spikes = run_zilany2014_spikes(_input, fs, anf_num=anf_num, cf=cfs, cohc=1, cihc=1, species=species,
-                                powerlaw='actual', ffGn=False)
+                                   powerlaw='approximate', ffGn=False)  # note power law and ffGn are fast versions
     return spikes
 
 
-@calculate_auditory_nerve_firing_rate
+@calculate_auditory_nerve_response
 def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
-    """
-    Implements Verhulst, Altoe, and Vasilikov (2018) auditory nerve simulation.
+    """ Implements Verhulst, Altoe, and Vasilikov (2018) auditory nerve simulation
 
-    Arguments:
+    TODO: explain how we did this (conditional on what code we can reuse)
+
+    Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
         fs (int): sampling rate in Hz
         cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses. Note that the
             Verhulst model returns responses at a hardcoded range of ~1000 CFs... for each requested CF, we return
             the closest available CF. This can produce significant distortion along the tonotopic axis or can even
-            result in the same response from a single CF being returned multiple times.
+            result in the same response from a single CF being returned multiple times, so consider what CFs you
+            request with caution.
+
     Returns:
         output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
 
     Warnings:
         - Note that arguments passed to **kwargs are discarded silently
-        - The CFs provided by the model appear to be somewhat arbitrary and not exactly aligned with the true underlying
-        CFs of the model
+        - The CFs provided do not necessarily align exactly with the true underlying CFs of the model. Care should be
+            taken for any application that depends crucially on the assumed underlying CFs. In such applications,
+            you may want to make measurements of the CFs yourself.
 
     TODO:
         - Replace the nearest-neighbors CF interpolation with some sort of smooth interpolation

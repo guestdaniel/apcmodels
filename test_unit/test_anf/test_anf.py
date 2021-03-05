@@ -1,4 +1,4 @@
-# TODO: add functions to test calculate_auditory_nerve_firing_rate
+# TODO: add functions to test calculate_auditory_nerve_response
 # noticed weird behavior if we pass cf_low and n_cfs instead of n_cf ... investigate!
 import apcmodels.anf as anf
 import numpy as np
@@ -65,11 +65,11 @@ def test_bare_minimum_input_rates(anf_func):
 
 
 @pytest.mark.parametrize(['anf_func', 'spont_rate'], [(anf.calculate_heinz2001_firing_rate, 50),
-                                                      (anf.calculate_zilany2014_firing_rate, 112)])
+                                                      (anf.calculate_zilany2014_firing_rate, 100)])
 def test_spontaneous_firing_rate_rates(anf_func, spont_rate):
     """ Test to make sure that if model receives empty short stimulus it has correct spont rate """
     results = anf_func(_input=np.zeros(10000), cfs=np.array([500]))
-    np.testing.assert_almost_equal(np.mean(results), spont_rate, decimal=0)
+    np.testing.assert_almost_equal(np.mean(results), spont_rate, decimal=-1)
 
 
 @pytest.mark.parametrize('anf_func', [anf.calculate_heinz2001_firing_rate, anf.calculate_zilany2014_firing_rate])
