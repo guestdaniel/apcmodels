@@ -377,10 +377,6 @@ def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
         Verhulst, S., Altoè, A., & Vasilkov, V. (2018). Computational modeling of the human auditory periphery:
         Auditory-nerve responses, evoked potentials and hearing loss. Hearing research, 360, 55-75.
     """
-    # Check if cfs is None, if so set 1000 Hz single CF
-    if cfs is None:
-        cfs = np.array([1000])
-
     # Run firing rate simulations
     vm, fs_res, cfs_model = Verhulst2018CochleaIHC(_input, fs)
     rates = Verhulst2018ANF(vm, fs_res, 2)
