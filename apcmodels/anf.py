@@ -17,17 +17,18 @@ class AuditoryNerveHeinz2001Numba(Simulator):
         self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
     @check_args([])
-    def simulate(self, params):
+    def simulate(self, params, **kwargs):
         """
         Passes params to the Heinz et al. (2001) firing rate simulation as kwargs and returns the firing rates
 
         Arguments:
             params: encoded parameters, should be a dict containing parameter names and values
+            kwargs: other parameters to be passed through to underlying function
 
         Returns:
             output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
         """
-        return calculate_heinz2001_firing_rate(**params)
+        return calculate_heinz2001_firing_rate(**params, **kwargs)
 
 
 class AuditoryNerveZilany2014(Simulator):
