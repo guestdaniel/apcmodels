@@ -23,7 +23,6 @@ class AuditoryNerveHeinz2001Numba(Simulator):
 
         Arguments:
             params: encoded parameters, should be a dict containing parameter names and values
-            kwargs: other parameters to be passed through to underlying function
 
         Returns:
             output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
@@ -38,7 +37,7 @@ class AuditoryNerveZilany2014(Simulator):
         self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
     @check_args(['species', 'fiber_type'])
-    def simulate(self, params):
+    def simulate(self, params, **kwargs):
         """
         Passes params to the Zilany et al. (2014) firing rate simulation as kwargs and returns the firing rates
 
@@ -48,10 +47,10 @@ class AuditoryNerveZilany2014(Simulator):
         Returns:
             output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
         """
-        return calculate_zilany2014_firing_rate(**params)
+        return calculate_zilany2014_firing_rate(**params, **kwargs)
 
     @check_args(['species', 'anf_num'])
-    def simulate_spikes(self, params):
+    def simulate_spikes(self, params, **kwargs):
         """
         Passes params to the Zilany et al. (2014) simulation as kwargs and returns the spike times
 
@@ -61,7 +60,7 @@ class AuditoryNerveZilany2014(Simulator):
         Returns:
             output (pd.dataframe): output dataframe of spike times, of shape (n_cf*n_fiber, ...)
         """
-        return calculate_zilany2014_spikes(**params)
+        return calculate_zilany2014_spikes(**params, **kwargs)
 
 
 class AuditoryNerveVerhulst2018(Simulator):
@@ -71,7 +70,7 @@ class AuditoryNerveVerhulst2018(Simulator):
         self.known_params = ['_input', 'fs', 'cfs', 'cf_low', 'cf_high', 'n_cf']
 
     @check_args([])
-    def simulate(self, params):
+    def simulate(self, params, **kwargs):
         """
         Passes params to the Verhulst et al. (2001) firing rate simulation as kwargs and returns the firing rates
 
@@ -81,7 +80,7 @@ class AuditoryNerveVerhulst2018(Simulator):
         Returns:
             output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_sample)
         """
-        return calculate_verhulst2018_firing_rate(**params)
+        return calculate_verhulst2018_firing_rate(**params, **kwargs)
 
 
 def calculate_auditory_nerve_firing_rate(nerve_model):

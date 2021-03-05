@@ -185,7 +185,7 @@ def find_parameter(params, param_name):
 
 
 def decode_staircase_procedure(ratefunc, rule, synthesizer, parameter, starting_value, step_sizes, transform,
-                               max_trials=50, max_num_reversal=12, calculate_from_reversal=6):
+                               max_trials=50, max_num_reversal=12, calculate_from_reversal=6, log=True):
     """
     Estimate a threshold given some rule for a neural simulation.
 
@@ -224,6 +224,9 @@ def decode_staircase_procedure(ratefunc, rule, synthesizer, parameter, starting_
         direction = []  # track direction changes (going up or going down)
         values = []  # track value on each trial
         value = starting_value  # track the value of the tracking variable
+        # Log!
+        if log is True:
+            print('Initiating staircase procedure')
         while n_trial < max_trials and len(reversals) < max_num_reversal:
             # Add 1 to n_trial
             n_trial += 1
@@ -249,6 +252,9 @@ def decode_staircase_procedure(ratefunc, rule, synthesizer, parameter, starting_
                     reversals.append(n_trial-1)  # if directions differ, indicate reversal
             except IndexError:
                 continue
+            # Log!
+            if np.mod(n_trial, 5) == 0:
+                print('Staircase step: ' + str(n_trial) + ', Value: ' + str(value))
         # Once we exit the staircase, return the threshold
         return np.mean([values[ii] for ii in reversals[-calculate_from_reversal:]])
 
