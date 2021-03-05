@@ -8,3 +8,4 @@ dist
 .pytest_cache
 apcmodels.egg-info
 *.egg
+*.coverage

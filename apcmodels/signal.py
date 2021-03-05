@@ -5,14 +5,13 @@ from copy import deepcopy
 
 
 def amplify(signal, dB):
-    """
-    Amplify or attenuate signal in terms of power by specified amount in decibels
+    """ Amplify or attenuate signal in terms of power by specified amount in decibels.
 
-    Arguments:
+    Args:
         signal (ndarray): input sound pressure signal, of shape (n_sample, ) or (n_sample, n_signal)
         dB (float, ndarray): dB amount to amplify by, of shape (1, ) or (n_signal)
     Returns:
-        output (array): output sound pressure signal
+        output (ndarray): output sound pressure signal, of same shape as input
     """
     # Determine scale factor and then apply to signal
     scale_factor = 10**(dB/20)
@@ -20,23 +19,22 @@ def amplify(signal, dB):
 
 
 def complex_tone(freqs, levels, phases, dur, fs):
-    """
-    Synthesize complex tone as series of pure tones
+    """ Synthesize complex tone as series of pure tones.
 
-    Arguments:
-        freqs (ndarray): harmonic frequencies in Hz
-        levels (ndarray): levels of each harmonic in dB SPL
-        phases (ndarray): phase offsets of each harmonic in degrees
+    Args:
+        freqs (ndarray): harmonic frequencies in Hz, of shape (n_harmonic, )
+        levels (ndarray): levels of each harmonic in dB SPL, of shape (n_harmonic, )
+        phases (ndarray): phase offsets of each harmonic in degrees, of shape (n_harmonic, )
         dur (float): duration in seconds
         fs (int): sampling rate in Hz
 
     Returns:
-        output (array): complex tone
+        output (array): complex tone, of shape (n_sample, )
     """
     # Check to make sure inputs are of the right shape
     if freqs.shape != levels.shape or freqs.shape != phases.shape:
         raise ValueError('Freqs, levels, and phases must all be the same size')
-    # Synthesize components in parallel
+    # Synthesize components (vectorized), output will be (n_sample, ) or (n_sample, n_component)
     output = scale_dbspl(pure_tone(freqs, phases, dur, fs), levels)
     if output.ndim == 1:
         return output  # if we only have one component, return it alone
@@ -45,11 +43,10 @@ def complex_tone(freqs, levels, phases, dur, fs):
 
 
 def cosine_ramp(signal, dur_ramp, fs):
-    """
-    Applies a raised-cosine ramp to a time-domain signal.
+    """ Applies a raised-cosine ramp to a time-domain signal.
 
-    Arguments:
-        signal (np.ndarray): time-domain signal to be ramped, of shape (n_samples, )
+    Args:
+        signal (np.ndarray): time-domain signal to be ramped, of shape (n_sample, )
         dur_ramp (float): duration of the ramp in seconds
         fs (int): sampling rate in Hz
 
@@ -70,12 +67,11 @@ def cosine_ramp(signal, dur_ramp, fs):
 
 
 def dbspl_pascal(signal):
-    """
-    Returns the expected dB SPL level of a time-domain signal
+    """ Returns the dB SPL level of a time-domain signal in pascals.
 
-    Arguments:
+    Args:
         signal (ndarray): input sound pressure signal, either shape of (n_sample, ) or (n_sample, n_signal). In the
-            latter case, each signal is processed separately.
+            latter case, the level of each signal is calculated separately.
 
     Returns:
         output (float): dB SPL of signal, of shape (1, ) or (n_signal, )
@@ -90,17 +86,16 @@ def dbspl_pascal(signal):
 
 
 def pure_tone(freq, phase, dur, fs):
-    """
-    Synthesize single pure tone
+    """ Synthesize single pure tone.
 
-    Arguments:
-        freq (float, ndarray): frequency of pure tone in Hz
-        phase (float, ndarray): phase offset in degrees, must be between 0 and 360
+    Args:
+        freq (float, ndarray): frequency of pure tone in Hz. If ndarray, of shape (n_tone, ).
+        phase (float, ndarray): phase offset in degrees, must be between 0 and 360. If ndarray, of shape (n_tone, ).
         dur (float, ndarray): duration in seconds
         fs (int): sampling rate in Hz
 
     Returns:
-        output (array): pure tone, of shape (n_sample, ) or (n_sample, n_pure_tone)
+        output (array): pure tone, of shape (n_sample, ) or (n_sample, n_tone)
     """
     # Create empty array of time samples
     t = np.linspace(0, dur, floor(dur*fs))
@@ -109,15 +104,14 @@ def pure_tone(freq, phase, dur, fs):
 
 
 def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
-    """
-    Synthesize single pure tone with sinusoidal amplitude modulation
+    """ Synthesize single pure tone with sinusoidal amplitude modulation.
 
-    Arguments:
-        freq (float): frequency of pure tone in Hz
-        phase (float): phase offset in degrees, must be between 0 and 360
+    Args:
+        freq (float, ndarray): frequency of pure tone in Hz. If ndarray, of shape (n_tone, ).
+        phase (float, ndarray): phase offset in degrees. If ndarray, of shape (n_tone, ).
         freq_mod (float): frequency of modulator in Hz
-        phase_mod (float): phase offset of modulator in Hz
-        depth_mod (float): modulation depth in m, bounded from 0 to 1
+        phase_mod (float): phase offset of modulator in Hz, in degrees
+        depth_mod (float): modulation depth in m, bounded in [0, 1]
         dur (float): duration in seconds
         fs (int): sampling rate in Hz
 
@@ -129,7 +123,7 @@ def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
     # Create empty array of time samples
     t = np.linspace(0, dur, floor(dur*fs))
     # Calculate carrier waveform
-    carrier = np.sin(2*np.pi*freq*t+(2*np.pi/360*phase))
+    carrier = np.sin(2*np.pi*np.outer(t, freq)+(2*np.pi/360*phase))
     # Calculate modulator waveform
     modulator = depth_mod*np.sin(2*np.pi*freq_mod*t+(2*np.pi/360*phase_mod))
     # Return carrier x modulator
@@ -137,24 +131,22 @@ def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
 
 
 def rms(signal, axis=0):
-    """
-    Computes root-mean-square (RMS) of signal
+    """ Computes root-mean-square (RMS) of signal.
 
-    Arguments:
+    Args:
         signal (ndarray): time-domain signal, of shape (n_sample, ) or (n_sample, n_signal)
         axis (int): axis along which to calculate RMS, defaults to 0
 
     Returns:
-        output (float): RMS value of signal
+        output (float, ndarray): RMS value of signal, either a float or ndarray of shape (n_signal, )
     """
     return np.sqrt(np.mean(signal**2, axis=axis))
 
 
 def scale_dbspl(signal, dB):
-    """
-    Scale time domain signal to have certain level in dB SPL
+    """ Scale time domain signal in pascals to have certain level in dB SPL.
 
-    Arguments:
+    Args:
         signal (ndarray): input sound pressure signal
         dB (float): desired level in dB SPL
 
@@ -168,11 +160,12 @@ def scale_dbspl(signal, dB):
 
 
 def te_noise(duration, fs, lco, hco, level):
-    """
-    Synthesizes a sample of threshold-equalizing noise. Adapted with minor changes from code used internally in the
-    Auditory Perception and Cognition Lab at the University of Minnesota.
+    """ Synthesizes a sample of threshold-equalizing noise.
 
-    Arguments:
+    Adapted with minor changes from code used internally in the Auditory Perception and Cognition Lab at the University
+    of Minnesota.
+
+    Args:
         duration (float): duration in seconds
         fs (int): sampling rate in Hz
         lco (float): lower cutoff of the noise in Hz
@@ -258,5 +251,5 @@ def te_noise(duration, fs, lco, hco, level):
     noise = np.real(noise[0:dur_smp])
 
     # Scale the noise such that the new level in the 1 kHz ERB matches the requested level
-    noise = amplify(noise, level-level_1kHz_ERB+3)  # scale by 3 dB b/c we only synthesized LHS spectrum
+    noise = amplify(noise, level-level_1kHz_ERB+3)  # scale by 3 dB extra because we only synthesized LHS spectrum
     return noise
