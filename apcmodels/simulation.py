@@ -17,10 +17,10 @@ class Simulator:
         else:
             self.default_runfunc = default_runfunc
 
-    def simulate(self, kwargs):
+    def simulate(self, params, **kwargs):
         """ Dummy method to provide an example runfunc for run() above. Subclasses should implement appropriate
          runfuncs """
-        return kwargs
+        return params
 
     def run(self, params, runfunc=None, parallel=True, n_thread=8, hide_progress=False):
         """ Main logical core of Simulator. run() is designed to be a flexible method that supports running batches
@@ -95,20 +95,20 @@ def check_args(known_params):
         inner (function): func but with the additional functionality specified in the docstring
     """
     def outer(func):
-        def inner(sim, params):
+        def inner(sim, params, **kwargs):
             """
             Checks whether params contains keys that are not in known_params
             Args:
                 sim (simulation.Simulator): Simulator object
                 params (dict): dict of parameter names and values
             """
-            # Check through known_params and if any keys in params are not recognized, raise a warning
-            for param_name in list(params.keys()):
+            # Check through known_params and if any keys in params/kwargs are not recognized, raise a warning
+            for param_name in list(params.keys()) + list(kwargs.keys()):
                 if param_name not in known_params + sim.known_params:
                     # Provide warning if the parameter name is not recognized
                     warnings.warn(param_name + ' was passed but is not a recognized parameter name.',
                                   UserWarning)
-            return func(sim, params)
+            return func(sim, params, **kwargs)
         return inner
     return outer
 
