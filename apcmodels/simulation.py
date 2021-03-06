@@ -7,10 +7,7 @@ import warnings
 
 
 class Simulator:
-    """
-    Simulator is the core of apcmodels' API for modeling auditory system responses and decoding or processing the
-    outputs of the models.
-    """
+    """ Core of interface for modeling auditory system responses and decoding or processing the outputs. """
     def __init__(self, default_runfunc=None):
         if default_runfunc is None:
             self.default_runfunc = self.simulate
@@ -23,28 +20,45 @@ class Simulator:
         return params
 
     def run(self, params, runfunc=None, parallel=True, n_thread=8, hide_progress=False):
-        """ Main logical core of Simulator. run() is designed to be a flexible method that supports running batches
-        of simulations using parallelization. run() takes the elements of its only required argument, params, and
-        dispatches them to a function (either default or user-provided) either in a loop or using a multiprocessing
-        Pool. The elements of params are assumed to be dicts that encode the information required to run simulations or
-        to be (possibly nested) lists of such dicts. Each element of params results in a single return and all of these
-        returns are bundled and returned either as a list in the same order as params or as an array in the same shape
-        as params. In theory, the function used to implement the simulations is allowed to have side effects
-        (e.g., saving to disk, writing to a log).
+        """ Main logical core of Simulator, accepting parameter list/array and returning simulation results.
+
+        run() is designed to be a flexible method for running batches of simulations. run() takes the elements of its
+        only required argument, params, and dispatches them to a function (either default or user-provided) that takes
+        that element and returns a neural simulation result (e.g., instantaneous firing rate response). This dispatching
+        can either be done in a traditional for loop or using a multiprocessing Pool. The latter means that batch
+        simulations can be easily parallelized.
+
+        The elements of params are generally assumed to be dicts that encode the information required to run
+        simulations, as Simulator subclasses are expected to implement a simulate() method that accepts such a dict and
+        returns a simulation result. This is because the default behavior of run() is to apply this simulate() method
+        to each element of params. However, by passing a custom "runfunc" one can override this default behavior. In
+        theory, one could pass *any* function as a runfunc and thereby use any subclass of Simulator to implement any
+        simulation. However, this is not the intended use of this functionality. Instead, the user is expected to wrap
+        the simulate() method with functions that extend or alter its functionality. This pattern creates a natural
+        correspondence between any Simulator object and its simulate() method. That is, even when that method is
+        extended with a custom runfunc, a user generally knows what simulation is being executed at the lowest level
+        of the runfunc simply by knowing the Simulator in question. Many examples of this pattern are visible in the
+        acceptance and replication tests in the test suite.
+
+        run() returns an object of the same type as its input params (either a list or an array). This output is also
+        of the same shape and size as the input params, and each element corresponds to the matching element of the
+        input params.
 
         One disadvantage of the way that run() is currently implemented is that parallelization is only supported
-        between elements of params. In other words, only a single core can work on a single element of params. A future
-        version plans to provide a way around this.
+        between elements of params. In other words, only a single core can work on a single element of params.
 
-        Arguments:
+        Args:
             params (list, ndarray): a list or ndarray whose elements are passed to runfunc
-
-            runfunc (func): function that accepts kwargs and returns simulation results
-
-            parallel (bool): flag to control if we run the sequence in parallel using pathos multiprocessing
-
+            runfunc (func): function that accepts elements of params and returns simulation results
+            parallel (bool): flag to control if we run the simulation in parallel. If true, elements of params are
+                dispatched to separate threads using the pathos.multiprocessing library. Note that this functionality
+                has a few side effects that must be carefully considered. First, some functionality (e.g., warnings)
+                does not work in parallel, so sometimes turning parallel mode off can be helpful for troubleshooting.
+                Second, randomization should be carefully considered if it plays a crucial role in a simulation.
+                Some variants of random number generation/seeding are *not* thread-safe, meaning that you may get the
+                same exact (nominally random) result multiple times across threads if random number generation is not
+                implemented correctly.
             n_thread (int): number of threads to use in multiprocessing, ignored if parallel is false
-
             hide_progress (bool): flag to control if we want to display a tqdm progress bar
 
         Returns:
@@ -85,21 +99,20 @@ class Simulator:
 
 
 def check_args(known_params):
-    """
-    Decorator around functions that accept params and raises warnings if params are passed that are not recognized
+    """ Decorator around functions that accept params/kwargs and raises warnings if passed args are not recognized
 
-    Arguments:
-        known_params (list): list of known parameter names
+    Args:
+        known_params (list): list of known parameter names. Any name not in this list will raise a warning.
 
     Returns:
         inner (function): func but with the additional functionality specified in the docstring
     """
     def outer(func):
         def inner(sim, params, **kwargs):
-            """
-            Checks whether params contains keys that are not in known_params
+            """ Raises warnings if params/kwargs contains keys that are not in known_params
+
             Args:
-                sim (simulation.Simulator): Simulator object
+                sim (Simulator): Simulator object
                 params (dict): dict of parameter names and values
             """
             # Check through known_params and if any keys in params/kwargs are not recognized, raise a warning
@@ -114,19 +127,19 @@ def check_args(known_params):
 
 
 class Parameters:
-    """
-    Parameters provides an object-oriented interface to the xxx_parameters functions below that facilitate the
-    construction of parameter lists. The key feature of Parameters() is the params attribute, which encodes a
-    series of simulations via an array of dicts (or possibly nested list of dicts). __iter__ and __getitem__ methods
-    are implemented to allow users to seamlessly loop or index, and a shape property is implemented to allow the user
-    to access the shape of the array directly.
+    """ Provides an object-oriented interface to parameter sequence generation functions.
+
+    Parameters is a class that provides an object-oriented interface to the various xxx_parameters functions in
+    apcmodels. This facilitates the construction of large batch simulations. The key feature of Parameters() is the
+    params attribute, which encodes a series of simulations via an array of dicts (or possibly nested list of dicts).
+    __iter__ and __getitem__ methods are implemented to allow users to seamlessly loop or index, and a shape property is
+    implemented to allow the user to access the shape of the array directly.
+
+    Args:
+        kwargs: when Parameters is initialized, each kwarg passed to __init__ is included as an entry in a seed
+            dictionary. This will make Parameters.params a (1, ) array when initialized.
     """
     def __init__(self, **kwargs):
-        """
-        Arguments:
-            **kwargs: when Parameters is initialized, each kwarg passed to __init__ is included as an entry in a seed
-            dictionary.
-        """
         self.params = np.array([kwargs])
 
     def __getitem__(self, index):
@@ -148,7 +161,7 @@ class Parameters:
         return self.params.size
 
     def append(self, parameter_to_append, value):
-        """ See documentation for append_parameters() """
+        """ Applies append_parameters to params. See documentation for append_parameters() """
         self.params = append_parameters(self.params, parameter_to_append, value)
 
     def add_inputs(self, inputs):
@@ -162,11 +175,11 @@ class Parameters:
         self.params = stitch_parameters(self.params, '_input', np.array(inputs, dtype=object))
 
     def combine(self, parameters_2):
-        """ See documentation for combine_parameters() """
+        """ Applies combine_parameters to params. See documentation for combine_parameters() """
         self.params = combine_parameters(self.params, parameters_2)
 
     def evaluate(self):
-        """ See documentation for evaluate_parameters() """
+        """ Applies evaluate_parameters to params. See documentation for evaluate_parameters() """
         self.params = evaluate_parameters(self.params)
 
     def flatten(self):
@@ -187,36 +200,35 @@ class Parameters:
         self.params = np.concatenate(temp)
 
     def increment(self, increments):
-        """ See documentation for increment_parameters() """
+        """ Applies increment_parameters to increments. See documentation for increment_parameters() """
         self.params = increment_parameters(self.params, increments)
 
     def repeat(self, n_rep):
-        """ See documentation for repeat_parameters() """
+        """ Applies repeat_parameters to params. See documentation for repeat_parameters() """
         self.params = repeat_parameters(self.params, n_rep)
 
     def stitch(self, parameter_to_stitch, values):
-        """ See documentation for stitch_parameters() """
+        """ Apply stitch_parameters to params. See documentation for stitch_parameters() """
         self.params = stitch_parameters(self.params, parameter_to_stitch, values)
 
     def wiggle(self, parameter_to_wiggle, values):
-        """ See documentation for wiggle_parameters() """
+        """ Apply wiggle_parameters to params. See documentation for wiggle_parameters() """
         self.params = wiggle_parameters(self.params, parameter_to_wiggle, values)
 
     def wiggle_parallel(self, parameter_to_wiggle, values):
-        """ See documentation for wiggle_parameters_parallel() """
+        """ Apply wiggle_parameters to params. See documentation for wiggle_parameters_parallel() """
         self.params = wiggle_parameters_parallel(self.params, parameter_to_wiggle, values)
 
 
 def append_parameters(parameters, parameter_to_append, value):
-    """
-    Takes a dict of parameter names and values (or an ndarray of these) and adds the same new key
-    and value combo to each dict. Useful for encoding the same information in each element of parameters.
+    """ Add a new parameter-value combo to a set of parameters.
 
-    Arguments:
+    Takes a dict of parameter names and values (or a list or ndarray of these) and adds the same new key
+    and value combo to each dict. Useful for encoding the same new information in each element of parameters.
+
+    Args:
         parameters (dict, list, ndarray): dict of parameter names and values, or a list or array of such dicts.
-
         parameter_to_append (string, list): name of parameter to add to each param dict, or a list of such names
-
         value: value to set new parameter to, or a list of such values
 
     Returns:
@@ -247,11 +259,12 @@ def append_parameters(parameters, parameter_to_append, value):
 
 
 def combine_parameters(parameters_1, parameters_2):
-    """
-    Accepts two lists or arrays of dicts of equal length/shape and combines them together. Useful for combining together
-    two types of parameter lists (e.g., stimulus and model parameters) of the same length.
+    """ Combine two sets of parameters together.
 
-    Arguments:
+    Accepts two lists or arrays of dicts of equal length/shape and combines them together. Useful for combining together
+    two sets of parameters (e.g., stimulus and model parameters) of the same size/shape.
+
+    Args:
         parameters_1 (list, ndarray): list or ndarray of dicts
         parameters_2 (list, ndarray): list or ndarray of dicts, equal in length/length to parameters_1
 
@@ -281,10 +294,11 @@ def combine_parameters(parameters_1, parameters_2):
 
 
 def flatten_parameters(parameters):
-    """
-    Takes a (possibly nested) list of parameter dicts and flattens it into a single list.
+    """ Flattens a set of parameters.
 
-    Arguments:
+    Takes a (possibly nested) list of dicts of parameter names and values and flattens it into a single list.
+
+    Args:
         parameters (list): possibly nested list of parameters dicts
 
     Returns:
@@ -298,14 +312,15 @@ def flatten_parameters(parameters):
 
 
 def evaluate_parameters(parameters):
-    """
-    Takes a dict of parameter names and values or a (possibly nested) list of these and evaluates any callable elements
+    """ Evaluates any callable elements in a set of parameters.
+
+    Takes a dict of parameter names and values (or a list or array of these) and evaluates any callable elements
     in the dicts.
 
-    Arguments:
+    Args:
         parameters (dict, list, ndarray): dict of parameter names and values or a list or ndarray of such dicts. If a
-        list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the
-        elements can be dicts or lists. Lists are processed recursively.
+            list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the
+            elements can be dicts or lists. Lists are processed recursively.
 
     Returns:
         parameters (dict, list, ndarray): input but where each callable element in the dict(s) has been evaluated
@@ -325,10 +340,9 @@ def evaluate_parameters(parameters):
 
 
 def _evaluate_parameters_dict(paramdict):
-    """
-    Takes a dict of parameter names and values and evaluates any callable elements in the dicts.
+    """ Evaluates any callable elements in a dict of parameter names and values.
 
-    Arguments:
+    Args:
         paramdict (dict): dict of parameter names and values
 
     Returns:
@@ -343,22 +357,22 @@ def _evaluate_parameters_dict(paramdict):
 
 
 def increment_parameters(parameters, increments):
-    """
-    Takes a dict of parameter names and values or a (possibly nested) list or an ndarray of such dicts and and copies
-    its elements multiple times. Each copy after the first contains one parameter with a small increment. The copies
-    are then returned as a list. Useful for setting up simulations for ideal observer analysis.
+    """ Increments a specific parameter in a set of parameters
 
-    Arguments:
+    Takes a dict of parameter names and values (or a list or array) of such dicts and and copies it multiple times.
+    Each copy after the first is modified to have one parameter with a small increment. The copies are then returned as
+    a list. Useful for setting up simulations for ideal observer analysis.
+
+    Args:
         parameters (dict, list, ndarray): dict of baseline parameter names and values or a list or ndarray of such
-        dicts. If a list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an
-        ndarray, the elements can be dicts or lists. Lists are processed recursively.
-
+            dicts. If a list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an
+            ndarray, the elements can be dicts or lists. Lists are processed recursively.
         increments (dict): dict of parameter names and values to increment them by
 
     Returns:
         sequence (list, ndarray): The input, except each dict has been replaced by a list of dicts. First dict
-        encodes a baseline while the remaining dicts encode small deviations in a single parameter from that baseline
-        (in the same order as specified in increments).
+            encodes a baseline while the remaining dicts encode small deviations in a single parameter from that
+            baseline (in the same order as specified in increments).
     """
     # Before we increment any parameters, we should evaluate any callable parameters
     parameters = evaluate_parameters(parameters)
@@ -378,13 +392,13 @@ def increment_parameters(parameters, increments):
 
 
 def _increment_parameters_dict(baselines, increments):
-    """
-    Takes a dict of parameter names and values and copies it multiple times. Each copy after the first contains
-    one incremented parameter.
+    """ Increments a parameter in a dict of parameter names and values.
 
-    Arguments:
+    Takes a dict of parameter names and values and copies it multiple times. Each copy after the first is modified to
+    have one parameter with a small increment. The copies are then returned as a list.
+
+    Args:
         baselines (dict): dict of baseline parameter names and values
-
         increments (dict): dict of parameter names and values to increment them by
 
     Returns:
@@ -425,16 +439,16 @@ def _increment_parameters_dict(baselines, increments):
 
 
 def repeat_parameters(parameters, n_rep):
-    """
-    Takes a dict of parameter names and values or a (possibly nested) list or an ndarray of these and replaces each dict
-    with a list containing multiple copies of that dict. Useful for encoding repeated simulations at the same parameter
+    """ Repeats a set of parameters multiple times.
+
+    Takes a dict of parameter names and values (or a list or array of these) and replaces each dict with a list
+    containing multiple copies of that dict. Useful for encoding repeated simulations at the same parameter
     values.
 
-    Arguments:
+    Args:
         parameters (dict, list, ndarray): dict of parameter names and values or a list. If a list, the elements can
             be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the elements can be dicts
             or lists.
-
         n_rep (int): number of repetitions to encode by copying the param dicts
 
     Returns:
@@ -456,12 +470,10 @@ def repeat_parameters(parameters, n_rep):
 
 
 def _repeat_dict(paramdict, n_rep):
-    """
-    Takes a dict of parameter names and values and returns a list containing multiple copies of the dict
+    """ Copies a dict of parameter names and values multiple times.
 
-    Arguments:
+    Args:
         paramdict (dict): dict of parameter names and values
-
         n_rep (int): number of repetitions to encode by copying the param dicts
 
     Returns:
@@ -471,16 +483,14 @@ def _repeat_dict(paramdict, n_rep):
 
 
 def stitch_parameters(parameters, parameter_to_stitch, values):
-    """
-    Takes a (possibly nested) list or an array of dicts containing parameter names and values, a name of a new
-    parameter, and a list of  values or an ndarray of values to add to each dict. Useful for encoding
-    new unique information in each dict.
+    """  Add a new (vector/matrix-valued) parameter-value combo to a set of parameters.
 
-    Arguments:
+    Takes a list or array of dicts containing parameter names and values, a name of a new parameter, and a list or array
+    of values to add to each dict. Useful for encoding new unique information in each dict.
+
+    Args:
         parameters (list, ndarray): list or ndarray of dicts of parameter names and values or lists of such dicts
-
         parameter_to_stitch (str): new parameter name
-
         values (list, ndarray): list where each element is a value for the new parameter to be set to, or a nested list
             of such lists. The length/hierarchy of parameters and values must match exactly. Alternatively, it can be
             an ndarray of the same shape as the input
@@ -522,30 +532,25 @@ def stitch_parameters(parameters, parameter_to_stitch, values):
 
 
 def wiggle_parameters(parameters, parameter_to_wiggle, values):
-    """
-    Takes a dict of parameter names and values (or possibly nested lists or arrays of these) and copies its elements
-    multiple times. Each copy after the first contains one parameter set to a new parameter value (wiggled). The copies
-    are returned. Useful for constructing batches of simulations over a range of parameter values.
+    """ Wiggles (i.e., varies) a specific parameter in a set of parameters
 
-    Arguments:
+    Takes a dict of parameter names and values (or lists or arrays of these) and copies these dicts multiple times.
+    Each copy is edited to have a particular parameter set to a new value. The copies are returned. Useful for
+    constructing batches of simulations over a range of parameter values. The name derives from the idea of "wiggling"
+    a knob.
+
+    Args:
         parameters (dict, list, ndarray): dict of parameter names and values or a list or ndarray of such dicts. If a
-        list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the
-        elements can be dicts or lists. Lists are processed recursively. Wiggled parameters are added as new dimensions
-        to the ndarray, which is squeezed on output to avoid singleton dimensions. This functionality is useful to
-        encode a series of wiggled parameters as a multi-dimensional array.
-
+            list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the
+            elements can be dicts or lists. Lists are processed recursively. Wiggled parameters are added as new
+            dimensions to the ndarray, which is squeezed on output to avoid singleton dimensions. This functionality is
+            useful to encode a series of wiggled parameters as a multi-dimensional array.
         parameter_to_wiggle (string): name of parameter to wiggle
-
         values (list, ndarray): values to which the parameter value is wiggled
 
     Returns:
         sequence: list of lists. Elements of lists are dicts. First dict is baselines, remaining dicts contain a
             single wiggled parameter.
-
-    Notes:
-        Generally, we assume that wiggling will be done before any repeats/increments... however, wiggle_parameters() is
-        written in an agnostic form such that this assumption is not rigidly enforced. A future version may avoid this
-        as it can produce undesireable functionality. # TODO: address this issue
     """
     # Check if input is dict or list and process accordingly
     if type(parameters) is dict:
@@ -559,15 +564,14 @@ def wiggle_parameters(parameters, parameter_to_wiggle, values):
 
 
 def _wiggle_parameters_dict(paramdict, parameter, values):
-    """
+    """ Wiggles (i.e., varies) a specific parameter in a dict of parameter names and values.
+
     Takes a dict of parameter names and values and copies it multiple times. Each copy after the first contains
     one parameter set to a new value (wiggled).
 
-    Arguments:
+    Args:
         paramdict (dict): dict of baseline parameter names and values
-
         parameter (string): name of parameter to wiggle
-
         values (list): values to which the parameter value is wiggled
 
     Returns:
@@ -585,24 +589,25 @@ def _wiggle_parameters_dict(paramdict, parameter, values):
 
 
 def wiggle_parameters_parallel(parameters, parameter_to_wiggle, values):
-    """
-    Takes a dict of parameter names and values (or possibly nested lists or arrays of these) and copies its elements
-    multiple times. Each copy after the first contains one parameter set to a new parameter value (wiggled). The copies
-    are returned. Useful for constructing batches of simulations over a range of parameter values. This function differs
-    from wiggle_parameters() in that multiple parameter names (and corresponding sets of values) can be specified. In
-    this case, these values are wiggled "simultaneously", meaning that each copied dict will simultaneously have adjusted
-    all parameters specified by the user.
+    """ Wiggles (i.e., varies) a multiple parameters in a set of parameters
 
-    Arguments:
+    Takes a dict of parameter names and values (or lists or arrays of these) and copies these dicts multiple times.
+    Each copy is edited to have a particular parameter set to a new value. The copies are returned. Useful for
+    constructing batches of simulations over a range of parameter values. The name derives from the idea of "wiggling"
+    a knob.
+
+    This function differs from wiggle_parameters() in that multiple parameter names (and corresponding sets of values)
+    can be specified. In this case, these values are wiggled "simultaneously" or "jointly", meaning that each copied
+    dict will simultaneously have new parameter values for all parameters specified by the user.
+
+    Args:
         parameters (dict, list, ndarray): dict of parameter names and values or a list or ndarray of such dicts. If a
             list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an ndarray, the
             elements can be dicts or lists. Lists are processed recursively. Wiggled parameters are added as new
             dimensions to the ndarray, which is squeezed on output to avoid singleton dimensions. This functionality is
             useful to encode a series of wiggled parameters as a multi-dimensional array.
-
         parameter_to_wiggle (string, list): name of parameter to wiggle, or list of such names. If a list, its length
             should match that of values.
-
         values (list, ndarray): values to which the parameter value is wiggled, or list of such lists. If a list, its
             length should match that of parameters_to_wiggle. The lists can also be 1d arrays.
 
@@ -626,16 +631,15 @@ def wiggle_parameters_parallel(parameters, parameter_to_wiggle, values):
 
 
 def _wiggle_parameters_parallel_dict(paramdict, parameter, values):
-    """
+    """ Wiggles (i.e., varies) a multiple parameters in a set of parameters
+
     Takes a dict of parameter names and values and copies it multiple times. Each copy after the first contains
     one or multiple parameters set to new values (wiggled).
 
-    Arguments:
+    Args:
         paramdict (dict): dict of baseline parameter names and values
-
         parameter (string, list): name of parameter to wiggle, or list of such names. If a list, its length
             should match that of values.
-
         values (list): values to which the parameter value is wiggled, or list of such lists. If a list, its length
             should match that of parameters_to_wiggle.
 
@@ -667,11 +671,14 @@ def _wiggle_parameters_parallel_dict(paramdict, parameter, values):
 
 
 def list_to_array(_list):
-    """
-    Accepts a list and turns it into an ndarray with 'object' dtype of shape (len,)
+    """ Transforms a list into an ndarray with 'object' dtype of shape (len,)
 
-    Arguments:
+    Args:
         _list (list)
+
+    Returns
+        new_array (ndarray): ndarray of shape (len, ). Has dtype 'object' so that no matter what is stored in the input
+            _list it can be stored in the array without any alterations of the size of the array.
     """
     new_array = np.empty(shape=(len(_list), ), dtype='object')
     for ii in range(len(_list)):
