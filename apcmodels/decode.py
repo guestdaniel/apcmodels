@@ -3,24 +3,48 @@ from copy import deepcopy
 
 
 def decode_ideal_observer(ratefunc):
-    """
-    Estimate thresholds for calculating an ideal observer. Implemented as a wrapper that can be applied to any ratefunc
-    that accepts kwargs and returns a single firing rate simulation in the standard apcmodels style.
+    """ Decode response by estimating thresholds for an ideal observer.
 
-    Arguments:
+    Estimates thresholds for a particular parameter in a set of parameter based on simulated responses to those
+    parameters. Implemented as a wrapper that can be applied to any ratefunc that accepts a dict of parameter names
+    and values (params) and returns a single firing rate simulation in the standard style.
+
+    The basic approach is as follows. We assume that, instead of encoding a single simulation as a dict of parameter
+    names and values (as any Simulator's simulate() method or ratefunc would assume), multiple simulations have been
+    encoded as a (possibly nested) list of such dicts. We refer to this as params (see below). The neural rate response
+    is simulated for each encoded set of parameters using ratefunc. Then, ideal observer thresholds are derived from
+    these simulated rate responses.
+
+    --- possible nesting types
+
+    --- strategies
+
+    --- assumptions
+
+    Args:
         ratefunc (function): a function that accepts **kwargs and returns firing rates for a neural simulation
+
+    Returns:
+        inner (function): the wrapped ratefunc
     """
     def inner(params):
-        """
-        Runs ratefunc on each input encoded in params, then estimates thresholds based on an ideal observer for a
-        particular parameter. This requires some additional information to be encoded in params in the form of an
-        a priori information matrix (API) and
+        """ Runs ratefunc on each input encoded in params and estimates ideal observer thresholds
 
-        Arguments:
-            params (dict): parameters and inputs encoded in a dict or in a list of dicts
+        inner() runs ratefunc on each input/parameter set encoded in params. Then, it calculates ideal observer
+        thresholds from those simulations. This requires some additional information to be encoded in params above and
+        beyond a standard neural simulation. Namely, we need
+            - API (ndarray): An a priori information matrix (API)
+            - delta_theta (ndarray, list): a collection of values indicating how much various parameters were
+                incremented
+            - n_fiber_per_chan (ndarray, list): a collection of values indicating how many fibers are "represented" at
+                by each CF's rate response
+
+        Args:
+            params (list, ndarray): a collection of dicts of parameter names and values. See docstring for the function
+                above to see how this should be structured.
 
         Returns:
-            thresholds (ndarray): predicted all-information and rate-place thresholds
+            thresholds (tuple): predicted all-information and rate-place thresholds
         """
         # Pull parameters from encoded list/dict of parameters
         fs = find_parameter(params, 'fs')
@@ -47,20 +71,16 @@ def decode_ideal_observer(ratefunc):
         return calculate_threshold(pdms_AI, API), calculate_threshold(pdms_RP, API)
 
     def compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type):
-        """
-        Given one list of simulations, computes a partial derivative matrix as in Siebert (1972).
+        """ Computes a partial derivative matrix as in Siebert (1972) / Heinz et al. (2001)
 
-        Arguments:
+        Args:
             x (list): list of ndarrays containing firing-rate simulations in shape (n_channel x n_sample). The first
                 array should be a firing-rate simulation for baseline parameter values. The following arrays should
                 be firing-rate simulations where a single parameter has been incremented by a small amount.
-
             fs (int): sampling rate in Hz
-
             delta_theta (ndarray): 1d ndarray containing the increment size for each element of x after the first
             n_fiber_per_chan (array): array containing integers of len n_cf, each element indicates how many fibers
                 are theoretically represented by the single corresponding channel in x
-
             _type (str): either 'AI' or 'RP' for all-information or rate-place
 
         Returns:
@@ -108,12 +128,10 @@ def decode_ideal_observer(ratefunc):
             return deriv_matrix
 
     def calculate_threshold(FI, API):
-        """
-        Optimally decode firing-rate waveforms of ANFs using N-D generalization from Siebert (1972).
+        """ Optimally decode firing-rate waveforms using N-D generalization of Siebert (1972).
 
-        Arguments:
+        Args:
             FI (ndarray): Fisher information matrices for parameters, of size n_param x n_param
-
             API (ndarray): Fisher information for parameter distributions, of size n_param x n_param.
 
         Returns:
