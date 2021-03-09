@@ -1,13 +1,36 @@
 import numpy as np
 
 
-def compute_running_ACF(rates, time_point, fs=int(100e3), tau=10*1e-3, lag_low=1e-3, lag_high=15e-3, n_lag=250):
+def compute_acf(rates, fs, demean=False):
+    """ Computes the autocorrelation function (ACF) of an input neural simulation.
+
+    Args:
+        rates (ndarray): an array of instantaneous firing rates or spike trains from an auditory nerve or other neural
+            model, of shape (n_channel, n_sample)
+        fs (int): sampling rate, in Hz
+        demean (bool): whether or not to subtract the mean of each channel before computing autocorrelation
+
+    Returns:
+        h (ndarray): autocorrelation values as a function of channel and lag time, of shape (n_channel, n_lag)
+        lag_times (ndarray): lag times in seconds, of shape (n_lag, )
+    """
+    if demean:
+        h = np.real(np.fft.ifft(np.abs(np.fft.fft(rates-np.mean(rates, axis=1), axis=1))**2, axis=1))
+    else:
+        h = np.real(np.fft.ifft(np.abs(np.fft.fft(rates, axis=1))**2, axis=1))
+    lag = np.linspace(0, h.shape[1]/fs, h.shape[1])
+    return h, lag
+
+
+def compute_acf_meddis(rates, time_point, fs=int(100e3), tau=10*1e-3, lag_low=1e-3, lag_high=15e-3, n_lag=250):
     """ Computes the summary autocorrelation function (sACF) from Meddis and O'Mard (1991) at a single time point.
+
+    Note that this implementation of the algorithm is quite slow.
 
     Args:
         rates (ndarray): an array of instantaneous firing rates from an auditory nerve or other neural model, of shape
             (n_channel, n_sample)
-        time_point (float): time point (t_0) at which to compute the autocorrelation
+        time_point (float): time point (t_0) at which to compute the autocorrelation, in seconds
         fs (int): sampling rate, in Hz
         tau (float): time constant, in seconds
         lag_low (float): shortest lag at which to compute autocorrelation, in seconds
@@ -34,7 +57,7 @@ def compute_running_ACF(rates, time_point, fs=int(100e3), tau=10*1e-3, lag_low=1
     return h, lag*dt
 
 
-def estimate_F0_sACF(rates, time_point, fs=int(100e3), tau=10*1e-3, lag_low=1e-3, lag_high=15e-3, n_lag=250):
+def estimate_f0_acf_meddis(rates, time_point, fs=int(100e3), tau=10*1e-3, lag_low=1e-3, lag_high=15e-3, n_lag=250):
     """ Estimates the F0 by simple peak-picking summary autocorrelation function from Meddis and O'Mard (1991).
 
     Args:
@@ -50,31 +73,13 @@ def estimate_F0_sACF(rates, time_point, fs=int(100e3), tau=10*1e-3, lag_low=1e-3
     Returns:
         F0 (float): estimated F0, in Hz
     """
-    h, lags = compute_running_ACF(rates, time_point, fs, tau, lag_low, lag_high, n_lag)
+    h, lags = compute_acf_meddis(rates, time_point, fs, tau, lag_low, lag_high, n_lag)
     idx = np.argmax(np.sum(h, axis=0))  # sum ACF across channels/fibers and pick the peak
 
     return 1/lags[idx]  # return F0
 
 
-def compute_autocorrelation(rates, fs):
-    """ Computes the autocorrelation function (ACF) of a firing-rate simulation.
-
-    Args:
-        rates (ndarray): an array of instantaneous firing rates from an auditory nerve or other neural model, of shape
-            (n_channel, n_sample)
-        fs (int): sampling rate, in Hz
-
-    Returns:
-        h (ndarray): autocorrelation values as a function of channel and lag time, of shape (n_channel, n_lag)
-        lag_times (ndarray): lag times in seconds, of shape (n_lag, )
-    """
-    # Create constants
-    h = np.real(np.fft.ifft(np.abs(np.fft.fft(rates, axis=1))**2, axis=1))
-    lag = np.linspace(0, h.shape[1]/fs, h.shape[1])
-    return h, lag
-
-
-def estimate_F0_autocorrelation(rates, fs, lag_low=1e-04):
+def estimate_f0_acf(rates, fs, lag_low=1e-04, lag_high=12e-3):
     """ Estimates the F0 by simple peak-picking summary autocorrelation function from Meddis and O'Mard (1991).
 
     Args:
@@ -86,8 +91,8 @@ def estimate_F0_autocorrelation(rates, fs, lag_low=1e-04):
     Returns:
         F0 (float): estimated F0, in Hz
     """
-    h, lags = compute_autocorrelation(rates, fs)
-    idx = np.argmax(np.sum(h[:, lags > lag_low], axis=0))  # sum ACF across channels/fibers and pick the peak
-    lags = lags[lags > lag_low]
+    h, lags = compute_acf(rates, fs)
+    idx = np.argmax(np.sum(h[:, np.logical_and(lag_low < lags, lags < lag_high)], axis=0))  # sum ACF across channels/fibers and pick the peak
+    lags = lags[np.logical_and(lag_low < lags, lags < lag_high)]
 
     return 1/lags[idx]  # return F0
