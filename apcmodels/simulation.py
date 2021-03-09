@@ -74,24 +74,24 @@ class Simulator:
         if parallel:
             p = ProcessPool(n_thread)
             if type(params) is list:
-                results = list(p.imap(runfunc, tqdm(params, disable=hide_progress)))
+                results = list(p.imap(runfunc, tqdm(params, disable=hide_progress, total=len(params))))
             elif type(params) is np.ndarray:
                 # For array params, we need flatten the array and then un-flatten it after output
                 old_size = params.shape
                 params = np.reshape(params, (params.size,))
-                results = list_to_array(list(p.imap(runfunc, tqdm(params, disable=hide_progress))))
+                results = list_to_array(list(p.imap(runfunc, tqdm(params, disable=hide_progress, total=len(params)))))
                 results = np.reshape(results, old_size)
             else:
                 raise ValueError('params should be a list or an array')
         # If not parallel, simply iterate over and run each element of the sequence
         else:
             if type(params) is list:
-                results = [runfunc(element) for element in params]
+                results = [runfunc(element) for element in tqdm(params, disable=hide_progress, total=len(params))]
             elif type(params) is np.ndarray:
                 # For array params, we need flatten the array and then un-flatten it after output
                 old_size = params.shape
                 params = np.reshape(params, (params.size,))
-                results = list_to_array(list(map(runfunc, params)))
+                results = list_to_array(list(map(runfunc, tqdm(params, disable=hide_progress, total=len(params)))))
                 results = np.reshape(results, old_size)
             else:
                 raise ValueError('params should be a list or an array')
