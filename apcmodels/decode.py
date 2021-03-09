@@ -222,7 +222,8 @@ def decode_staircase_procedure(ratefunc, rule, synthesizer, tracked_parameter, s
     function that should return an integer value indicating which interval is thought to be the target. The target is
     always the last interval. The staircase procedure continues until one stopping criterion is met (either a maximum
     number of trials, a maximum number of reversals, or a maximum number of trials at the maximum permitted value of
-    the tracked variable).
+    the tracked variable). Note that in some cases it is possible that a stopping criterion will be reached before
+    a sufficient number of reversals are achieved. In this case, a nan will be returned.
 
     Args:
         ratefunc (function): a function that accepts params encoded in a dictionary and returns firing rates for a
