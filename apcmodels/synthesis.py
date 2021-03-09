@@ -83,7 +83,7 @@ class Synthesizer:
 
 
 class PureTone(Synthesizer):
-    """ Synthesizes a pure tone with raised-cosine ramps. """
+    """ Synthesizes a pure tone. """
     def __init__(self):
         super().__init__(stimulus_name='Pure Tone')
 
@@ -103,5 +103,37 @@ class PureTone(Synthesizer):
         """
         pt = sg.pure_tone(freq, phase, dur, fs)
         pt = sg.scale_dbspl(pt, level)
+        pt = sg.cosine_ramp(pt, dur_ramp, fs)
+        return pt
+
+
+class ComplexTone(Synthesizer):
+    """ Synthesizes a simple complex tone stimulus with a consecutive series of harmonics. """
+    def __init__(self):
+        super().__init__(stimulus_name='Complex Tone')
+
+    def synthesize(self, f0=100, h_low=1, h_high=10, level=50, phase=0, dur=1, dur_ramp=0.1, fs=int(48e3), **kwargs):
+        """ Synthesizes a single instance of a complex tone with a raised-cosine ramp.
+
+        The complex tone is synthesized with a consecutive series of harmonics from h_low to h_high. All components
+        have the same level and the same phase.
+
+        Args:
+            f0 (float): F0 of complex tone, in Hz
+            h_low (int): lowest harmonic number
+            h_high (int): highest harmonic number
+            level (float): level of complex tone per-component, in dB SPL
+            phase (float): phase offset for every component, in degrees
+            dur (float): duration, in seconds
+            dur_ramp (float): duration of raised-cosine ramp, in seconds
+            fs (int): sampling rate, in Hz
+
+        Returns:
+            output (array): complex tone
+        """
+        freqs = np.arange(h_low, h_high+1) * f0
+        levels = np.ones(len(freqs))*level
+        phases = np.zeros(len(freqs))
+        pt = sg.complex_tone(freqs, levels, phases, dur, fs)
         pt = sg.cosine_ramp(pt, dur_ramp, fs)
         return pt
