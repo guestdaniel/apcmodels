@@ -13,7 +13,7 @@ import warnings
 class AuditoryNerveHeinz2001Numba(Simulator):
     """ Provides an interface to the Heinz, Colburn, and Carney (2001) auditory nerve model.
 
-    Citations:
+    References:
         Heinz, M. G., Colburn, H. S., and Carney, L. H. (2001). "Evaluating auditory performance limits: I.
         One-parameter discrimination using a computational model for the auditory nerve." Neural Computation 13(10).
         2273-2316.
@@ -49,7 +49,7 @@ class AuditoryNerveZilany2014(Simulator):
     The Zilany et al. (2014) model is implemented via code adapted from the cochlea package
     (https://github.com/mrkrd/cochlea)
 
-    Citations:
+    References:
         Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
         model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
     """
@@ -188,11 +188,10 @@ def calculate_heinz2001_firing_rate(_input, fs, cfs, **kwargs):
     Warnings:
         - Note that arguments passed via **kwargs are silently unused
 
-    Citations:
+    References:
         Heinz, M. G., Colburn, H. S., and Carney, L. H. (2001). "Evaluating auditory performance limits: I.
         One-parameter discrimination using a computational model for the auditory nerve." Neural Computation, 13(10).
         2273-2316.
-
         Westerman, L. A., & Smith, R. L. (1988). A diffusion model of the transient response of the cochlear inner hair
         cell synapse. The Journal of the Acoustical Society of America, 83(6), 2266-2276.
     """
@@ -269,8 +268,7 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
     """ Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation, returning firing rates.
 
     The Zilany et al. (2014) model is implemented via code adapted from the cochlea package
-    (https://github.com/mrkrd/cochlea). Specifically, the adapted code provides a Python interface to a slightly
-    modified version of the original implementation of the Zilany et al. (2014) model in C.
+    (https://github.com/mrkrd/cochlea).
 
     Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
@@ -288,7 +286,7 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
     Warnings:
         - Note that arguments passed via **kwargs are silently unused
 
-    Citations:
+    References:
         Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
         model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
     """
@@ -312,8 +310,7 @@ def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(
     """ Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation, returning spike times.
 
     The Zilany et al. (2014) model is implemented via code adapted from the cochlea package
-    (https://github.com/mrkrd/cochlea). Specifically, the adapted code provides a Python interface to a slightly
-    modified version of the original implementation of the Zilany et al. (2014) model in C.
+    (https://github.com/mrkrd/cochlea).
 
     Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
@@ -328,7 +325,7 @@ def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(
     Warnings:
         - Note that arguments passed to **kwargs are discarded silently
 
-    Citations:
+    References:
         Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a
         model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
     """
@@ -373,7 +370,7 @@ def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
     TODO:
         - Replace the nearest-neighbors CF interpolation with some sort of smooth interpolation
 
-    Citations:
+    References:
         Verhulst, S., Altoè, A., & Vasilkov, V. (2018). Computational modeling of the human auditory periphery:
         Auditory-nerve responses, evoked potentials and hearing loss. Hearing research, 360, 55-75.
     """

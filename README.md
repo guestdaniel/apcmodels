@@ -89,7 +89,8 @@ plt.ylabel('Response (sp/s)')
 ├── test_acceptance          # Acceptance tests
 ├── test_unit                # Unit tests
 ├── test_replication         # Replications from literature
-├── LICENSE                  # License file for the code contained in this repository
+├── LICENSE                  # Attributions for source code adapted from other authors (in apcmodels/external)
+├── LICENSE                  # License file for the code contained in this repository (excluding code in apcmodels/external)
 ├── README.md                # This README file
 └── setup.py                 # Setup/install file
 ```
@@ -105,6 +106,12 @@ We generally recommend that you install `apcmodels` in a virtual environment (e.
 ```
 pip install git+https://github.com/detly/gammatone.git
 ```
+
+# Attribution and licensing
+
+`apcmodels` is open-source and would not be possible without the efforts of open-source contributors and scientists around the world. `apcmodels` used modified versions of parts of other open-source projects. All such code is stored in `apcmodels/external`. Each subfolder in `external` contains code adapted from a single such source along with a relevant `LICENSE` file for that part of the code. The contributions of the authors of these open-source projects are described in the top-level `AUTHORS.md` file. 
+
+`apcmodels` also depends on the scientific contributions of those who build computational mdoels of the auditory system. Attributions for such scientific works can be found in the doc strings of associated source code.
 
 # Similar tools and resources
 
