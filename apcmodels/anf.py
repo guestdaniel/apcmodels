@@ -4,9 +4,7 @@ from scipy.signal import butter, lfilter
 from apcmodels.simulation import Simulator, check_args
 from numba import jit
 from apcmodels.external.zilany2014.run_zilany import run_zilany2014_rate, run_zilany2014_spikes
-import sys
-sys.path.append('/home/daniel/apc_code/scripts/Verhulstetal2018Model')
-from run_model2018 import Verhulst2018CochleaIHC, Verhulst2018ANF
+from apcmodels.external.verhulst2018.run_verhulst import run_verhulst2018_rate
 import warnings
 
 
@@ -356,7 +354,7 @@ def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
         fs (int): sampling rate in Hz
         cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses. Note that the
-            Verhulst model returns responses at a hardcoded range of ~1000 CFs... for each requested CF, we return
+            Verhulst model returns responses at a hardcoded range of 1000 CFs.. For each requested CF, we return
             the closest available CF. This can produce significant distortion along the tonotopic axis or can even
             result in the same response from a single CF being returned multiple times, so consider what CFs you
             request with caution.
@@ -370,18 +368,13 @@ def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
             taken for any application that depends crucially on the assumed underlying CFs. In such applications,
             you may want to make measurements of the CFs yourself.
 
-    TODO:
-        - Replace the nearest-neighbors CF interpolation with some sort of smooth interpolation
-
     Citations:
         Verhulst, S., Altoè, A., & Vasilkov, V. (2018). Computational modeling of the human auditory periphery:
         Auditory-nerve responses, evoked potentials and hearing loss. Hearing research, 360, 55-75.
     """
-    # Run firing rate simulations
-    vm, fs_res, cfs_model = Verhulst2018CochleaIHC(_input, fs)
-    rates = Verhulst2018ANF(vm, fs_res, 2)
-    rates = rates / (1 / fs_res)
-    rates = np.flip(rates, axis=1)  # flip tonotopic axis left-right
+    # Run firing rate simulation
+    rates, cfs_model = run_verhulst2018_rate(_input, fs, 2)
+    rates = np.flip(rates, axis=1)  # flip tonotopic axis left-right (by default it goes high->low)
     rates = rates.T  # transpose to (n_cf, n_sample)
 
     # Only return rates at requested "CFs" (while not forgetting to flip model CFs)
