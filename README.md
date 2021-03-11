@@ -77,7 +77,7 @@ plt.ylabel('Response (sp/s)')
 ├── apcmodels                # Primary package directory
 │   ├── external             # Submodule that contains code from external sources (e.g., other packages)
 │   │   ├── zilany2014       # Code adapted from cochlea package to implement Zilany et al. (2014) AN model
-│   │   └── verhulst2018     # Code adapted from CoNNear package to implement Verhulst et al. (2018) AN model
+│   │   └── verhulst2018     # Wrapper around original implementation of Verhulst et al. (2018) AN model
 │   ├── __init__.py          
 │   ├── anf.py               # Auditory nerve models 
 │   ├── decode.py            # Ideal observer analysis 
@@ -97,19 +97,41 @@ plt.ylabel('Response (sp/s)')
 
 # Installation
 
-To install `apcmodels`, simply download this Git repository and run `python setup.py install` in the root directory. Alternatively, you can simply install the package directly from git using `pip` as...
+Installation of `apcmodels` involves a few simple steps.
+
+1. Download this Git repository. This can be done either with...
+
 ```
-pip install git+https://github.com/guestdaniel/apcmodels.git
+git clone git@github.com:guestdaniel/apcmodels
 ```
-We generally recommend that you install `apcmodels` in a virtual environment (e.g., Conda) to insulate it from your system Python install. A number of Python packages are required but should be installed automatically by the install script. One notable exception is the [`gammatone`](https://github.com/detly/gammatone) package, which must be manually installed or installed via `pip` as...
+
+... or by downloading the [zip file](https://github.com/guestdaniel/apcmodels/archive/master.zip). 
+
+2. [Install `Cython`](https://cython.readthedocs.io/en/latest/src/quickstart/install.html). 
+
+3. Install the [`gammatone`](https://github.com/detly/gammatone) package. This can be done easily with `pip` as...
 
 ```
 pip install git+https://github.com/detly/gammatone.git
 ```
 
+4. Install [`Verhulst2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model), the codebase for the Verhulst et al. (2018) nerve model. Note that this repository is not a Python package. Crucially, this means it must be located on your computer and *available on your Python path*. Our recommended solution is to clone/download the repository to the `apcmodels/external/verhulst2018` directory in this repository. This can be done from the repository as...
+
+```
+git clone git@github.com:HearingTechnology/Verhulstetal2018Model.git apcmodels/external/verhulst2018/Verhulstetal2018Model
+```
+
+... or by unzipping the [zip file](https://github.com/HearingTechnology/Verhulstetal2018Model/archive/master.zip) into the corresponding folder (note that the entire repository should be contained as one folder within `apcmodels/external/verhulst2018`). Then, navigate to this new local copy of the model and proceed with the second and third step of the installation instructions provided in the [`Verhulst2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model) repository (compile `tridiag.so` and unzip Poles, respectively). When you install `apcmodels` (step 5 below), it will bundle this copy of the Verhulst et al. (2018) codebase with `apcmodels` and automatically add its location to your Python path when you import `apcmodels`. 
+
+Alternatively, you can download and install [`Verhulst2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model) wherever you would like. However, before importing any modules that depend on the Verhulst et al. (2018) code, you must make sure that your Python path includes the corresponding directory.
+
+5. Run `python setup.py install` in the root directory of this repository. This will install the package on your computer and automatically install all remaining Python dependencies (e.g., `numpy`, `scipy`) if they are not already installed.
+
+We generally recommend that you install `apcmodels` in a virtual environment (e.g., Conda) to insulate it from your system Python install. 
+
 # Attribution and licensing
 
-`apcmodels` is open-source and would not be possible without the efforts of open-source contributors and scientists around the world. `apcmodels` used modified versions of parts of other open-source projects. All such code is stored in `apcmodels/external`. Each subfolder in `external` contains code adapted from a single such source along with a relevant `LICENSE` file for that part of the code. The contributions of the authors of these open-source projects are described in the top-level `AUTHORS.md` file. 
+`apcmodels` is open-source and would not be possible without the efforts of open-source contributors and scientists around the world. `apcmodels` used modified versions of parts of other open-source projects. Such modified code is stored in `apcmodels/external` (although other code is stored there too!). If a subfoder/submodule in `external` contains modified code from an external source, an appropriate `LICENSE` file is included. More information about this, as well as references to the original authors, can be found in the top-level `AUTHORS.md` file in this repository.
 
 `apcmodels` also depends on the scientific contributions of those who build computational mdoels of the auditory system. Attributions for such scientific works can be found in the doc strings of associated source code.
 

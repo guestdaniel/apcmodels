@@ -1,6 +1,6 @@
 import numpy as np
 import sys
-sys.path.append('/home/daniel/apcmodels/apcmodels/external/verhulst2018/Verhulstetal2018Model')
+sys.path.append('apcmodels/external/verhulst2018/Verhulstetal2018Model')
 import inner_hair_cell2018 as ihc
 import auditory_nerve2018 as anf
 from cochlear_model2018 import cochlea_model

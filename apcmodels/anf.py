@@ -96,6 +96,15 @@ class AuditoryNerveZilany2014(Simulator):
 
 
 class AuditoryNerveVerhulst2018(Simulator):
+    """ Provides an interface to the Verhulst, Altoe, and Vasilikov (2018) auditory nerve model
+
+    The Verhulst et al. (2018) model is implemented via a tiny wrapper around the Verhulst lab's release of their 2018
+    model available at https://github.com/HearingTechnology/Verhulstetal2018Model
+
+    References:
+        Verhulst, S., Altoè, A., & Vasilkov, V. (2018). Computational modeling of the human auditory periphery:
+        Auditory-nerve responses, evoked potentials and hearing loss. Hearing research, 360, 55-75.
+    """
     def __init__(self):
         super().__init__()
         # Declare recognized parameters
@@ -103,7 +112,7 @@ class AuditoryNerveVerhulst2018(Simulator):
 
     @check_args([])
     def simulate(self, params, **kwargs):
-        """ Runs the Verhulst et al. (2018) auditory nerve simulation and returns firing rates
+        """ Runs the Verhulst et al. (2018) auditory nerve simulation and return firing rates
 
         Args:
             params (dict): encoded parameters, should be a dict containing parameter names and values
@@ -163,7 +172,7 @@ def calculate_auditory_nerve_response(nerve_model):
 
 @calculate_auditory_nerve_response
 def calculate_heinz2001_firing_rate(_input, fs, cfs, **kwargs):
-    """ Implements Heinz, Colburn, and Carney (2001) auditory nerve model.
+    """ Runs the Heinz et al. (2001) auditory nerve simulation and return firing rates
 
     Implements the Heinz et al. (2001) auditory nerve model. This model contains the following steps:
         - A gammatone frontend is implemented via the gammatone package (https://github.com/detly/gammatone)
@@ -184,7 +193,7 @@ def calculate_heinz2001_firing_rate(_input, fs, cfs, **kwargs):
         output (ndarray): output array of instantaneous firing rates, of shape (n_cf, n_samp)
 
     Warnings:
-        - Note that arguments passed via **kwargs are silently unused
+        - Arguments passed via **kwargs are silently unused
 
     References:
         Heinz, M. G., Colburn, H. S., and Carney, L. H. (2001). "Evaluating auditory performance limits: I.
@@ -263,7 +272,7 @@ def _calculate_heinz2001_rate_internals(dims, fs, ihc, C_I, C_L):
 
 @calculate_auditory_nerve_response
 def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fiber_type='hsr', **kwargs):
-    """ Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation, returning firing rates.
+    """ Runs the Zilany et al. (20144) auditory nerve simulation and returns firing rates
 
     The Zilany et al. (2014) model is implemented via code adapted from the cochlea package
     (https://github.com/mrkrd/cochlea).
@@ -305,7 +314,7 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
 
 @calculate_auditory_nerve_response
 def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(1, 0, 0), **kwargs):
-    """ Implements Zilany, Bruce, and Carney (2014) auditory nerve simulation, returning spike times.
+    """ Runs the Zilany et al. (20144) auditory nerve simulation and returns spike times
 
     The Zilany et al. (2014) model is implemented via code adapted from the cochlea package
     (https://github.com/mrkrd/cochlea).
@@ -345,7 +354,8 @@ def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(
 def calculate_verhulst2018_firing_rate(_input, fs, cfs=None, **kwargs):
     """ Implements Verhulst, Altoe, and Vasilikov (2018) auditory nerve simulation
 
-    TODO: explain how we did this (conditional on what code we can reuse)
+    The Verhulst et al. (2018) model is implemented via a tiny wrapper around the Verhulst lab's release of their 2018
+    model available at https://github.com/HearingTechnology/Verhulstetal2018Model
 
     Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
