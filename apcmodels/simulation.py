@@ -82,7 +82,7 @@ class Simulator:
                 results = list_to_array(list(p.imap(runfunc, tqdm(params, disable=hide_progress, total=len(params)))))
                 results = np.reshape(results, old_size)
             else:
-                raise ValueError('params should be a list or an array')
+                raise TypeError('params should be a list or an array')
         # If not parallel, simply iterate over and run each element of the sequence
         else:
             if type(params) is list:
@@ -94,7 +94,7 @@ class Simulator:
                 results = list_to_array(list(map(runfunc, tqdm(params, disable=hide_progress, total=len(params)))))
                 results = np.reshape(results, old_size)
             else:
-                raise ValueError('params should be a list or an array')
+                raise TypeError('params should be a list or an array')
         return results
 
 
@@ -145,9 +145,15 @@ class Parameters:
     def __getitem__(self, index):
         return self.params[index]
 
+    def __setitem__(self, index, value):
+        self.params[index] = value
+
     def __iter__(self):
         for elem in self.params:
             yield elem
+
+    def __repr__(self):
+        return self.params.__repr__()
 
     def __str__(self):
         return self.params.__str__()
@@ -185,19 +191,18 @@ class Parameters:
     def flatten(self):
         """ Takes the params array and flattens it into a single 1d array. We assume that each element of self.params is
          of the same type and of the same structure.
-         TODO: add tests?
          """
         # First, we loop through each element of self.params and flatten them out if needed
         temp = np.empty(self.params.shape, dtype=object)
         with np.nditer(self.params, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
-                for x in it:
-                    x = x.item()
-                    if type(x) is list:
-                        temp[it.multi_index] = flatten_parameters(x)
-                    else:
-                        temp[it.multi_index] = x
+            for x in it:
+                x = x.item()
+                if type(x) is list:
+                    temp[it.multi_index] = flatten_parameters(x)
+                else:
+                    temp[it.multi_index] = x
         # Next, we concatenate together all the elements of temp and return them
-        self.params = np.concatenate(temp)
+        self.params = temp.reshape((temp.size, ))
 
     def increment(self, increments):
         """ Applies increment_parameters to increments. See documentation for increment_parameters() """
@@ -255,7 +260,7 @@ def append_parameters(parameters, parameter_to_append, value):
                 temp[it.multi_index] = append_parameters(x.item(), parameter_to_append, value)
         return temp
     else:
-        raise ValueError('Input is not list or dict!')
+        raise TypeError('Input is not list or dict!')
 
 
 def combine_parameters(parameters_1, parameters_2):
@@ -269,9 +274,7 @@ def combine_parameters(parameters_1, parameters_2):
         parameters_2 (list, ndarray): list or ndarray of dicts, equal in length/length to parameters_1
 
     Returns:
-        output (list, ndarray): a list or ndarray of dicts, each dict contains all elements from both dicts. Conflicting
-         elements (i.e., keys are in both input dicts) are both included by resolved by appending '_2' to the second
-         dict's key.
+        output (list, ndarray): a list or ndarray of dicts, each dict contains all elements from both dicts.
     """
     # Check to make sure that the two lists are the same length
     if type(parameters_1) == list:
@@ -285,10 +288,7 @@ def combine_parameters(parameters_1, parameters_2):
     for params_1, params_2 in zip(parameters_1, parameters_2):
         # Loop through elements of params_2
         for key in params_2.keys():
-            if key in params_1.keys():
-                params_1[key + '_2'] = params_2[key]
-            else:
-                params_1[key] = params_2[key]
+            params_1[key] = params_2[key]
     # Return
     return parameters_1
 
@@ -336,7 +336,7 @@ def evaluate_parameters(parameters):
                 temp[it.multi_index] = evaluate_parameters(x.item())
         return temp
     else:
-        raise ValueError('Input is not list or dict!')
+        raise TypeError('Input is not list or dict!')
 
 
 def _evaluate_parameters_dict(paramdict):
@@ -367,7 +367,9 @@ def increment_parameters(parameters, increments):
         parameters (dict, list, ndarray): dict of baseline parameter names and values or a list or ndarray of such
             dicts. If a list, the elements can be dicts of parameters or lists. Lists are processed recursively. If an
             ndarray, the elements can be dicts or lists. Lists are processed recursively.
-        increments (dict): dict of parameter names and values to increment them by
+        increments (dict): dict of parameter names and values to increment them by. If parameter names are appended
+            by (#)_ where # is some integer number, then this part of the parameter name will be stripped before
+            incrementing the parameter. This useful if you want to increment the same parameter multiple times.
 
     Returns:
         sequence (list, ndarray): The input, except each dict has been replaced by a list of dicts. First dict
@@ -387,8 +389,6 @@ def increment_parameters(parameters, increments):
             for x in it:
                 temp[it.multi_index] = increment_parameters(x.item(), increments)
         return temp
-    else:
-        raise ValueError('Input is not list or dict!')
 
 
 def _increment_parameters_dict(baselines, increments):
@@ -399,7 +399,9 @@ def _increment_parameters_dict(baselines, increments):
 
     Args:
         baselines (dict): dict of baseline parameter names and values
-        increments (dict): dict of parameter names and values to increment them by
+        increments (dict): dict of parameter names and values to increment them by. If parameter names are appended
+            by (#)_ where # is some integer number, then this part of the parameter name will be stripped before
+            incrementing the parameter.
 
     Returns:
         sequence: list of dicts. First dict is baselines, remaining dicts contain a
@@ -415,22 +417,16 @@ def _increment_parameters_dict(baselines, increments):
             new_key = key[(len(key.split('_')[0])+1):]
             # Create copy of baseline
             temp = deepcopy(baselines)
-            # Check if elements of temp are callable, if so we call them now
-            if callable(temp[new_key]):
-                temp[new_key] = temp[new_key]() + increments[key]
-            else:
-                temp[new_key] = temp[new_key] + increments[key]
+            # Add new value
+            temp[new_key] = temp[new_key] + increments[key]
             # Add in a record of the size of the increment
             temp['increment_size'] = increments[key]
             parameter_sequence.append(temp)
         else:
             # Create copy of baseline
             temp = deepcopy(baselines)
-            # Check if elements of temp are callable, if so we call them now
-            if callable(temp[key]):
-                temp[key] = temp[key]() + increments[key]
-            else:
-                temp[key] = temp[key] + increments[key]
+            # Add new value
+            temp[key] = temp[key] + increments[key]
             # Add in a record of the size of the increment
             temp['increment_size'] = increments[key]
             parameter_sequence.append(temp)
@@ -466,7 +462,7 @@ def repeat_parameters(parameters, n_rep):
                 temp[it.multi_index] = repeat_parameters(x.item(), n_rep)
         return temp
     else:
-        raise ValueError('Input is not list or dict!')
+        raise TypeError('Input is not list or dict!')
 
 
 def _repeat_dict(paramdict, n_rep):
@@ -503,7 +499,7 @@ def stitch_parameters(parameters, parameter_to_stitch, values):
         if len(parameters) != len(values):
             raise ValueError('parameters and values should be the same length.')
     elif type(parameters) is np.ndarray or type(parameters) is Parameters:
-        if not np.all(parameters.shape == values.shape):
+        if not parameters.shape == values.shape:
             raise ValueError('parameters and values should be the same shape.')
     # Add values to each element in parameters
     if type(parameters) is list:
@@ -528,7 +524,7 @@ def stitch_parameters(parameters, parameter_to_stitch, values):
                     output[it.multi_index] = dict(**x, **{parameter_to_stitch: values[it.multi_index]})
         return output
     else:
-        raise ValueError('parameters is of unexpected type')
+        raise TypeError('parameters is of unexpected type')
 
 
 def wiggle_parameters(parameters, parameter_to_wiggle, values):
@@ -560,7 +556,7 @@ def wiggle_parameters(parameters, parameter_to_wiggle, values):
     elif type(parameters) is np.ndarray:
         return np.squeeze(np.array(list(map(lambda x: wiggle_parameters(x, parameter_to_wiggle, values), parameters))))
     else:
-        raise ValueError('Input is not list or dict!')
+        raise TypeError('Input is not list or dict!')
 
 
 def _wiggle_parameters_dict(paramdict, parameter, values):
@@ -627,7 +623,7 @@ def wiggle_parameters_parallel(parameters, parameter_to_wiggle, values):
     elif type(parameters) is np.ndarray:
         return np.squeeze(np.array(list(map(lambda x: wiggle_parameters_parallel(x, parameter_to_wiggle, values), parameters))))
     else:
-        raise ValueError('Input is not list or dict!')
+        raise TypeError('Input is not list or dict!')
 
 
 def _wiggle_parameters_parallel_dict(paramdict, parameter, values):

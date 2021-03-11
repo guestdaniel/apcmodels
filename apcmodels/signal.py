@@ -54,7 +54,7 @@ def cosine_ramp(signal, dur_ramp, fs):
         output (array): time-domain signal with ramp
     """
     # Check to make sure that the duration of the ramp is less than 1/2 of the stimulus duration
-    if dur_ramp > len(signal)/2:
+    if dur_ramp > (len(signal)/fs)/2:
         raise ValueError('The ramp cannot be longer than the stimulus!')
     # Determine length of the ramp
     n_ramp = floor(fs*dur_ramp)
@@ -127,7 +127,7 @@ def pure_tone_am(freq, phase, freq_mod, phase_mod, depth_mod, dur, fs):
     # Calculate modulator waveform
     modulator = depth_mod*np.sin(2*np.pi*freq_mod*t+(2*np.pi/360*phase_mod))
     # Return carrier x modulator
-    return (1 + modulator) * carrier
+    return np.squeeze(np.multiply((1 + modulator), carrier.T).T)
 
 
 def rms(signal, axis=0):
