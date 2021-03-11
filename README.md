@@ -16,7 +16,7 @@
 | ------ | ------ | ------ |
 | [Heinz, Colburn, and Carney (2001)](https://doi.org/10.1162/089976601750541804) | Auditory nerve | Firing rate
 | [Zilany, Bruce, and Carney (2014)](https://doi.org/10.1121/1.4837815) | Auditory nerve | Firing rate, spikes
-| [Verhulst, Altoe, and Vasilkov (2018)](https://doi.org/10.1016/j.heares.2017.12.018) | Auditory nerve | Firing rate
+| [Verhulst, Altoe, and Vasilkov (2018)](https://doi.org/10.1016/j.heares.2017.12.018) | Basilar membrane, inner hair cells, auditory nerve | Vibration, potentials, firing rate
 
 # Upcoming models
 
@@ -115,15 +115,28 @@ git clone git@github.com:guestdaniel/apcmodels
 pip install git+https://github.com/detly/gammatone.git
 ```
 
-4. Install [`Verhulst2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model), the codebase for the Verhulst et al. (2018) nerve model. Note that this repository is not a Python package. Crucially, this means it must be located on your computer and *available on your Python path*. Our recommended solution is to clone/download the repository to the `apcmodels/external/verhulst2018` directory in this repository. This can be done from the repository as...
+4. Install [`Verhulstetal2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model), the codebase for the Verhulst et al. (2018) nerve model. Note that this repository is not a Python package and, as such, cannot be installed through package managers. Moreover, it requires some manual installation steps. This means it must be located on your computer, set up correctly, and *available on your Python path* to be usable by `apcmodels`. First, clone/download the repository to a preferred location on your device. This can be done from the repository as...
 
 ```
-git clone git@github.com:HearingTechnology/Verhulstetal2018Model.git apcmodels/external/verhulst2018/Verhulstetal2018Model
+git clone git@github.com:HearingTechnology/Verhulstetal2018Model.git 
 ```
 
-... or by unzipping the [zip file](https://github.com/HearingTechnology/Verhulstetal2018Model/archive/master.zip) into the corresponding folder (note that the entire repository should be contained as one folder within `apcmodels/external/verhulst2018`). Then, navigate to this new local copy of the model and proceed with the second and third step of the installation instructions provided in the [`Verhulst2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model) repository (compile `tridiag.so` and unzip Poles, respectively). When you install `apcmodels` (step 5 below), it will bundle this copy of the Verhulst et al. (2018) codebase with `apcmodels` and automatically add its location to your Python path when you import `apcmodels`. 
+... or by unzipping the [zip file](https://github.com/HearingTechnology/Verhulstetal2018Model/archive/master.zip). Then, navigate to this new local copy of the model and proceed with the second and third step of the installation instructions provided in the [`Verhulstetal2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model) repository (compile `tridiag.so` and unzip Poles, respectively). Finally, before importing any modules that depend on the Verhulst et al. (2018) code, you must make sure that your Python path includes the directory where you downloaded [`Verhulstetal2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model). If you are a Linux/MacOS user and run Python through the terminal, something like this in your `.bashrc` or `.tschrc` file will likely work:
 
-Alternatively, you can download and install [`Verhulst2018Model`](https://github.com/HearingTechnology/Verhulstetal2018Model) wherever you would like. However, before importing any modules that depend on the Verhulst et al. (2018) code, you must make sure that your Python path includes the corresponding directory.
+```
+export PYTHONPATH="${PYTHONPATH}:/my/path/to/Verhulst/model"
+```
+
+Alternatively, at the beginning of each session or at the top of every script you run, you may use:
+
+```
+import sys
+sys.path.append('/my/path/to/Verhulst/model')
+```
+
+If you are a PyCharm user, you can separately configure the path of each Python interpreter that you use (see this [StackExchange post](https://stackoverflow.com/questions/48947494/add-directory-to-python-path-in-pycharm)).
+
+Note that importing `apcmodels` should still succeed even if you have not correctly configured the `Verhulstetal2018Model`. However, a warning will be printed to the screen and running any code that depends on the associated modules will fail.
 
 5. Run `python setup.py install` in the root directory of this repository. This will install the package on your computer and automatically install all remaining Python dependencies (e.g., `numpy`, `scipy`) if they are not already installed.
 

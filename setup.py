@@ -22,6 +22,7 @@ setup(
               'apcmodels.external',
               'apcmodels.external.zilany2014',
               'apcmodels.external.verhulst2018'],
+    package_data={'apcmodels.external.verhulst2018': ['default_poles.dat']},
     license='GPLv3',
     author='Daniel R. Guest',
     install_requires=['numpy', 'scipy', 'pandas', 'matplotlib', 'Cython', 'numba', 'pathos', 'tqdm'],

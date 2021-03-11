@@ -15,6 +15,8 @@ apcmodels.egg-info/requires.txt
 apcmodels.egg-info/top_level.txt
 apcmodels/external/__init__.py
 apcmodels/external/verhulst2018/__init__.py
+apcmodels/external/verhulst2018/default_poles.dat
+apcmodels/external/verhulst2018/run_verhulst.py
 apcmodels/external/zilany2014/__init__.py
 apcmodels/external/zilany2014/_zilany2014.c
 apcmodels/external/zilany2014/complex.c
