@@ -1,4 +1,4 @@
-`apcmodels` is based in part on code adapted from other authors as well as scientific publications. Here, attributions for these authors are listed. For modified source code, information about what changes were made from the original code, and information about the licenses that apply to their contributions, is available. For scientific publications, the authors and appropriate citations are listed. In both cases, relative paths to relevant source code are provided.
+`apcmodels` is based in part on code adapted from other authors as well as scientific publications. For modified source code, information about the authors, what changes were made from the original code, and the license that applies to the modified code is available. For scientific publications, the authors and appropriate citations are listed. In both cases, relative paths to relevant source code are provided.
 
 # Modified code
 
