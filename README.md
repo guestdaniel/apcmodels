@@ -1,16 +1,18 @@
 # apcmodels
 
-`apcmodels` is a Python 3 library developed by Daniel Guest in the [Auditory Perception and Cognition Lab](http://apc.psych.umn.edu/) at the University of Minnesota. `apcmodels` implements computational models of the auditory system, simulates responses for these models to acoustic stimuli, and analyzes the outputs of these models. `apcmodels` utilizes code from a range of existing Python packages/code in the auditory modeling domain and provides a single unified API to access these models. Moreover, `apcmodels` features extensive unit testing and thorough documentation to ensure validity of its outputs and ease of use.
+`apcmodels` is a Python 3 library developed by Daniel Guest in the [Auditory Perception and Cognition Lab](http://apc.psych.umn.edu/) at the University of Minnesota. `apcmodels` allows users to simulate responses to acoustic stimuli for multiple different auditory nerve models and analyze the outputs. `apcmodels` utilizes code from a range of existing Python packages/code in the auditory modeling domain and provides a single unified interface to access these models. Moreover, `apcmodels` features extensive unit testing and thorough documentation to ensure validity of its outputs and ease of use.
 
 # Features
 
 - Access multiple auditory models with a unified interface
 - Rapidly generate batch simulations over ranges of parameters or combinations of parameters
 - Automatically utilize parallel processing for batch simulations
-- Decode responses with ideal observers ([Heinz, Colburn, and Carney, 2001](https://doi.org/10.1162/089976601750541804))
+- Estimate thresholds with ideal observers ([Heinz, Colburn, and Carney, 2001](https://doi.org/10.1162/089976601750541804)), adaptive staircase procedures, etc.
 - Ensure reliability and validity of results with extensive testing
 
-# Implemented models
+# Models
+
+## Implemented models
 
 | Model | Locus | Outputs |
 | ------ | ------ | ------ |
@@ -18,7 +20,7 @@
 | [Zilany, Bruce, and Carney (2014)](https://doi.org/10.1121/1.4837815) | Auditory nerve | Firing rate, spikes
 | [Verhulst, Altoe, and Vasilkov (2018)](https://doi.org/10.1016/j.heares.2017.12.018) | Basilar membrane, inner hair cells, auditory nerve | Vibration, potentials, firing rate
 
-# Upcoming models
+## Upcoming models
 
 | Model | Locus | Outputs |
 | ------ | ------ | ------ |
@@ -28,7 +30,7 @@
 
 ### Rate-level function
 
-Tools provided in `apcmodels.simulation` create a simple and readable interface for setting up simulations. Here, we set up, run, and plot a simulation of a simple rate-level function for a single HSR auditory nerve fiber tuned to 1000 Hz. The simulation by default is parallelized across multiple cores. The `params` object encodes the exact stimulus and model parameters used in each element of `output` which allows users to easily perform *post hoc* analyses and document the details of their simulations.
+Tools provided in `apcmodels.simulation` offer a simple and readable interface for setting up simulations. Here, we set up, run, and plot a simulation of a simple rate-level function for a single  auditory nerve fiber tuned to 1000 Hz. The simulation automatically parallelized over multiple threads. The `params` object encodes the exact stimulus and model parameters used in each element of `output`, allowing users to easily perform *post hoc* analyses and document the details of their simulations.
 
 ```python
 import apcmodels.simulation as si
@@ -68,7 +70,7 @@ plt.xlabel('Level (dB SPL)')
 plt.ylabel('Response (sp/s)')
 ```
 
-# File structure
+# File structure and organization
 
 `apcmodels` is organized as one main package (`apcmodels`) and a handful of subpackages that implement functionality adapted from external libraries/packages (`external`). Tests are located in three subfolders; unit tests are in `test_unit`, acceptance tests are in `test_acceptance`, and replications of figures or results from the literature are in `test_replication`. 
 
@@ -144,9 +146,9 @@ We generally recommend that you install `apcmodels` in a virtual environment (e.
 
 # Attribution and licensing
 
-`apcmodels` is open-source and would not be possible without the efforts of open-source contributors and scientists around the world. `apcmodels` used modified versions of parts of other open-source projects. Such modified code is stored in `apcmodels/external` (although other code is stored there too!). If a subfoder/submodule in `external` contains modified code from an external source, an appropriate `LICENSE` file is included. More information about this, as well as references to the original authors, can be found in the top-level `AUTHORS.md` file in this repository.
+`apcmodels` is open-source and would not be possible without the efforts of open-source contributors and scientists around the world. `apcmodels` uses modified versions of parts of other open-source projects. Such modified code is stored in `apcmodels/external` (although other code is stored there too!). If a subfoder/submodule in `external` contains modified code from an external source, an appropriate `LICENSE` file is included. More information about this, as well as references to the original authors, can be found in the top-level `AUTHORS.md` file in this repository.
 
-`apcmodels` also depends on the scientific contributions of those who build computational mdoels of the auditory system. Attributions for such scientific works can be found in the doc strings of associated source code.
+`apcmodels` also depends on the scientific contributions of those who build computational models of the auditory system. Attributions for such scientific works can be found in the doc strings of associated source code as well as in the top-level `AUTHORS.md` file.
 
 # Similar tools and resources
 
