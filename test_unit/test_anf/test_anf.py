@@ -1,5 +1,3 @@
-# TODO: add functions to test calculate_auditory_nerve_response
-# noticed weird behavior if we pass cf_low and n_cfs instead of n_cf ... investigate!
 import apcmodels.anf as anf
 import numpy as np
 import pytest
@@ -134,7 +132,7 @@ def test_spontaneous_firing_rate_rates(anf_func, spont_rate):
 def test_output_dimensionality_rates(anf_func):
     """ Test to make sure that if model simulates multiple channels that they output with the correct shape """
     results = anf_func(_input=np.zeros(100), cfs=np.array([1000, 2000, 3000]))
-    assert results.shape == (3, 13000)
+    assert results.shape == (3, 9100)
 
 
 @pytest.mark.parametrize('anf_func', [anf.calculate_zilany2014_firing_rate])

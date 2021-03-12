@@ -94,7 +94,10 @@ plt.ylabel('Response (sp/s)')
 ├── LICENSE                  # Attributions for source code adapted from other authors (in apcmodels/external)
 ├── LICENSE                  # License file for the code contained in this repository (excluding code in apcmodels/external)
 ├── README.md                # This README file
-└── setup.py                 # Setup/install file
+├── setup.py                 # Setup/install file
+├── test.sh                  # Bash script to run testing suite
+└── tood.md                  # Todo list
+
 ```
 
 # Installation
