@@ -4,21 +4,27 @@
 {
     "distutils": {
         "depends": [
-            "external/zilany2014/model_IHC.h",
-            "external/zilany2014/model_Synapse.h"
+            "/home/daniel/anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/core/include/numpy/arrayobject.h",
+            "/home/daniel/anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/core/include/numpy/arrayscalars.h",
+            "/home/daniel/anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/core/include/numpy/ndarrayobject.h",
+            "/home/daniel/anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/core/include/numpy/ndarraytypes.h",
+            "/home/daniel/anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/core/include/numpy/ufuncobject.h",
+            "apcmodels/external/zilany2014/model_IHC.h",
+            "apcmodels/external/zilany2014/model_Synapse.h"
         ],
         "include_dirs": [
-            "external/zilany2014"
+            "apcmodels/external/zilany2014",
+            "/home/daniel/anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/core/include"
         ],
-        "name": "external.zilany2014._zilany2014",
+        "name": "apcmodels.external.zilany2014._zilany2014",
         "sources": [
-            "external/zilany2014/_zilany2014.pyx",
-            "external/zilany2014/model_IHC.c",
-            "external/zilany2014/model_Synapse.c",
-            "external/zilany2014/complex.c"
+            "apcmodels/external/zilany2014/_zilany2014.pyx",
+            "apcmodels/external/zilany2014/model_IHC.c",
+            "apcmodels/external/zilany2014/model_Synapse.c",
+            "apcmodels/external/zilany2014/complex.c"
         ]
     },
-    "module_name": "external.zilany2014._zilany2014"
+    "module_name": "apcmodels.external.zilany2014._zilany2014"
 }
 END: Cython Metadata */
 
@@ -624,8 +630,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__external__zilany2014___zilany2014
-#define __PYX_HAVE_API__external__zilany2014___zilany2014
+#define __PYX_HAVE__apcmodels__external__zilany2014___zilany2014
+#define __PYX_HAVE_API__apcmodels__external__zilany2014___zilany2014
 /* Early includes */
 #include <string.h>
 #include <stdlib.h>
@@ -871,7 +877,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "external/zilany2014/_zilany2014.pyx",
+  "apcmodels/external/zilany2014/_zilany2014.pyx",
   "__init__.pxd",
   "type.pxd",
 };
@@ -912,7 +918,7 @@ typedef struct {
 } __Pyx_BufFmt_Context;
 
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":690
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":690
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -921,7 +927,7 @@ typedef struct {
  */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":691
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":691
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -930,7 +936,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
  */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":692
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":692
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -939,7 +945,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
  */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":693
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":693
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -948,7 +954,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
  */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":697
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":697
  * #ctypedef npy_int128     int128_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -957,7 +963,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
  */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":698
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":698
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -966,7 +972,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
  */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":699
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":699
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -975,7 +981,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
  */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":700
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":700
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -984,7 +990,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
  */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":704
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":704
  * #ctypedef npy_uint128    uint128_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -993,7 +999,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
  */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":705
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":705
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -1002,7 +1008,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
  */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":714
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":714
  * # The int types are mapped a bit surprising --
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t             # <<<<<<<<<<<<<<
@@ -1011,7 +1017,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
  */
 typedef npy_long __pyx_t_5numpy_int_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":715
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":715
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t             # <<<<<<<<<<<<<<
@@ -1020,7 +1026,7 @@ typedef npy_long __pyx_t_5numpy_int_t;
  */
 typedef npy_longlong __pyx_t_5numpy_long_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":716
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":716
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -1029,7 +1035,7 @@ typedef npy_longlong __pyx_t_5numpy_long_t;
  */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":718
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":718
  * ctypedef npy_longlong   longlong_t
  * 
  * ctypedef npy_ulong      uint_t             # <<<<<<<<<<<<<<
@@ -1038,7 +1044,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
  */
 typedef npy_ulong __pyx_t_5numpy_uint_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":719
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":719
  * 
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t             # <<<<<<<<<<<<<<
@@ -1047,7 +1053,7 @@ typedef npy_ulong __pyx_t_5numpy_uint_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":720
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":720
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -1056,7 +1062,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":722
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":722
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -1065,7 +1071,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
  */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":723
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":723
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -1074,7 +1080,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
  */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":725
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":725
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -1083,7 +1089,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
  */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":726
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":726
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -1092,7 +1098,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
  */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":727
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":727
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -1127,7 +1133,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
 
 /*--- Type declarations ---*/
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":729
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":729
  * ctypedef npy_longdouble longdouble_t
  * 
  * ctypedef npy_cfloat      cfloat_t             # <<<<<<<<<<<<<<
@@ -1136,7 +1142,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
  */
 typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":730
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":730
  * 
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t             # <<<<<<<<<<<<<<
@@ -1145,7 +1151,7 @@ typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":731
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":731
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t
  * ctypedef npy_clongdouble clongdouble_t             # <<<<<<<<<<<<<<
@@ -1154,7 +1160,7 @@ typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
  */
 typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":733
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":733
  * ctypedef npy_clongdouble clongdouble_t
  * 
  * ctypedef npy_cdouble     complex_t             # <<<<<<<<<<<<<<
@@ -1274,13 +1280,6 @@ static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int eq
 
 /* UnicodeEquals.proto */
 static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals);
-
-/* StrEquals.proto */
-#if PY_MAJOR_VERSION >= 3
-#define __Pyx_PyString_Equals __Pyx_PyUnicode_Equals
-#else
-#define __Pyx_PyString_Equals __Pyx_PyBytes_Equals
-#endif
 
 /* PyCFunctionFastCall.proto */
 #if CYTHON_FAST_PYCCALL
@@ -1760,16 +1759,16 @@ static PyTypeObject *__pyx_ptype_5numpy_character = 0;
 static PyTypeObject *__pyx_ptype_5numpy_ufunc = 0;
 static CYTHON_INLINE int __pyx_f_5numpy_import_array(void); /*proto*/
 
-/* Module declarations from 'external.zilany2014._zilany2014' */
+/* Module declarations from 'apcmodels.external.zilany2014._zilany2014' */
 __PYX_EXTERN_C double *generate_random_numbers(long); /*proto*/
 __PYX_EXTERN_C double *decimate(int, double *, int); /*proto*/
 __PYX_EXTERN_C double *ffGn(int, double, double, double, double); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_float64_t = { "float64_t", NULL, sizeof(__pyx_t_5numpy_float64_t), { 0 }, 0, 'R', 0, 0 };
-#define __Pyx_MODULE_NAME "external.zilany2014._zilany2014"
-extern int __pyx_module_is_main_external__zilany2014___zilany2014;
-int __pyx_module_is_main_external__zilany2014___zilany2014 = 0;
+#define __Pyx_MODULE_NAME "apcmodels.external.zilany2014._zilany2014"
+extern int __pyx_module_is_main_apcmodels__external__zilany2014___zilany2014;
+int __pyx_module_is_main_apcmodels__external__zilany2014___zilany2014 = 0;
 
-/* Implementation of 'external.zilany2014._zilany2014' */
+/* Implementation of 'apcmodels.external.zilany2014._zilany2014' */
 static PyObject *__pyx_builtin_ImportError;
 static const char __pyx_k_C[] = "C";
 static const char __pyx_k_a[] = "a";
@@ -1843,30 +1842,32 @@ static const char __pyx_k_Wrong_CF_80_cf_40e3_CF_s[] = "Wrong CF: 80 <= cf < 40e
 static const char __pyx_k_anf_type_not_hsr_msr_lsr[] = "anf_type not hsr/msr/lsr";
 static const char __pyx_k_Wrong_CF_125_cf_20e3_CF_s[] = "Wrong CF: 125 <= cf <= 20e3, CF = %s";
 static const char __pyx_k_Wrong_CF_125_cf_40e3_CF_s[] = "Wrong CF: 125 <= cf < 40e3, CF = %s";
-static const char __pyx_k_external_zilany2014__zilany2014[] = "external/zilany2014/_zilany2014.pyx";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_powerlaw_not_actual_approximate[] = "powerlaw not actual/approximate";
+static const char __pyx_k_apcmodels_external_zilany2014__z[] = "apcmodels/external/zilany2014/_zilany2014.pyx";
 static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
-static const char __pyx_k_external_zilany2014__zilany2014_2[] = "external.zilany2014._zilany2014";
-static PyObject *__pyx_kp_s_0_cihc_1;
-static PyObject *__pyx_kp_s_0_cohc_1;
-static PyObject *__pyx_n_s_C;
-static PyObject *__pyx_n_s_C_CONTIGUOUS;
+static const char __pyx_k_apcmodels_external_zilany2014__z_2[] = "apcmodels.external.zilany2014._zilany2014";
+static PyObject *__pyx_kp_u_0_cihc_1;
+static PyObject *__pyx_kp_u_0_cohc_1;
+static PyObject *__pyx_n_u_C;
+static PyObject *__pyx_n_u_C_CONTIGUOUS;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_kp_s_Wrong_CF_125_cf_20e3_CF_s;
-static PyObject *__pyx_kp_s_Wrong_CF_125_cf_40e3_CF_s;
-static PyObject *__pyx_kp_s_Wrong_CF_80_cf_40e3_CF_s;
-static PyObject *__pyx_kp_s_Wrong_Fs_100e3_fs_500e3;
+static PyObject *__pyx_kp_u_Wrong_CF_125_cf_20e3_CF_s;
+static PyObject *__pyx_kp_u_Wrong_CF_125_cf_40e3_CF_s;
+static PyObject *__pyx_kp_u_Wrong_CF_80_cf_40e3_CF_s;
+static PyObject *__pyx_kp_u_Wrong_Fs_100e3_fs_500e3;
 static PyObject *__pyx_n_s__3;
 static PyObject *__pyx_n_s__4;
 static PyObject *__pyx_n_s_a;
-static PyObject *__pyx_n_s_actual;
+static PyObject *__pyx_n_u_actual;
 static PyObject *__pyx_n_s_anf_type;
-static PyObject *__pyx_kp_s_anf_type_not_hsr_msr_lsr;
-static PyObject *__pyx_n_s_approximate;
+static PyObject *__pyx_kp_u_anf_type_not_hsr_msr_lsr;
+static PyObject *__pyx_kp_s_apcmodels_external_zilany2014__z;
+static PyObject *__pyx_n_s_apcmodels_external_zilany2014__z_2;
+static PyObject *__pyx_n_u_approximate;
 static PyObject *__pyx_n_s_array;
 static PyObject *__pyx_n_s_b;
-static PyObject *__pyx_n_s_cat;
+static PyObject *__pyx_n_u_cat;
 static PyObject *__pyx_n_s_ceil;
 static PyObject *__pyx_n_s_cf;
 static PyObject *__pyx_n_s_cihc;
@@ -1874,33 +1875,31 @@ static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_cohc;
 static PyObject *__pyx_n_s_copy;
 static PyObject *__pyx_n_s_dsp;
-static PyObject *__pyx_kp_s_external_zilany2014__zilany2014;
-static PyObject *__pyx_n_s_external_zilany2014__zilany2014_2;
 static PyObject *__pyx_n_s_ffGn;
 static PyObject *__pyx_n_s_filtfilt;
 static PyObject *__pyx_n_s_firwin;
 static PyObject *__pyx_n_s_flags;
 static PyObject *__pyx_n_s_fs;
-static PyObject *__pyx_n_s_hamming;
-static PyObject *__pyx_n_s_hsr;
-static PyObject *__pyx_n_s_human;
-static PyObject *__pyx_n_s_human_glasberg1990;
+static PyObject *__pyx_n_u_hamming;
+static PyObject *__pyx_n_u_hsr;
+static PyObject *__pyx_n_u_human;
+static PyObject *__pyx_n_u_human_glasberg1990;
 static PyObject *__pyx_n_s_ihcout;
 static PyObject *__pyx_n_s_ihcout_data;
 static PyObject *__pyx_n_s_import;
-static PyObject *__pyx_n_s_lsr;
+static PyObject *__pyx_n_u_lsr;
 static PyObject *__pyx_n_s_main;
-static PyObject *__pyx_n_s_msr;
+static PyObject *__pyx_n_u_msr;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_noise_type;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
-static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
-static PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
+static PyObject *__pyx_kp_u_numpy_core_multiarray_failed_to;
+static PyObject *__pyx_kp_u_numpy_core_umath_failed_to_impor;
 static PyObject *__pyx_n_s_order;
 static PyObject *__pyx_n_s_powerlaw;
 static PyObject *__pyx_n_s_powerlaw_map;
-static PyObject *__pyx_kp_s_powerlaw_not_actual_approximate;
+static PyObject *__pyx_kp_u_powerlaw_not_actual_approximate;
 static PyObject *__pyx_n_s_rand;
 static PyObject *__pyx_n_s_random;
 static PyObject *__pyx_n_s_run_ihc;
@@ -1925,9 +1924,9 @@ static PyObject *__pyx_n_s_window;
 static PyObject *__pyx_n_s_x;
 static PyObject *__pyx_n_s_zeros;
 static PyObject *__pyx_n_s_zeros_like;
-static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_signal, double __pyx_v_cf, double __pyx_v_fs, PyObject *__pyx_v_species, double __pyx_v_cohc, double __pyx_v_cihc); /* proto */
-static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_vihc, double __pyx_v_fs, double __pyx_v_cf, PyObject *__pyx_v_anf_type, PyObject *__pyx_v_powerlaw, PyObject *__pyx_v_ffGn); /* proto */
-static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_generator(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_synout, double __pyx_v_fs); /* proto */
+static PyObject *__pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_signal, double __pyx_v_cf, double __pyx_v_fs, PyObject *__pyx_v_species, double __pyx_v_cohc, double __pyx_v_cihc); /* proto */
+static PyObject *__pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_2run_synapse(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_vihc, double __pyx_v_fs, double __pyx_v_cf, PyObject *__pyx_v_anf_type, PyObject *__pyx_v_powerlaw, PyObject *__pyx_v_ffGn); /* proto */
+static PyObject *__pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_4run_spike_generator(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_synout, double __pyx_v_fs); /* proto */
 static PyObject *__pyx_float_1_;
 static PyObject *__pyx_float_0_1;
 static PyObject *__pyx_float_4_0;
@@ -1946,7 +1945,7 @@ static PyObject *__pyx_codeobj__8;
 static PyObject *__pyx_codeobj__10;
 /* Late includes */
 
-/* "external/zilany2014/_zilany2014.pyx":85
+/* "apcmodels/external/zilany2014/_zilany2014.pyx":85
  * 
  * 
  * def run_ihc(             # <<<<<<<<<<<<<<
@@ -1955,10 +1954,10 @@ static PyObject *__pyx_codeobj__10;
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_1run_ihc(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_8external_10zilany2014_11_zilany2014_run_ihc[] = "Run middle ear filter, BM filters and IHC model.\n\n    Parameters\n    ----------\n    signal : array_like\n        Output of the middle ear filter in Pascal.\n    cf : float\n        Characteristic frequency in Hz.\n    fs : float\n        Sampling frequency in Hz.\n    species : {'cat', 'human', 'human_glasberg1990'}\n        Species.\n    cihc, cohc : float\n        Degeneration parameters for IHC and OHC cells.\n\n    Returns\n    -------\n    array_like\n        IHC receptor potential.\n\n    ";
-static PyMethodDef __pyx_mdef_8external_10zilany2014_11_zilany2014_1run_ihc = {"run_ihc", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_8external_10zilany2014_11_zilany2014_1run_ihc, METH_VARARGS|METH_KEYWORDS, __pyx_doc_8external_10zilany2014_11_zilany2014_run_ihc};
-static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_1run_ihc(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_1run_ihc(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_9apcmodels_8external_10zilany2014_11_zilany2014_run_ihc[] = "Run middle ear filter, BM filters and IHC model.\n\n    Parameters\n    ----------\n    signal : array_like\n        Output of the middle ear filter in Pascal.\n    cf : float\n        Characteristic frequency in Hz.\n    fs : float\n        Sampling frequency in Hz.\n    species : {'cat', 'human', 'human_glasberg1990'}\n        Species.\n    cihc, cohc : float\n        Degeneration parameters for IHC and OHC cells.\n\n    Returns\n    -------\n    array_like\n        IHC receptor potential.\n\n    ";
+static PyMethodDef __pyx_mdef_9apcmodels_8external_10zilany2014_11_zilany2014_1run_ihc = {"run_ihc", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_1run_ihc, METH_VARARGS|METH_KEYWORDS, __pyx_doc_9apcmodels_8external_10zilany2014_11_zilany2014_run_ihc};
+static PyObject *__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_1run_ihc(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_signal = 0;
   double __pyx_v_cf;
   double __pyx_v_fs;
@@ -1974,7 +1973,7 @@ static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_1run_ihc(PyObject
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_signal,&__pyx_n_s_cf,&__pyx_n_s_fs,&__pyx_n_s_species,&__pyx_n_s_cohc,&__pyx_n_s_cihc,0};
     PyObject* values[6] = {0,0,0,0,0,0};
-    values[3] = ((PyObject *)__pyx_n_s_cat);
+    values[3] = ((PyObject *)__pyx_n_u_cat);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -2067,12 +2066,12 @@ static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_1run_ihc(PyObject
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("run_ihc", 0, 3, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 85, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("external.zilany2014._zilany2014.run_ihc", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("apcmodels.external.zilany2014._zilany2014.run_ihc", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_signal), __pyx_ptype_5numpy_ndarray, 1, "signal", 0))) __PYX_ERR(0, 86, __pyx_L1_error)
-  __pyx_r = __pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(__pyx_self, __pyx_v_signal, __pyx_v_cf, __pyx_v_fs, __pyx_v_species, __pyx_v_cohc, __pyx_v_cihc);
+  __pyx_r = __pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_run_ihc(__pyx_self, __pyx_v_signal, __pyx_v_cf, __pyx_v_fs, __pyx_v_species, __pyx_v_cohc, __pyx_v_cihc);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2083,7 +2082,7 @@ static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_1run_ihc(PyObject
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_signal, double __pyx_v_cf, double __pyx_v_fs, PyObject *__pyx_v_species, double __pyx_v_cohc, double __pyx_v_cihc) {
+static PyObject *__pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_signal, double __pyx_v_cf, double __pyx_v_fs, PyObject *__pyx_v_species, double __pyx_v_cohc, double __pyx_v_cihc) {
   PyObject *__pyx_v_species_map = NULL;
   double *__pyx_v_signal_data;
   PyObject *__pyx_v_ihcout = NULL;
@@ -2119,17 +2118,17 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
   }
   __pyx_pybuffernd_signal.diminfo[0].strides = __pyx_pybuffernd_signal.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_signal.diminfo[0].shape = __pyx_pybuffernd_signal.rcbuffer->pybuffer.shape[0];
 
-  /* "external/zilany2014/_zilany2014.pyx":114
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":114
  * 
  *     """
  *     if species == 'cat':             # <<<<<<<<<<<<<<
  *         assert (cf > 124.9) and (cf < 40e3), "Wrong CF: 125 <= cf < 40e3, CF = %s"%str(cf)
  *     elif 'human' in species:
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_species, __pyx_n_s_cat, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_species, __pyx_n_u_cat, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 114, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "external/zilany2014/_zilany2014.pyx":115
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":115
  *     """
  *     if species == 'cat':
  *         assert (cf > 124.9) and (cf < 40e3), "Wrong CF: 125 <= cf < 40e3, CF = %s"%str(cf)             # <<<<<<<<<<<<<<
@@ -2150,10 +2149,10 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
       if (unlikely(!__pyx_t_1)) {
         __pyx_t_3 = PyFloat_FromDouble(__pyx_v_cf); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyString_FormatSafe(__pyx_kp_s_Wrong_CF_125_cf_40e3_CF_s, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
+        __pyx_t_3 = PyUnicode_Format(__pyx_kp_u_Wrong_CF_125_cf_40e3_CF_s, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         PyErr_SetObject(PyExc_AssertionError, __pyx_t_3);
@@ -2163,7 +2162,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     }
     #endif
 
-    /* "external/zilany2014/_zilany2014.pyx":114
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":114
  * 
  *     """
  *     if species == 'cat':             # <<<<<<<<<<<<<<
@@ -2173,18 +2172,18 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     goto __pyx_L3;
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":116
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":116
  *     if species == 'cat':
  *         assert (cf > 124.9) and (cf < 40e3), "Wrong CF: 125 <= cf < 40e3, CF = %s"%str(cf)
  *     elif 'human' in species:             # <<<<<<<<<<<<<<
  *         assert (cf > 124.9) and (cf < 20001.), "Wrong CF: 125 <= cf <= 20e3, CF = %s"%str(cf)
  * 
  */
-  __pyx_t_1 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_human, __pyx_v_species, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PySequence_ContainsTF(__pyx_n_u_human, __pyx_v_species, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 116, __pyx_L1_error)
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "external/zilany2014/_zilany2014.pyx":117
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":117
  *         assert (cf > 124.9) and (cf < 40e3), "Wrong CF: 125 <= cf < 40e3, CF = %s"%str(cf)
  *     elif 'human' in species:
  *         assert (cf > 124.9) and (cf < 20001.), "Wrong CF: 125 <= cf <= 20e3, CF = %s"%str(cf)             # <<<<<<<<<<<<<<
@@ -2205,10 +2204,10 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
       if (unlikely(!__pyx_t_2)) {
         __pyx_t_3 = PyFloat_FromDouble(__pyx_v_cf); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 117, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 117, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 117, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyString_FormatSafe(__pyx_kp_s_Wrong_CF_125_cf_20e3_CF_s, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 117, __pyx_L1_error)
+        __pyx_t_3 = PyUnicode_Format(__pyx_kp_u_Wrong_CF_125_cf_20e3_CF_s, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 117, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         PyErr_SetObject(PyExc_AssertionError, __pyx_t_3);
@@ -2218,7 +2217,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     }
     #endif
 
-    /* "external/zilany2014/_zilany2014.pyx":116
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":116
  *     if species == 'cat':
  *         assert (cf > 124.9) and (cf < 40e3), "Wrong CF: 125 <= cf < 40e3, CF = %s"%str(cf)
  *     elif 'human' in species:             # <<<<<<<<<<<<<<
@@ -2228,7 +2227,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
   }
   __pyx_L3:;
 
-  /* "external/zilany2014/_zilany2014.pyx":119
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":119
  *         assert (cf > 124.9) and (cf < 20001.), "Wrong CF: 125 <= cf <= 20e3, CF = %s"%str(cf)
  * 
  *     assert (fs >= 100e3) and (fs <= 500e3), "Wrong Fs: 100e3 <= fs <= 500e3"             # <<<<<<<<<<<<<<
@@ -2247,13 +2246,13 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     __pyx_t_2 = __pyx_t_1;
     __pyx_L8_bool_binop_done:;
     if (unlikely(!__pyx_t_2)) {
-      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_s_Wrong_Fs_100e3_fs_500e3);
+      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_Wrong_Fs_100e3_fs_500e3);
       __PYX_ERR(0, 119, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "external/zilany2014/_zilany2014.pyx":120
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":120
  * 
  *     assert (fs >= 100e3) and (fs <= 500e3), "Wrong Fs: 100e3 <= fs <= 500e3"
  *     assert (cohc >= 0) and (cohc <= 1), "0 <= cohc <= 1"             # <<<<<<<<<<<<<<
@@ -2272,13 +2271,13 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     __pyx_t_2 = __pyx_t_1;
     __pyx_L10_bool_binop_done:;
     if (unlikely(!__pyx_t_2)) {
-      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_s_0_cohc_1);
+      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_0_cohc_1);
       __PYX_ERR(0, 120, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "external/zilany2014/_zilany2014.pyx":121
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":121
  *     assert (fs >= 100e3) and (fs <= 500e3), "Wrong Fs: 100e3 <= fs <= 500e3"
  *     assert (cohc >= 0) and (cohc <= 1), "0 <= cohc <= 1"
  *     assert (cihc >= 0) and (cihc <= 1), "0 <= cihc <= 1"             # <<<<<<<<<<<<<<
@@ -2297,13 +2296,13 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     __pyx_t_2 = __pyx_t_1;
     __pyx_L12_bool_binop_done:;
     if (unlikely(!__pyx_t_2)) {
-      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_s_0_cihc_1);
+      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_0_cihc_1);
       __PYX_ERR(0, 121, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "external/zilany2014/_zilany2014.pyx":125
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":125
  * 
  *     species_map = {
  *         'cat': 1,             # <<<<<<<<<<<<<<
@@ -2312,13 +2311,13 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
  */
   __pyx_t_3 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 125, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_cat, __pyx_int_1) < 0) __PYX_ERR(0, 125, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_human, __pyx_int_2) < 0) __PYX_ERR(0, 125, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_human_glasberg1990, __pyx_int_3) < 0) __PYX_ERR(0, 125, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_cat, __pyx_int_1) < 0) __PYX_ERR(0, 125, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_human, __pyx_int_2) < 0) __PYX_ERR(0, 125, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_human_glasberg1990, __pyx_int_3) < 0) __PYX_ERR(0, 125, __pyx_L1_error)
   __pyx_v_species_map = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":131
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":131
  * 
  *     # Input sound
  *     if not signal.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -2327,7 +2326,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
  */
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_signal), __pyx_n_s_flags); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_C_CONTIGUOUS); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 131, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_u_C_CONTIGUOUS); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 131, __pyx_L1_error)
@@ -2335,7 +2334,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
   __pyx_t_1 = ((!__pyx_t_2) != 0);
   if (__pyx_t_1) {
 
-    /* "external/zilany2014/_zilany2014.pyx":132
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":132
  *     # Input sound
  *     if not signal.flags['C_CONTIGUOUS']:
  *         signal = signal.copy(order='C')             # <<<<<<<<<<<<<<
@@ -2346,7 +2345,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 132, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_n_s_C) < 0) __PYX_ERR(0, 132, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_n_u_C) < 0) __PYX_ERR(0, 132, __pyx_L1_error)
     __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 132, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -2374,7 +2373,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     __Pyx_DECREF_SET(__pyx_v_signal, ((PyArrayObject *)__pyx_t_5));
     __pyx_t_5 = 0;
 
-    /* "external/zilany2014/_zilany2014.pyx":131
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":131
  * 
  *     # Input sound
  *     if not signal.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -2383,7 +2382,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
  */
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":133
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":133
  *     if not signal.flags['C_CONTIGUOUS']:
  *         signal = signal.copy(order='C')
  *     cdef double *signal_data = <double *>np.PyArray_DATA(signal)             # <<<<<<<<<<<<<<
@@ -2392,7 +2391,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
  */
   __pyx_v_signal_data = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_signal)));
 
-  /* "external/zilany2014/_zilany2014.pyx":136
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":136
  * 
  *     # Output IHC voltage
  *     ihcout = np.zeros( len(signal) )             # <<<<<<<<<<<<<<
@@ -2426,7 +2425,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
   __pyx_v_ihcout = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":137
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":137
  *     # Output IHC voltage
  *     ihcout = np.zeros( len(signal) )
  *     cdef double *ihcout_data = <double *>np.PyArray_DATA(ihcout)             # <<<<<<<<<<<<<<
@@ -2436,7 +2435,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
   if (!(likely(((__pyx_v_ihcout) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_ihcout, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 137, __pyx_L1_error)
   __pyx_v_ihcout_data = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_ihcout)));
 
-  /* "external/zilany2014/_zilany2014.pyx":144
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":144
  *         cf,
  *         1,
  *         1.0/fs,             # <<<<<<<<<<<<<<
@@ -2448,7 +2447,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     __PYX_ERR(0, 144, __pyx_L1_error)
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":145
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":145
  *         1,
  *         1.0/fs,
  *         len(signal),             # <<<<<<<<<<<<<<
@@ -2457,7 +2456,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
  */
   __pyx_t_11 = PyObject_Length(((PyObject *)__pyx_v_signal)); if (unlikely(__pyx_t_11 == ((Py_ssize_t)-1))) __PYX_ERR(0, 145, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":148
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":148
  *         cohc,
  *         cihc,
  *         species_map[species],             # <<<<<<<<<<<<<<
@@ -2469,7 +2468,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
   __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_t_5); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 148, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":140
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":140
  * 
  * 
  *     IHCAN(             # <<<<<<<<<<<<<<
@@ -2478,7 +2477,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
  */
   IHCAN(__pyx_v_signal_data, __pyx_v_cf, 1, (1.0 / __pyx_v_fs), __pyx_t_11, __pyx_v_cohc, __pyx_v_cihc, __pyx_t_7, __pyx_v_ihcout_data);
 
-  /* "external/zilany2014/_zilany2014.pyx":153
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":153
  * 
  * 
  *     return ihcout             # <<<<<<<<<<<<<<
@@ -2490,7 +2489,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
   __pyx_r = __pyx_v_ihcout;
   goto __pyx_L0;
 
-  /* "external/zilany2014/_zilany2014.pyx":85
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":85
  * 
  * 
  * def run_ihc(             # <<<<<<<<<<<<<<
@@ -2510,7 +2509,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_signal.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("external.zilany2014._zilany2014.run_ihc", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("apcmodels.external.zilany2014._zilany2014.run_ihc", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -2524,7 +2523,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
   return __pyx_r;
 }
 
-/* "external/zilany2014/_zilany2014.pyx":158
+/* "apcmodels/external/zilany2014/_zilany2014.pyx":158
  * 
  * 
  * def run_synapse(             # <<<<<<<<<<<<<<
@@ -2533,10 +2532,10 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_run_ihc(CYTHON_UN
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_3run_synapse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_8external_10zilany2014_11_zilany2014_2run_synapse[] = "Run synapse simulation.\n\n    vihc: IHC receptor potential\n    cf: characteristic frequency\n    anf_type: auditory nerve fiber type ('hsr', 'msr' or 'lsr')\n    powerlaw: implementation of the powerlaw ('actual', 'approximate')\n    ffGn: enable/disable factorial Gauss noise generator\n\n    return: PSTH from ANF\n\n    ";
-static PyMethodDef __pyx_mdef_8external_10zilany2014_11_zilany2014_3run_synapse = {"run_synapse", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_8external_10zilany2014_11_zilany2014_3run_synapse, METH_VARARGS|METH_KEYWORDS, __pyx_doc_8external_10zilany2014_11_zilany2014_2run_synapse};
-static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_3run_synapse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_3run_synapse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_9apcmodels_8external_10zilany2014_11_zilany2014_2run_synapse[] = "Run synapse simulation.\n\n    vihc: IHC receptor potential\n    cf: characteristic frequency\n    anf_type: auditory nerve fiber type ('hsr', 'msr' or 'lsr')\n    powerlaw: implementation of the powerlaw ('actual', 'approximate')\n    ffGn: enable/disable factorial Gauss noise generator\n\n    return: PSTH from ANF\n\n    ";
+static PyMethodDef __pyx_mdef_9apcmodels_8external_10zilany2014_11_zilany2014_3run_synapse = {"run_synapse", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_3run_synapse, METH_VARARGS|METH_KEYWORDS, __pyx_doc_9apcmodels_8external_10zilany2014_11_zilany2014_2run_synapse};
+static PyObject *__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_3run_synapse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_vihc = 0;
   double __pyx_v_fs;
   double __pyx_v_cf;
@@ -2552,10 +2551,10 @@ static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_3run_synapse(PyOb
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_vihc,&__pyx_n_s_fs,&__pyx_n_s_cf,&__pyx_n_s_anf_type,&__pyx_n_s_powerlaw,&__pyx_n_s_ffGn,0};
     PyObject* values[6] = {0,0,0,0,0,0};
-    values[3] = ((PyObject *)__pyx_n_s_hsr);
-    values[4] = ((PyObject *)__pyx_n_s_actual);
+    values[3] = ((PyObject *)__pyx_n_u_hsr);
+    values[4] = ((PyObject *)__pyx_n_u_actual);
 
-    /* "external/zilany2014/_zilany2014.pyx":164
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":164
  *         anf_type='hsr',
  *         powerlaw='actual',
  *         ffGn=True             # <<<<<<<<<<<<<<
@@ -2647,14 +2646,14 @@ static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_3run_synapse(PyOb
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("run_synapse", 0, 3, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 158, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("external.zilany2014._zilany2014.run_synapse", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("apcmodels.external.zilany2014._zilany2014.run_synapse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_vihc), __pyx_ptype_5numpy_ndarray, 1, "vihc", 0))) __PYX_ERR(0, 159, __pyx_L1_error)
-  __pyx_r = __pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(__pyx_self, __pyx_v_vihc, __pyx_v_fs, __pyx_v_cf, __pyx_v_anf_type, __pyx_v_powerlaw, __pyx_v_ffGn);
+  __pyx_r = __pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_2run_synapse(__pyx_self, __pyx_v_vihc, __pyx_v_fs, __pyx_v_cf, __pyx_v_anf_type, __pyx_v_powerlaw, __pyx_v_ffGn);
 
-  /* "external/zilany2014/_zilany2014.pyx":158
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":158
  * 
  * 
  * def run_synapse(             # <<<<<<<<<<<<<<
@@ -2671,7 +2670,7 @@ static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_3run_synapse(PyOb
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_vihc, double __pyx_v_fs, double __pyx_v_cf, PyObject *__pyx_v_anf_type, PyObject *__pyx_v_powerlaw, PyObject *__pyx_v_ffGn) {
+static PyObject *__pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_2run_synapse(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_vihc, double __pyx_v_fs, double __pyx_v_cf, PyObject *__pyx_v_anf_type, PyObject *__pyx_v_powerlaw, PyObject *__pyx_v_ffGn) {
   PyObject *__pyx_v_spont = NULL;
   PyObject *__pyx_v_powerlaw_map = NULL;
   double __pyx_v_noise_type;
@@ -2710,7 +2709,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   }
   __pyx_pybuffernd_vihc.diminfo[0].strides = __pyx_pybuffernd_vihc.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vihc.diminfo[0].shape = __pyx_pybuffernd_vihc.rcbuffer->pybuffer.shape[0];
 
-  /* "external/zilany2014/_zilany2014.pyx":177
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":177
  * 
  *     """
  *     assert (cf > 79.9) and (cf < 40e3), "Wrong CF: 80 <= cf < 40e3, CF = %s"%str(cf)             # <<<<<<<<<<<<<<
@@ -2731,10 +2730,10 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
     if (unlikely(!__pyx_t_1)) {
       __pyx_t_3 = PyFloat_FromDouble(__pyx_v_cf); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 177, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 177, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyString_FormatSafe(__pyx_kp_s_Wrong_CF_80_cf_40e3_CF_s, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
+      __pyx_t_3 = PyUnicode_Format(__pyx_kp_u_Wrong_CF_80_cf_40e3_CF_s, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       PyErr_SetObject(PyExc_AssertionError, __pyx_t_3);
@@ -2744,7 +2743,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   }
   #endif
 
-  /* "external/zilany2014/_zilany2014.pyx":178
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":178
  *     """
  *     assert (cf > 79.9) and (cf < 40e3), "Wrong CF: 80 <= cf < 40e3, CF = %s"%str(cf)
  *     assert (fs >= 100e3) and (fs <= 500e3), "Wrong Fs: 100e3 <= fs <= 500e3"             # <<<<<<<<<<<<<<
@@ -2763,13 +2762,13 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
     __pyx_t_1 = __pyx_t_2;
     __pyx_L5_bool_binop_done:;
     if (unlikely(!__pyx_t_1)) {
-      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_s_Wrong_Fs_100e3_fs_500e3);
+      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_Wrong_Fs_100e3_fs_500e3);
       __PYX_ERR(0, 178, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "external/zilany2014/_zilany2014.pyx":179
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":179
  *     assert (cf > 79.9) and (cf < 40e3), "Wrong CF: 80 <= cf < 40e3, CF = %s"%str(cf)
  *     assert (fs >= 100e3) and (fs <= 500e3), "Wrong Fs: 100e3 <= fs <= 500e3"
  *     assert anf_type in ['hsr', 'msr', 'lsr'], "anf_type not hsr/msr/lsr"             # <<<<<<<<<<<<<<
@@ -2780,30 +2779,30 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   if (unlikely(!Py_OptimizeFlag)) {
     __Pyx_INCREF(__pyx_v_anf_type);
     __pyx_t_3 = __pyx_v_anf_type;
-    __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_hsr, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_3, __pyx_n_u_hsr, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
     if (!__pyx_t_2) {
     } else {
       __pyx_t_1 = __pyx_t_2;
       goto __pyx_L7_bool_binop_done;
     }
-    __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_msr, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_3, __pyx_n_u_msr, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
     if (!__pyx_t_2) {
     } else {
       __pyx_t_1 = __pyx_t_2;
       goto __pyx_L7_bool_binop_done;
     }
-    __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_lsr, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_3, __pyx_n_u_lsr, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
     __pyx_t_1 = __pyx_t_2;
     __pyx_L7_bool_binop_done:;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (unlikely(!(__pyx_t_1 != 0))) {
-      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_s_anf_type_not_hsr_msr_lsr);
+      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_anf_type_not_hsr_msr_lsr);
       __PYX_ERR(0, 179, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "external/zilany2014/_zilany2014.pyx":180
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":180
  *     assert (fs >= 100e3) and (fs <= 500e3), "Wrong Fs: 100e3 <= fs <= 500e3"
  *     assert anf_type in ['hsr', 'msr', 'lsr'], "anf_type not hsr/msr/lsr"
  *     assert powerlaw in ['actual', 'approximate'], "powerlaw not actual/approximate"             # <<<<<<<<<<<<<<
@@ -2814,24 +2813,24 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   if (unlikely(!Py_OptimizeFlag)) {
     __Pyx_INCREF(__pyx_v_powerlaw);
     __pyx_t_3 = __pyx_v_powerlaw;
-    __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_actual, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 180, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_3, __pyx_n_u_actual, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 180, __pyx_L1_error)
     if (!__pyx_t_2) {
     } else {
       __pyx_t_1 = __pyx_t_2;
       goto __pyx_L10_bool_binop_done;
     }
-    __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_approximate, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 180, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_3, __pyx_n_u_approximate, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 180, __pyx_L1_error)
     __pyx_t_1 = __pyx_t_2;
     __pyx_L10_bool_binop_done:;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (unlikely(!(__pyx_t_1 != 0))) {
-      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_s_powerlaw_not_actual_approximate);
+      PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_powerlaw_not_actual_approximate);
       __PYX_ERR(0, 180, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "external/zilany2014/_zilany2014.pyx":183
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":183
  * 
  *     spont = {
  *         'lsr': 0.1,             # <<<<<<<<<<<<<<
@@ -2840,13 +2839,13 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
   __pyx_t_3 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 183, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_lsr, __pyx_float_0_1) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_msr, __pyx_float_4_0) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_hsr, __pyx_float_100_0) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_lsr, __pyx_float_0_1) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_msr, __pyx_float_4_0) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_hsr, __pyx_float_100_0) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
   __pyx_v_spont = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":189
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":189
  * 
  *     powerlaw_map = {
  *         'actual': 1,             # <<<<<<<<<<<<<<
@@ -2855,12 +2854,12 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
   __pyx_t_3 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 189, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_actual, __pyx_int_1) < 0) __PYX_ERR(0, 189, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_approximate, __pyx_int_0) < 0) __PYX_ERR(0, 189, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_actual, __pyx_int_1) < 0) __PYX_ERR(0, 189, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_approximate, __pyx_int_0) < 0) __PYX_ERR(0, 189, __pyx_L1_error)
   __pyx_v_powerlaw_map = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":193
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":193
  *     }
  * 
  *     if ffGn:             # <<<<<<<<<<<<<<
@@ -2870,7 +2869,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_ffGn); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 193, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "external/zilany2014/_zilany2014.pyx":194
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":194
  * 
  *     if ffGn:
  *         noise_type = 1.             # <<<<<<<<<<<<<<
@@ -2879,7 +2878,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
     __pyx_v_noise_type = 1.;
 
-    /* "external/zilany2014/_zilany2014.pyx":193
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":193
  *     }
  * 
  *     if ffGn:             # <<<<<<<<<<<<<<
@@ -2889,7 +2888,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
     goto __pyx_L12;
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":196
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":196
  *         noise_type = 1.
  *     else:
  *         noise_type = 0.             # <<<<<<<<<<<<<<
@@ -2901,7 +2900,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   }
   __pyx_L12:;
 
-  /* "external/zilany2014/_zilany2014.pyx":200
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":200
  * 
  *     # Input IHC voltage
  *     if not vihc.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -2910,7 +2909,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_vihc), __pyx_n_s_flags); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_C_CONTIGUOUS); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_u_C_CONTIGUOUS); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 200, __pyx_L1_error)
@@ -2918,7 +2917,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   __pyx_t_2 = ((!__pyx_t_1) != 0);
   if (__pyx_t_2) {
 
-    /* "external/zilany2014/_zilany2014.pyx":201
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":201
  *     # Input IHC voltage
  *     if not vihc.flags['C_CONTIGUOUS']:
  *         vihc = vihc.copy(order='C')             # <<<<<<<<<<<<<<
@@ -2929,7 +2928,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 201, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_n_s_C) < 0) __PYX_ERR(0, 201, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_n_u_C) < 0) __PYX_ERR(0, 201, __pyx_L1_error)
     __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 201, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -2957,7 +2956,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
     __Pyx_DECREF_SET(__pyx_v_vihc, ((PyArrayObject *)__pyx_t_5));
     __pyx_t_5 = 0;
 
-    /* "external/zilany2014/_zilany2014.pyx":200
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":200
  * 
  *     # Input IHC voltage
  *     if not vihc.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -2966,7 +2965,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":202
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":202
  *     if not vihc.flags['C_CONTIGUOUS']:
  *         vihc = vihc.copy(order='C')
  *     cdef double *vihc_data = <double *>np.PyArray_DATA(vihc)             # <<<<<<<<<<<<<<
@@ -2975,7 +2974,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
   __pyx_v_vihc_data = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_vihc)));
 
-  /* "external/zilany2014/_zilany2014.pyx":206
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":206
  * 
  *     # Output synapse data (spiking probabilities)
  *     synout = np.zeros_like(vihc)             # <<<<<<<<<<<<<<
@@ -3005,7 +3004,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   __pyx_v_synout = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":207
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":207
  *     # Output synapse data (spiking probabilities)
  *     synout = np.zeros_like(vihc)
  *     cdef double *synout_data = <double *>np.PyArray_DATA(synout)             # <<<<<<<<<<<<<<
@@ -3015,7 +3014,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   if (!(likely(((__pyx_v_synout) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_synout, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 207, __pyx_L1_error)
   __pyx_v_synout_data = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_synout)));
 
-  /* "external/zilany2014/_zilany2014.pyx":213
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":213
  *     Synapse(
  *         vihc_data,                   # ihcout
  *         1.0/fs,                      # tdres             # <<<<<<<<<<<<<<
@@ -3027,7 +3026,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
     __PYX_ERR(0, 213, __pyx_L1_error)
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":215
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":215
  *         1.0/fs,                      # tdres
  *         cf,                          # cf
  *         len(vihc),                   # totalstim             # <<<<<<<<<<<<<<
@@ -3036,7 +3035,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
   __pyx_t_11 = PyObject_Length(((PyObject *)__pyx_v_vihc)); if (unlikely(__pyx_t_11 == ((Py_ssize_t)-1))) __PYX_ERR(0, 215, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":217
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":217
  *         len(vihc),                   # totalstim
  *         1,                           # nrep
  *         spont[anf_type],             # spont             # <<<<<<<<<<<<<<
@@ -3048,7 +3047,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   __pyx_t_12 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_12 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":219
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":219
  *         spont[anf_type],             # spont
  *         noise_type,                  # noiseType
  *         powerlaw_map[powerlaw],      # implnt             # <<<<<<<<<<<<<<
@@ -3060,7 +3059,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   __pyx_t_13 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_13 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":211
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":211
  * 
  *     # Run synapse model
  *     Synapse(             # <<<<<<<<<<<<<<
@@ -3069,7 +3068,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
   (void)(Synapse(__pyx_v_vihc_data, (1.0 / __pyx_v_fs), __pyx_v_cf, __pyx_t_11, 1, __pyx_t_12, __pyx_v_noise_type, __pyx_t_13, 10e3, __pyx_v_synout_data));
 
-  /* "external/zilany2014/_zilany2014.pyx":224
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":224
  *     )
  * 
  *     return synout             # <<<<<<<<<<<<<<
@@ -3081,7 +3080,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   __pyx_r = __pyx_v_synout;
   goto __pyx_L0;
 
-  /* "external/zilany2014/_zilany2014.pyx":158
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":158
  * 
  * 
  * def run_synapse(             # <<<<<<<<<<<<<<
@@ -3100,7 +3099,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vihc.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("external.zilany2014._zilany2014.run_synapse", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("apcmodels.external.zilany2014._zilany2014.run_synapse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -3115,7 +3114,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
   return __pyx_r;
 }
 
-/* "external/zilany2014/_zilany2014.pyx":227
+/* "apcmodels/external/zilany2014/_zilany2014.pyx":227
  * 
  * 
  * def run_spike_generator(             # <<<<<<<<<<<<<<
@@ -3124,10 +3123,10 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_2run_synapse(CYTH
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_5run_spike_generator(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_8external_10zilany2014_11_zilany2014_4run_spike_generator[] = "Run spike generator.\n\n    synout: synapse output\n    fs: sampling frequency\n\n    return: sptime\n\n    ";
-static PyMethodDef __pyx_mdef_8external_10zilany2014_11_zilany2014_5run_spike_generator = {"run_spike_generator", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_8external_10zilany2014_11_zilany2014_5run_spike_generator, METH_VARARGS|METH_KEYWORDS, __pyx_doc_8external_10zilany2014_11_zilany2014_4run_spike_generator};
-static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_5run_spike_generator(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_5run_spike_generator(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_9apcmodels_8external_10zilany2014_11_zilany2014_4run_spike_generator[] = "Run spike generator.\n\n    synout: synapse output\n    fs: sampling frequency\n\n    return: sptime\n\n    ";
+static PyMethodDef __pyx_mdef_9apcmodels_8external_10zilany2014_11_zilany2014_5run_spike_generator = {"run_spike_generator", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_5run_spike_generator, METH_VARARGS|METH_KEYWORDS, __pyx_doc_9apcmodels_8external_10zilany2014_11_zilany2014_4run_spike_generator};
+static PyObject *__pyx_pw_9apcmodels_8external_10zilany2014_11_zilany2014_5run_spike_generator(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_synout = 0;
   double __pyx_v_fs;
   int __pyx_lineno = 0;
@@ -3178,12 +3177,12 @@ static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_5run_spike_genera
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("run_spike_generator", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 227, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("external.zilany2014._zilany2014.run_spike_generator", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("apcmodels.external.zilany2014._zilany2014.run_spike_generator", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_synout), __pyx_ptype_5numpy_ndarray, 1, "synout", 0))) __PYX_ERR(0, 228, __pyx_L1_error)
-  __pyx_r = __pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_generator(__pyx_self, __pyx_v_synout, __pyx_v_fs);
+  __pyx_r = __pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_4run_spike_generator(__pyx_self, __pyx_v_synout, __pyx_v_fs);
 
   /* function exit code */
   goto __pyx_L0;
@@ -3194,7 +3193,7 @@ static PyObject *__pyx_pw_8external_10zilany2014_11_zilany2014_5run_spike_genera
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_generator(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_synout, double __pyx_v_fs) {
+static PyObject *__pyx_pf_9apcmodels_8external_10zilany2014_11_zilany2014_4run_spike_generator(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_synout, double __pyx_v_fs) {
   double *__pyx_v_synout_data;
   PyObject *__pyx_v_sptimes = NULL;
   double *__pyx_v_sptimes_data;
@@ -3233,7 +3232,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
   }
   __pyx_pybuffernd_synout.diminfo[0].strides = __pyx_pybuffernd_synout.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_synout.diminfo[0].shape = __pyx_pybuffernd_synout.rcbuffer->pybuffer.shape[0];
 
-  /* "external/zilany2014/_zilany2014.pyx":240
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":240
  *     """
  *     # Input IHC voltage
  *     if not synout.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -3242,7 +3241,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
  */
   __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_synout), __pyx_n_s_flags); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 240, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_C_CONTIGUOUS); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 240, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_u_C_CONTIGUOUS); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 240, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 240, __pyx_L1_error)
@@ -3250,7 +3249,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
   __pyx_t_4 = ((!__pyx_t_3) != 0);
   if (__pyx_t_4) {
 
-    /* "external/zilany2014/_zilany2014.pyx":241
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":241
  *     # Input IHC voltage
  *     if not synout.flags['C_CONTIGUOUS']:
  *         synout = synout.copy(order='C')             # <<<<<<<<<<<<<<
@@ -3261,7 +3260,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 241, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_n_s_C) < 0) __PYX_ERR(0, 241, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_n_u_C) < 0) __PYX_ERR(0, 241, __pyx_L1_error)
     __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 241, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3289,7 +3288,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
     __Pyx_DECREF_SET(__pyx_v_synout, ((PyArrayObject *)__pyx_t_5));
     __pyx_t_5 = 0;
 
-    /* "external/zilany2014/_zilany2014.pyx":240
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":240
  *     """
  *     # Input IHC voltage
  *     if not synout.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -3298,7 +3297,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
  */
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":242
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":242
  *     if not synout.flags['C_CONTIGUOUS']:
  *         synout = synout.copy(order='C')
  *     cdef double *synout_data = <double *>np.PyArray_DATA(synout)             # <<<<<<<<<<<<<<
@@ -3307,7 +3306,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
  */
   __pyx_v_synout_data = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_synout)));
 
-  /* "external/zilany2014/_zilany2014.pyx":245
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":245
  * 
  *     # Output spikes (signal)
  *     sptimes = np.zeros(int(np.ceil(len(synout)/0.00075/fs)))             # <<<<<<<<<<<<<<
@@ -3370,7 +3369,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
   __pyx_v_sptimes = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":246
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":246
  *     # Output spikes (signal)
  *     sptimes = np.zeros(int(np.ceil(len(synout)/0.00075/fs)))
  *     cdef double *sptimes_data = <double *>np.PyArray_DATA(sptimes)             # <<<<<<<<<<<<<<
@@ -3380,7 +3379,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
   if (!(likely(((__pyx_v_sptimes) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_sptimes, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 246, __pyx_L1_error)
   __pyx_v_sptimes_data = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_sptimes)));
 
-  /* "external/zilany2014/_zilany2014.pyx":252
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":252
  *     SpikeGenerator(
  *         synout_data,            # synouttmp
  *         1./fs,                  # tdres             # <<<<<<<<<<<<<<
@@ -3392,7 +3391,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
     __PYX_ERR(0, 252, __pyx_L1_error)
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":253
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":253
  *         synout_data,            # synouttmp
  *         1./fs,                  # tdres
  *         len(synout),            # totalstim             # <<<<<<<<<<<<<<
@@ -3401,7 +3400,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
  */
   __pyx_t_13 = PyObject_Length(((PyObject *)__pyx_v_synout)); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 253, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":250
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":250
  * 
  *     # Run synapse model
  *     SpikeGenerator(             # <<<<<<<<<<<<<<
@@ -3410,7 +3409,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
  */
   (void)(SpikeGenerator(__pyx_v_synout_data, (1. / __pyx_v_fs), __pyx_t_13, 1, __pyx_v_sptimes_data));
 
-  /* "external/zilany2014/_zilany2014.pyx":258
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":258
  *     )
  * 
  *     spikes = np.array(sptimes[sptimes != 0])             # <<<<<<<<<<<<<<
@@ -3446,7 +3445,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
   __pyx_v_spikes = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":260
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":260
  *     spikes = np.array(sptimes[sptimes != 0])
  * 
  *     return spikes             # <<<<<<<<<<<<<<
@@ -3458,7 +3457,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
   __pyx_r = __pyx_v_spikes;
   goto __pyx_L0;
 
-  /* "external/zilany2014/_zilany2014.pyx":227
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":227
  * 
  * 
  * def run_spike_generator(             # <<<<<<<<<<<<<<
@@ -3480,7 +3479,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_synout.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("external.zilany2014._zilany2014.run_spike_generator", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("apcmodels.external.zilany2014._zilany2014.run_spike_generator", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -3494,7 +3493,7 @@ static PyObject *__pyx_pf_8external_10zilany2014_11_zilany2014_4run_spike_genera
   return __pyx_r;
 }
 
-/* "external/zilany2014/_zilany2014.pyx":264
+/* "apcmodels/external/zilany2014/_zilany2014.pyx":264
  * 
  * 
  * cdef public double* generate_random_numbers(long length):             # <<<<<<<<<<<<<<
@@ -3519,7 +3518,7 @@ double *generate_random_numbers(long __pyx_v_length) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("generate_random_numbers", 0);
 
-  /* "external/zilany2014/_zilany2014.pyx":265
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":265
  * 
  * cdef public double* generate_random_numbers(long length):
  *     arr = np.random.rand(length)             # <<<<<<<<<<<<<<
@@ -3555,7 +3554,7 @@ double *generate_random_numbers(long __pyx_v_length) {
   __pyx_v_arr = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":267
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":267
  *     arr = np.random.rand(length)
  * 
  *     if not arr.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -3564,7 +3563,7 @@ double *generate_random_numbers(long __pyx_v_length) {
  */
   __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_arr, __pyx_n_s_flags); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 267, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_C_CONTIGUOUS); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 267, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_u_C_CONTIGUOUS); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 267, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 267, __pyx_L1_error)
@@ -3572,7 +3571,7 @@ double *generate_random_numbers(long __pyx_v_length) {
   __pyx_t_6 = ((!__pyx_t_5) != 0);
   if (__pyx_t_6) {
 
-    /* "external/zilany2014/_zilany2014.pyx":268
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":268
  * 
  *     if not arr.flags['C_CONTIGUOUS']:
  *         arr = arr.copy(order='C')             # <<<<<<<<<<<<<<
@@ -3583,7 +3582,7 @@ double *generate_random_numbers(long __pyx_v_length) {
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_n_s_C) < 0) __PYX_ERR(0, 268, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_n_u_C) < 0) __PYX_ERR(0, 268, __pyx_L1_error)
     __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 268, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3591,7 +3590,7 @@ double *generate_random_numbers(long __pyx_v_length) {
     __Pyx_DECREF_SET(__pyx_v_arr, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "external/zilany2014/_zilany2014.pyx":267
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":267
  *     arr = np.random.rand(length)
  * 
  *     if not arr.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -3600,7 +3599,7 @@ double *generate_random_numbers(long __pyx_v_length) {
  */
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":270
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":270
  *         arr = arr.copy(order='C')
  * 
  *     cdef double *data_ptr = <double *>np.PyArray_DATA(arr)             # <<<<<<<<<<<<<<
@@ -3610,7 +3609,7 @@ double *generate_random_numbers(long __pyx_v_length) {
   if (!(likely(((__pyx_v_arr) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_arr, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 270, __pyx_L1_error)
   __pyx_v_data_ptr = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_arr)));
 
-  /* "external/zilany2014/_zilany2014.pyx":271
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":271
  * 
  *     cdef double *data_ptr = <double *>np.PyArray_DATA(arr)
  *     cdef double *out_ptr = <double *>malloc(length * sizeof(double))             # <<<<<<<<<<<<<<
@@ -3619,7 +3618,7 @@ double *generate_random_numbers(long __pyx_v_length) {
  */
   __pyx_v_out_ptr = ((double *)malloc((__pyx_v_length * (sizeof(double)))));
 
-  /* "external/zilany2014/_zilany2014.pyx":272
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":272
  *     cdef double *data_ptr = <double *>np.PyArray_DATA(arr)
  *     cdef double *out_ptr = <double *>malloc(length * sizeof(double))
  *     memcpy(out_ptr, data_ptr, length*sizeof(double))             # <<<<<<<<<<<<<<
@@ -3628,7 +3627,7 @@ double *generate_random_numbers(long __pyx_v_length) {
  */
   (void)(memcpy(__pyx_v_out_ptr, __pyx_v_data_ptr, (__pyx_v_length * (sizeof(double)))));
 
-  /* "external/zilany2014/_zilany2014.pyx":274
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":274
  *     memcpy(out_ptr, data_ptr, length*sizeof(double))
  * 
  *     return out_ptr             # <<<<<<<<<<<<<<
@@ -3638,7 +3637,7 @@ double *generate_random_numbers(long __pyx_v_length) {
   __pyx_r = __pyx_v_out_ptr;
   goto __pyx_L0;
 
-  /* "external/zilany2014/_zilany2014.pyx":264
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":264
  * 
  * 
  * cdef public double* generate_random_numbers(long length):             # <<<<<<<<<<<<<<
@@ -3652,7 +3651,7 @@ double *generate_random_numbers(long __pyx_v_length) {
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_WriteUnraisable("external.zilany2014._zilany2014.generate_random_numbers", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("apcmodels.external.zilany2014._zilany2014.generate_random_numbers", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_arr);
@@ -3660,7 +3659,7 @@ double *generate_random_numbers(long __pyx_v_length) {
   return __pyx_r;
 }
 
-/* "external/zilany2014/_zilany2014.pyx":279
+/* "apcmodels/external/zilany2014/_zilany2014.pyx":279
  * 
  * 
  * cdef public double* decimate(             # <<<<<<<<<<<<<<
@@ -3691,7 +3690,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("decimate", 0);
 
-  /* "external/zilany2014/_zilany2014.pyx":297
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":297
  *     signal_arr = PyArray_SimpleNewFromData(
  *         1,                      # nd
  *         [k],                    # dims             # <<<<<<<<<<<<<<
@@ -3700,7 +3699,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
  */
   __pyx_t_1[0] = __pyx_v_k;
 
-  /* "external/zilany2014/_zilany2014.pyx":295
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":295
  *     # signal_arr will not own the data, signal's array has to be freed
  *     # after return from this function
  *     signal_arr = PyArray_SimpleNewFromData(             # <<<<<<<<<<<<<<
@@ -3712,7 +3711,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_v_signal_arr = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":309
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":309
  * 
  * 
  *     b = dsp.firwin(q+1, 1./q, window='hamming')             # <<<<<<<<<<<<<<
@@ -3742,7 +3741,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_t_4 = 0;
   __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 309, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_window, __pyx_n_s_hamming) < 0) __PYX_ERR(0, 309, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_window, __pyx_n_u_hamming) < 0) __PYX_ERR(0, 309, __pyx_L1_error)
   __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 309, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3751,7 +3750,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_v_b = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":310
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":310
  * 
  *     b = dsp.firwin(q+1, 1./q, window='hamming')
  *     a = [1.]             # <<<<<<<<<<<<<<
@@ -3766,7 +3765,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_v_a = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":312
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":312
  *     a = [1.]
  * 
  *     filtered = dsp.filtfilt(             # <<<<<<<<<<<<<<
@@ -3779,7 +3778,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":313
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":313
  * 
  *     filtered = dsp.filtfilt(
  *         b=b,             # <<<<<<<<<<<<<<
@@ -3790,7 +3789,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __Pyx_GOTREF(__pyx_t_2);
   if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_b, __pyx_v_b) < 0) __PYX_ERR(0, 313, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":314
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":314
  *     filtered = dsp.filtfilt(
  *         b=b,
  *         a=a,             # <<<<<<<<<<<<<<
@@ -3799,7 +3798,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
  */
   if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_a, __pyx_v_a) < 0) __PYX_ERR(0, 313, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":315
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":315
  *         b=b,
  *         a=a,
  *         x=signal_arr             # <<<<<<<<<<<<<<
@@ -3808,7 +3807,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
  */
   if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_x, __pyx_v_signal_arr) < 0) __PYX_ERR(0, 313, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":312
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":312
  *     a = [1.]
  * 
  *     filtered = dsp.filtfilt(             # <<<<<<<<<<<<<<
@@ -3822,7 +3821,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_v_filtered = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":318
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":318
  *     )
  * 
  *     resampled = filtered[::q]             # <<<<<<<<<<<<<<
@@ -3840,7 +3839,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_v_resampled = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":321
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":321
  * 
  * 
  *     if not resampled.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -3849,7 +3848,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
  */
   __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_resampled, __pyx_n_s_flags); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_C_CONTIGUOUS); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_u_C_CONTIGUOUS); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 321, __pyx_L1_error)
@@ -3857,7 +3856,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_t_7 = ((!__pyx_t_6) != 0);
   if (__pyx_t_7) {
 
-    /* "external/zilany2014/_zilany2014.pyx":322
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":322
  * 
  *     if not resampled.flags['C_CONTIGUOUS']:
  *         resampled = resampled.copy(order='C')             # <<<<<<<<<<<<<<
@@ -3868,7 +3867,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 322, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_order, __pyx_n_s_C) < 0) __PYX_ERR(0, 322, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_order, __pyx_n_u_C) < 0) __PYX_ERR(0, 322, __pyx_L1_error)
     __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3876,7 +3875,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
     __Pyx_DECREF_SET(__pyx_v_resampled, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "external/zilany2014/_zilany2014.pyx":321
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":321
  * 
  * 
  *     if not resampled.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -3885,7 +3884,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
  */
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":326
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":326
  * 
  *     # Copy data to output array
  *     cdef double *resampled_ptr = <double *>np.PyArray_DATA(resampled)             # <<<<<<<<<<<<<<
@@ -3895,7 +3894,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   if (!(likely(((__pyx_v_resampled) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_resampled, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 326, __pyx_L1_error)
   __pyx_v_resampled_ptr = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_resampled)));
 
-  /* "external/zilany2014/_zilany2014.pyx":327
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":327
  *     # Copy data to output array
  *     cdef double *resampled_ptr = <double *>np.PyArray_DATA(resampled)
  *     cdef double *out_ptr = <double *>malloc(len(resampled)*sizeof(double))             # <<<<<<<<<<<<<<
@@ -3905,7 +3904,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_t_8 = PyObject_Length(__pyx_v_resampled); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 327, __pyx_L1_error)
   __pyx_v_out_ptr = ((double *)malloc((__pyx_t_8 * (sizeof(double)))));
 
-  /* "external/zilany2014/_zilany2014.pyx":328
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":328
  *     cdef double *resampled_ptr = <double *>np.PyArray_DATA(resampled)
  *     cdef double *out_ptr = <double *>malloc(len(resampled)*sizeof(double))
  *     memcpy(out_ptr, resampled_ptr, len(resampled)*sizeof(double))             # <<<<<<<<<<<<<<
@@ -3915,7 +3914,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_t_8 = PyObject_Length(__pyx_v_resampled); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 328, __pyx_L1_error)
   (void)(memcpy(__pyx_v_out_ptr, __pyx_v_resampled_ptr, (__pyx_t_8 * (sizeof(double)))));
 
-  /* "external/zilany2014/_zilany2014.pyx":330
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":330
  *     memcpy(out_ptr, resampled_ptr, len(resampled)*sizeof(double))
  * 
  *     return out_ptr             # <<<<<<<<<<<<<<
@@ -3925,7 +3924,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __pyx_r = __pyx_v_out_ptr;
   goto __pyx_L0;
 
-  /* "external/zilany2014/_zilany2014.pyx":279
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":279
  * 
  * 
  * cdef public double* decimate(             # <<<<<<<<<<<<<<
@@ -3939,7 +3938,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_WriteUnraisable("external.zilany2014._zilany2014.decimate", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("apcmodels.external.zilany2014._zilany2014.decimate", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_signal_arr);
@@ -3951,7 +3950,7 @@ double *decimate(int __pyx_v_k, double *__pyx_v_signal, int __pyx_v_q) {
   return __pyx_r;
 }
 
-/* "external/zilany2014/_zilany2014.pyx":333
+/* "apcmodels/external/zilany2014/_zilany2014.pyx":333
  * 
  * 
  * cdef public double* ffGn(int N, double tdres, double Hinput, double noiseType, double mu):             # <<<<<<<<<<<<<<
@@ -3983,7 +3982,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("ffGn", 0);
 
-  /* "external/zilany2014/_zilany2014.pyx":336
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":336
  *     """util.ffGn() wrapper"""
  * 
  *     a = util.ffGn(N, tdres, Hinput, noiseType, mu)             # <<<<<<<<<<<<<<
@@ -4072,7 +4071,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   __pyx_v_a = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":338
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":338
  *     a = util.ffGn(N, tdres, Hinput, noiseType, mu)
  * 
  *     if not a.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -4081,7 +4080,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
  */
   __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_a, __pyx_n_s_flags); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 338, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_C_CONTIGUOUS); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 338, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_u_C_CONTIGUOUS); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 338, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 338, __pyx_L1_error)
@@ -4089,7 +4088,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   __pyx_t_12 = ((!__pyx_t_11) != 0);
   if (__pyx_t_12) {
 
-    /* "external/zilany2014/_zilany2014.pyx":339
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":339
  * 
  *     if not a.flags['C_CONTIGUOUS']:
  *         a = a.copy(order='C')             # <<<<<<<<<<<<<<
@@ -4100,7 +4099,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 339, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_n_s_C) < 0) __PYX_ERR(0, 339, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_n_u_C) < 0) __PYX_ERR(0, 339, __pyx_L1_error)
     __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 339, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -4108,7 +4107,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
     __Pyx_DECREF_SET(__pyx_v_a, __pyx_t_10);
     __pyx_t_10 = 0;
 
-    /* "external/zilany2014/_zilany2014.pyx":338
+    /* "apcmodels/external/zilany2014/_zilany2014.pyx":338
  *     a = util.ffGn(N, tdres, Hinput, noiseType, mu)
  * 
  *     if not a.flags['C_CONTIGUOUS']:             # <<<<<<<<<<<<<<
@@ -4117,7 +4116,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
  */
   }
 
-  /* "external/zilany2014/_zilany2014.pyx":342
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":342
  * 
  *     # Copy data to output array
  *     cdef double *ptr = <double *>np.PyArray_DATA(a)             # <<<<<<<<<<<<<<
@@ -4127,7 +4126,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   if (!(likely(((__pyx_v_a) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_a, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 342, __pyx_L1_error)
   __pyx_v_ptr = ((double *)PyArray_DATA(((PyArrayObject *)__pyx_v_a)));
 
-  /* "external/zilany2014/_zilany2014.pyx":343
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":343
  *     # Copy data to output array
  *     cdef double *ptr = <double *>np.PyArray_DATA(a)
  *     cdef double *out_ptr = <double *>malloc(len(a)*sizeof(double))             # <<<<<<<<<<<<<<
@@ -4137,7 +4136,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   __pyx_t_13 = PyObject_Length(__pyx_v_a); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 343, __pyx_L1_error)
   __pyx_v_out_ptr = ((double *)malloc((__pyx_t_13 * (sizeof(double)))));
 
-  /* "external/zilany2014/_zilany2014.pyx":344
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":344
  *     cdef double *ptr = <double *>np.PyArray_DATA(a)
  *     cdef double *out_ptr = <double *>malloc(len(a)*sizeof(double))
  *     memcpy(out_ptr, ptr, len(a)*sizeof(double))             # <<<<<<<<<<<<<<
@@ -4147,7 +4146,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   __pyx_t_13 = PyObject_Length(__pyx_v_a); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 344, __pyx_L1_error)
   (void)(memcpy(__pyx_v_out_ptr, __pyx_v_ptr, (__pyx_t_13 * (sizeof(double)))));
 
-  /* "external/zilany2014/_zilany2014.pyx":346
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":346
  *     memcpy(out_ptr, ptr, len(a)*sizeof(double))
  * 
  *     return out_ptr             # <<<<<<<<<<<<<<
@@ -4155,7 +4154,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   __pyx_r = __pyx_v_out_ptr;
   goto __pyx_L0;
 
-  /* "external/zilany2014/_zilany2014.pyx":333
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":333
  * 
  * 
  * cdef public double* ffGn(int N, double tdres, double Hinput, double noiseType, double mu):             # <<<<<<<<<<<<<<
@@ -4174,7 +4173,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
   __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_WriteUnraisable("external.zilany2014._zilany2014.ffGn", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("apcmodels.external.zilany2014._zilany2014.ffGn", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_a);
@@ -4182,7 +4181,7 @@ double *ffGn(int __pyx_v_N, double __pyx_v_tdres, double __pyx_v_Hinput, double 
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":735
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":735
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -4199,7 +4198,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":736
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":736
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -4213,7 +4212,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":735
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":735
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -4232,7 +4231,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":738
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":738
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -4249,7 +4248,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":739
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":739
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -4263,7 +4262,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":738
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":738
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -4282,7 +4281,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":741
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":741
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -4299,7 +4298,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":742
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":742
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -4313,7 +4312,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":741
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":741
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -4332,7 +4331,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":744
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":744
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -4349,7 +4348,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":745
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":745
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -4363,7 +4362,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":744
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":744
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -4382,7 +4381,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":747
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":747
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -4399,7 +4398,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":748
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":748
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -4413,7 +4412,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":747
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":747
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -4432,7 +4431,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":750
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":750
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -4446,7 +4445,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("PyDataType_SHAPE", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":751
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":751
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -4456,7 +4455,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   __pyx_t_1 = (PyDataType_HASSUBARRAY(__pyx_v_d) != 0);
   if (__pyx_t_1) {
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":752
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":752
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):
  *         return <tuple>d.subarray.shape             # <<<<<<<<<<<<<<
@@ -4468,7 +4467,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     __pyx_r = ((PyObject*)__pyx_v_d->subarray->shape);
     goto __pyx_L0;
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":751
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":751
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -4477,7 +4476,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
  */
   }
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":754
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":754
  *         return <tuple>d.subarray.shape
  *     else:
  *         return ()             # <<<<<<<<<<<<<<
@@ -4491,7 +4490,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     goto __pyx_L0;
   }
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":750
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":750
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -4506,7 +4505,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":931
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":931
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -4518,7 +4517,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_array_base", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":932
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":932
  * 
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!             # <<<<<<<<<<<<<<
@@ -4527,7 +4526,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   Py_INCREF(__pyx_v_base);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":933
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":933
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!
  *     PyArray_SetBaseObject(arr, base)             # <<<<<<<<<<<<<<
@@ -4536,7 +4535,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   (void)(PyArray_SetBaseObject(__pyx_v_arr, __pyx_v_base));
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":931
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":931
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -4548,7 +4547,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":935
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":935
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -4563,7 +4562,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":936
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":936
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)             # <<<<<<<<<<<<<<
@@ -4572,7 +4571,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   __pyx_v_base = PyArray_BASE(__pyx_v_arr);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":937
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":937
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -4582,7 +4581,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = ((__pyx_v_base == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":938
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":938
  *     base = PyArray_BASE(arr)
  *     if base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -4593,7 +4592,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":937
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":937
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -4602,7 +4601,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   }
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":939
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":939
  *     if base is NULL:
  *         return None
  *     return <object>base             # <<<<<<<<<<<<<<
@@ -4614,7 +4613,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_r = ((PyObject *)__pyx_v_base);
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":935
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":935
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -4629,7 +4628,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":943
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":943
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -4653,7 +4652,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_array", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":944
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":944
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4669,7 +4668,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":945
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":945
  * cdef inline int import_array() except -1:
  *     try:
  *         __pyx_import_array()             # <<<<<<<<<<<<<<
@@ -4678,7 +4677,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  */
       __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 945, __pyx_L3_error)
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":944
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":944
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4692,7 +4691,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":946
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":946
  *     try:
  *         __pyx_import_array()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4707,7 +4706,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":947
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":947
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -4723,7 +4722,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":944
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":944
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4738,7 +4737,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":943
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":943
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -4761,7 +4760,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":949
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":949
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -4785,7 +4784,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_umath", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":950
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":950
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4801,7 +4800,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":951
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":951
  * cdef inline int import_umath() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -4810,7 +4809,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 951, __pyx_L3_error)
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":950
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":950
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4824,7 +4823,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":952
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":952
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4839,7 +4838,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":953
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":953
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -4855,7 +4854,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":950
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":950
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4870,7 +4869,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":949
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":949
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -4893,7 +4892,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":955
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":955
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -4917,7 +4916,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_ufunc", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":956
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":956
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4933,7 +4932,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":957
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":957
  * cdef inline int import_ufunc() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -4942,7 +4941,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 957, __pyx_L3_error)
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":956
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":956
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4956,7 +4955,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":958
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":958
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4971,7 +4970,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":959
+      /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":959
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -4987,7 +4986,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":956
+    /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":956
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -5002,7 +5001,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":955
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":955
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -5025,7 +5024,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":969
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":969
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -5038,7 +5037,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("is_timedelta64_object", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":981
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":981
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyTimedeltaArrType_Type)             # <<<<<<<<<<<<<<
@@ -5048,7 +5047,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyTimedeltaArrType_Type));
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":969
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":969
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -5062,7 +5061,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":984
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":984
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -5075,7 +5074,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("is_datetime64_object", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":996
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":996
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyDatetimeArrType_Type)             # <<<<<<<<<<<<<<
@@ -5085,7 +5084,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyDatetimeArrType_Type));
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":984
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":984
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -5099,7 +5098,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":999
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":999
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -5110,7 +5109,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
 static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *__pyx_v_obj) {
   npy_datetime __pyx_r;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":1006
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":1006
  *     also needed.  That can be found using `get_datetime64_unit`.
  *     """
  *     return (<PyDatetimeScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -5120,7 +5119,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   __pyx_r = ((PyDatetimeScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":999
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":999
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -5133,7 +5132,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":1009
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":1009
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -5144,7 +5143,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
 static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject *__pyx_v_obj) {
   npy_timedelta __pyx_r;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":1013
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":1013
  *     returns the int64 value underlying scalar numpy timedelta64 object
  *     """
  *     return (<PyTimedeltaScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -5154,7 +5153,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   __pyx_r = ((PyTimedeltaScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":1009
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":1009
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -5167,7 +5166,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   return __pyx_r;
 }
 
-/* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":1016
+/* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":1016
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -5178,7 +5177,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
 static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObject *__pyx_v_obj) {
   NPY_DATETIMEUNIT __pyx_r;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":1020
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":1020
  *     returns the unit part of the dtype for a numpy datetime64 object.
  *     """
  *     return <NPY_DATETIMEUNIT>(<PyDatetimeScalarObject*>obj).obmeta.base             # <<<<<<<<<<<<<<
@@ -5186,7 +5185,7 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
   __pyx_r = ((NPY_DATETIMEUNIT)((PyDatetimeScalarObject *)__pyx_v_obj)->obmeta.base);
   goto __pyx_L0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":1016
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":1016
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -5245,25 +5244,27 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
-  {&__pyx_kp_s_0_cihc_1, __pyx_k_0_cihc_1, sizeof(__pyx_k_0_cihc_1), 0, 0, 1, 0},
-  {&__pyx_kp_s_0_cohc_1, __pyx_k_0_cohc_1, sizeof(__pyx_k_0_cohc_1), 0, 0, 1, 0},
-  {&__pyx_n_s_C, __pyx_k_C, sizeof(__pyx_k_C), 0, 0, 1, 1},
-  {&__pyx_n_s_C_CONTIGUOUS, __pyx_k_C_CONTIGUOUS, sizeof(__pyx_k_C_CONTIGUOUS), 0, 0, 1, 1},
+  {&__pyx_kp_u_0_cihc_1, __pyx_k_0_cihc_1, sizeof(__pyx_k_0_cihc_1), 0, 1, 0, 0},
+  {&__pyx_kp_u_0_cohc_1, __pyx_k_0_cohc_1, sizeof(__pyx_k_0_cohc_1), 0, 1, 0, 0},
+  {&__pyx_n_u_C, __pyx_k_C, sizeof(__pyx_k_C), 0, 1, 0, 1},
+  {&__pyx_n_u_C_CONTIGUOUS, __pyx_k_C_CONTIGUOUS, sizeof(__pyx_k_C_CONTIGUOUS), 0, 1, 0, 1},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_kp_s_Wrong_CF_125_cf_20e3_CF_s, __pyx_k_Wrong_CF_125_cf_20e3_CF_s, sizeof(__pyx_k_Wrong_CF_125_cf_20e3_CF_s), 0, 0, 1, 0},
-  {&__pyx_kp_s_Wrong_CF_125_cf_40e3_CF_s, __pyx_k_Wrong_CF_125_cf_40e3_CF_s, sizeof(__pyx_k_Wrong_CF_125_cf_40e3_CF_s), 0, 0, 1, 0},
-  {&__pyx_kp_s_Wrong_CF_80_cf_40e3_CF_s, __pyx_k_Wrong_CF_80_cf_40e3_CF_s, sizeof(__pyx_k_Wrong_CF_80_cf_40e3_CF_s), 0, 0, 1, 0},
-  {&__pyx_kp_s_Wrong_Fs_100e3_fs_500e3, __pyx_k_Wrong_Fs_100e3_fs_500e3, sizeof(__pyx_k_Wrong_Fs_100e3_fs_500e3), 0, 0, 1, 0},
+  {&__pyx_kp_u_Wrong_CF_125_cf_20e3_CF_s, __pyx_k_Wrong_CF_125_cf_20e3_CF_s, sizeof(__pyx_k_Wrong_CF_125_cf_20e3_CF_s), 0, 1, 0, 0},
+  {&__pyx_kp_u_Wrong_CF_125_cf_40e3_CF_s, __pyx_k_Wrong_CF_125_cf_40e3_CF_s, sizeof(__pyx_k_Wrong_CF_125_cf_40e3_CF_s), 0, 1, 0, 0},
+  {&__pyx_kp_u_Wrong_CF_80_cf_40e3_CF_s, __pyx_k_Wrong_CF_80_cf_40e3_CF_s, sizeof(__pyx_k_Wrong_CF_80_cf_40e3_CF_s), 0, 1, 0, 0},
+  {&__pyx_kp_u_Wrong_Fs_100e3_fs_500e3, __pyx_k_Wrong_Fs_100e3_fs_500e3, sizeof(__pyx_k_Wrong_Fs_100e3_fs_500e3), 0, 1, 0, 0},
   {&__pyx_n_s__3, __pyx_k__3, sizeof(__pyx_k__3), 0, 0, 1, 1},
   {&__pyx_n_s__4, __pyx_k__4, sizeof(__pyx_k__4), 0, 0, 1, 1},
   {&__pyx_n_s_a, __pyx_k_a, sizeof(__pyx_k_a), 0, 0, 1, 1},
-  {&__pyx_n_s_actual, __pyx_k_actual, sizeof(__pyx_k_actual), 0, 0, 1, 1},
+  {&__pyx_n_u_actual, __pyx_k_actual, sizeof(__pyx_k_actual), 0, 1, 0, 1},
   {&__pyx_n_s_anf_type, __pyx_k_anf_type, sizeof(__pyx_k_anf_type), 0, 0, 1, 1},
-  {&__pyx_kp_s_anf_type_not_hsr_msr_lsr, __pyx_k_anf_type_not_hsr_msr_lsr, sizeof(__pyx_k_anf_type_not_hsr_msr_lsr), 0, 0, 1, 0},
-  {&__pyx_n_s_approximate, __pyx_k_approximate, sizeof(__pyx_k_approximate), 0, 0, 1, 1},
+  {&__pyx_kp_u_anf_type_not_hsr_msr_lsr, __pyx_k_anf_type_not_hsr_msr_lsr, sizeof(__pyx_k_anf_type_not_hsr_msr_lsr), 0, 1, 0, 0},
+  {&__pyx_kp_s_apcmodels_external_zilany2014__z, __pyx_k_apcmodels_external_zilany2014__z, sizeof(__pyx_k_apcmodels_external_zilany2014__z), 0, 0, 1, 0},
+  {&__pyx_n_s_apcmodels_external_zilany2014__z_2, __pyx_k_apcmodels_external_zilany2014__z_2, sizeof(__pyx_k_apcmodels_external_zilany2014__z_2), 0, 0, 1, 1},
+  {&__pyx_n_u_approximate, __pyx_k_approximate, sizeof(__pyx_k_approximate), 0, 1, 0, 1},
   {&__pyx_n_s_array, __pyx_k_array, sizeof(__pyx_k_array), 0, 0, 1, 1},
   {&__pyx_n_s_b, __pyx_k_b, sizeof(__pyx_k_b), 0, 0, 1, 1},
-  {&__pyx_n_s_cat, __pyx_k_cat, sizeof(__pyx_k_cat), 0, 0, 1, 1},
+  {&__pyx_n_u_cat, __pyx_k_cat, sizeof(__pyx_k_cat), 0, 1, 0, 1},
   {&__pyx_n_s_ceil, __pyx_k_ceil, sizeof(__pyx_k_ceil), 0, 0, 1, 1},
   {&__pyx_n_s_cf, __pyx_k_cf, sizeof(__pyx_k_cf), 0, 0, 1, 1},
   {&__pyx_n_s_cihc, __pyx_k_cihc, sizeof(__pyx_k_cihc), 0, 0, 1, 1},
@@ -5271,33 +5272,31 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_cohc, __pyx_k_cohc, sizeof(__pyx_k_cohc), 0, 0, 1, 1},
   {&__pyx_n_s_copy, __pyx_k_copy, sizeof(__pyx_k_copy), 0, 0, 1, 1},
   {&__pyx_n_s_dsp, __pyx_k_dsp, sizeof(__pyx_k_dsp), 0, 0, 1, 1},
-  {&__pyx_kp_s_external_zilany2014__zilany2014, __pyx_k_external_zilany2014__zilany2014, sizeof(__pyx_k_external_zilany2014__zilany2014), 0, 0, 1, 0},
-  {&__pyx_n_s_external_zilany2014__zilany2014_2, __pyx_k_external_zilany2014__zilany2014_2, sizeof(__pyx_k_external_zilany2014__zilany2014_2), 0, 0, 1, 1},
   {&__pyx_n_s_ffGn, __pyx_k_ffGn, sizeof(__pyx_k_ffGn), 0, 0, 1, 1},
   {&__pyx_n_s_filtfilt, __pyx_k_filtfilt, sizeof(__pyx_k_filtfilt), 0, 0, 1, 1},
   {&__pyx_n_s_firwin, __pyx_k_firwin, sizeof(__pyx_k_firwin), 0, 0, 1, 1},
   {&__pyx_n_s_flags, __pyx_k_flags, sizeof(__pyx_k_flags), 0, 0, 1, 1},
   {&__pyx_n_s_fs, __pyx_k_fs, sizeof(__pyx_k_fs), 0, 0, 1, 1},
-  {&__pyx_n_s_hamming, __pyx_k_hamming, sizeof(__pyx_k_hamming), 0, 0, 1, 1},
-  {&__pyx_n_s_hsr, __pyx_k_hsr, sizeof(__pyx_k_hsr), 0, 0, 1, 1},
-  {&__pyx_n_s_human, __pyx_k_human, sizeof(__pyx_k_human), 0, 0, 1, 1},
-  {&__pyx_n_s_human_glasberg1990, __pyx_k_human_glasberg1990, sizeof(__pyx_k_human_glasberg1990), 0, 0, 1, 1},
+  {&__pyx_n_u_hamming, __pyx_k_hamming, sizeof(__pyx_k_hamming), 0, 1, 0, 1},
+  {&__pyx_n_u_hsr, __pyx_k_hsr, sizeof(__pyx_k_hsr), 0, 1, 0, 1},
+  {&__pyx_n_u_human, __pyx_k_human, sizeof(__pyx_k_human), 0, 1, 0, 1},
+  {&__pyx_n_u_human_glasberg1990, __pyx_k_human_glasberg1990, sizeof(__pyx_k_human_glasberg1990), 0, 1, 0, 1},
   {&__pyx_n_s_ihcout, __pyx_k_ihcout, sizeof(__pyx_k_ihcout), 0, 0, 1, 1},
   {&__pyx_n_s_ihcout_data, __pyx_k_ihcout_data, sizeof(__pyx_k_ihcout_data), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
-  {&__pyx_n_s_lsr, __pyx_k_lsr, sizeof(__pyx_k_lsr), 0, 0, 1, 1},
+  {&__pyx_n_u_lsr, __pyx_k_lsr, sizeof(__pyx_k_lsr), 0, 1, 0, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
-  {&__pyx_n_s_msr, __pyx_k_msr, sizeof(__pyx_k_msr), 0, 0, 1, 1},
+  {&__pyx_n_u_msr, __pyx_k_msr, sizeof(__pyx_k_msr), 0, 1, 0, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_noise_type, __pyx_k_noise_type, sizeof(__pyx_k_noise_type), 0, 0, 1, 1},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
-  {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
-  {&__pyx_kp_s_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 0, 1, 0},
+  {&__pyx_kp_u_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 1, 0, 0},
+  {&__pyx_kp_u_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 1, 0, 0},
   {&__pyx_n_s_order, __pyx_k_order, sizeof(__pyx_k_order), 0, 0, 1, 1},
   {&__pyx_n_s_powerlaw, __pyx_k_powerlaw, sizeof(__pyx_k_powerlaw), 0, 0, 1, 1},
   {&__pyx_n_s_powerlaw_map, __pyx_k_powerlaw_map, sizeof(__pyx_k_powerlaw_map), 0, 0, 1, 1},
-  {&__pyx_kp_s_powerlaw_not_actual_approximate, __pyx_k_powerlaw_not_actual_approximate, sizeof(__pyx_k_powerlaw_not_actual_approximate), 0, 0, 1, 0},
+  {&__pyx_kp_u_powerlaw_not_actual_approximate, __pyx_k_powerlaw_not_actual_approximate, sizeof(__pyx_k_powerlaw_not_actual_approximate), 0, 1, 0, 0},
   {&__pyx_n_s_rand, __pyx_k_rand, sizeof(__pyx_k_rand), 0, 0, 1, 1},
   {&__pyx_n_s_random, __pyx_k_random, sizeof(__pyx_k_random), 0, 0, 1, 1},
   {&__pyx_n_s_run_ihc, __pyx_k_run_ihc, sizeof(__pyx_k_run_ihc), 0, 0, 1, 1},
@@ -5335,29 +5334,29 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":947
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":947
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_umath() except -1:
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple_)) __PYX_ERR(1, 947, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_u_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple_)) __PYX_ERR(1, 947, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":953
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":953
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_ufunc() except -1:
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(1, 953, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_u_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(1, 953, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "external/zilany2014/_zilany2014.pyx":85
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":85
  * 
  * 
  * def run_ihc(             # <<<<<<<<<<<<<<
@@ -5367,9 +5366,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__5 = PyTuple_Pack(10, __pyx_n_s_signal, __pyx_n_s_cf, __pyx_n_s_fs, __pyx_n_s_species, __pyx_n_s_cohc, __pyx_n_s_cihc, __pyx_n_s_species_map, __pyx_n_s_signal_data, __pyx_n_s_ihcout, __pyx_n_s_ihcout_data); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(6, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_external_zilany2014__zilany2014, __pyx_n_s_run_ihc, 85, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(6, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_apcmodels_external_zilany2014__z, __pyx_n_s_run_ihc, 85, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 85, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":158
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":158
  * 
  * 
  * def run_synapse(             # <<<<<<<<<<<<<<
@@ -5379,9 +5378,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__7 = PyTuple_Pack(12, __pyx_n_s_vihc, __pyx_n_s_fs, __pyx_n_s_cf, __pyx_n_s_anf_type, __pyx_n_s_powerlaw, __pyx_n_s_ffGn, __pyx_n_s_spont, __pyx_n_s_powerlaw_map, __pyx_n_s_noise_type, __pyx_n_s_vihc_data, __pyx_n_s_synout, __pyx_n_s_synout_data); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 158, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(6, 0, 12, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_external_zilany2014__zilany2014, __pyx_n_s_run_synapse, 158, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 158, __pyx_L1_error)
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(6, 0, 12, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_apcmodels_external_zilany2014__z, __pyx_n_s_run_synapse, 158, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 158, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":227
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":227
  * 
  * 
  * def run_spike_generator(             # <<<<<<<<<<<<<<
@@ -5391,7 +5390,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__9 = PyTuple_Pack(6, __pyx_n_s_synout, __pyx_n_s_fs, __pyx_n_s_synout_data, __pyx_n_s_sptimes, __pyx_n_s_sptimes_data, __pyx_n_s_spikes); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
-  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_external_zilany2014__zilany2014, __pyx_n_s_run_spike_generator, 227, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_apcmodels_external_zilany2014__z, __pyx_n_s_run_spike_generator, 227, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -5706,14 +5705,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_external__zilany2014___zilany2014) {
+  if (__pyx_module_is_main_apcmodels__external__zilany2014___zilany2014) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "external.zilany2014._zilany2014")) {
-      if (unlikely(PyDict_SetItemString(modules, "external.zilany2014._zilany2014", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "apcmodels.external.zilany2014._zilany2014")) {
+      if (unlikely(PyDict_SetItemString(modules, "apcmodels.external.zilany2014._zilany2014", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -5734,7 +5733,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "external/zilany2014/_zilany2014.pyx":21
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":21
  * from __future__ import division, print_function, absolute_import
  * 
  * import numpy as np             # <<<<<<<<<<<<<<
@@ -5746,7 +5745,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 21, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":23
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":23
  * import numpy as np
  * from libc.stdlib cimport malloc
  * from . import util             # <<<<<<<<<<<<<<
@@ -5767,7 +5766,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":24
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":24
  * from libc.stdlib cimport malloc
  * from . import util
  * import scipy.signal as dsp             # <<<<<<<<<<<<<<
@@ -5785,7 +5784,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_dsp, __pyx_t_1) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":82
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":82
  * 
  * 
  * np.import_array()             # <<<<<<<<<<<<<<
@@ -5794,43 +5793,43 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_t_3 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(0, 82, __pyx_L1_error)
 
-  /* "external/zilany2014/_zilany2014.pyx":85
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":85
  * 
  * 
  * def run_ihc(             # <<<<<<<<<<<<<<
  *         np.ndarray[np.float64_t, ndim=1] signal,
  *         double cf,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8external_10zilany2014_11_zilany2014_1run_ihc, NULL, __pyx_n_s_external_zilany2014__zilany2014_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9apcmodels_8external_10zilany2014_11_zilany2014_1run_ihc, NULL, __pyx_n_s_apcmodels_external_zilany2014__z_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_run_ihc, __pyx_t_1) < 0) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":158
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":158
  * 
  * 
  * def run_synapse(             # <<<<<<<<<<<<<<
  *         np.ndarray[np.float64_t, ndim=1] vihc,
  *         double fs,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8external_10zilany2014_11_zilany2014_3run_synapse, NULL, __pyx_n_s_external_zilany2014__zilany2014_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9apcmodels_8external_10zilany2014_11_zilany2014_3run_synapse, NULL, __pyx_n_s_apcmodels_external_zilany2014__z_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_run_synapse, __pyx_t_1) < 0) __PYX_ERR(0, 158, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":227
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":227
  * 
  * 
  * def run_spike_generator(             # <<<<<<<<<<<<<<
  *         np.ndarray[np.float64_t, ndim=1] synout,
  *         double fs
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8external_10zilany2014_11_zilany2014_5run_spike_generator, NULL, __pyx_n_s_external_zilany2014__zilany2014_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9apcmodels_8external_10zilany2014_11_zilany2014_5run_spike_generator, NULL, __pyx_n_s_apcmodels_external_zilany2014__z_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_run_spike_generator, __pyx_t_1) < 0) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "external/zilany2014/_zilany2014.pyx":1
+  /* "apcmodels/external/zilany2014/_zilany2014.pyx":1
  * # Copyright 2013-2014 Marek Rudnicki             # <<<<<<<<<<<<<<
  * 
  * # This file is part of cochlea.
@@ -5840,7 +5839,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../anaconda3/envs/GuestOxenham2021_code/lib/python3.8/site-packages/numpy/__init__.pxd":1016
+  /* "../anaconda3/envs/modeling/lib/python3.8/site-packages/numpy/__init__.pxd":1016
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -5856,11 +5855,11 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init external.zilany2014._zilany2014", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init apcmodels.external.zilany2014._zilany2014", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_CLEAR(__pyx_m);
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init external.zilany2014._zilany2014");
+    PyErr_SetString(PyExc_ImportError, "init apcmodels.external.zilany2014._zilany2014");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

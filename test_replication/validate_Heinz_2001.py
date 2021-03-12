@@ -80,7 +80,7 @@ def calculate_fdl_vs_frequency(f_low, f_high, n_f):
 
     """
     # Initialize simulator object
-    sim = anf.AuditoryNerveHeinz2001Numba()
+    sim = anf.AuditoryNerveHeinz2001()
 
     # Define stimulus parameters
     tone_level = 40
@@ -165,7 +165,7 @@ def calculate_fdl_vs_dur(dur_low, dur_high, n_dur):
 
     """
     # Initialize simulator object
-    sim = anf.AuditoryNerveHeinz2001Numba()
+    sim = anf.AuditoryNerveHeinz2001()
 
     # Define stimulus parameters
     tone_level = 40
@@ -246,7 +246,7 @@ def calculate_fdl_vs_level(level_low, level_high, n_level):
 
     """
     # Initialize simulator object
-    sim = anf.AuditoryNerveHeinz2001Numba()
+    sim = anf.AuditoryNerveHeinz2001()
 
     # Define stimulus parameters
     tone_dur = 0.50

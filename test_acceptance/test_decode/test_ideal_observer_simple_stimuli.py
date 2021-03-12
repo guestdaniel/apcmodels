@@ -7,7 +7,7 @@ import apcmodels.anf as anf
 def test_ideal_observer_FDL_vs_frequency():
     """ Test that ideal observer analysis on simple pure tone FDLs shows increasing FDLs with increasing frequency """
     # Initialize simulator object
-    sim = anf.AuditoryNerveHeinz2001Numba()
+    sim = anf.AuditoryNerveHeinz2001()
 
     # Define stimulus parameters
     fs = int(200e3)
@@ -49,7 +49,7 @@ def test_ideal_observer_real_simulation_with_level_roving():
     """ Test that ideal observer analysis on simple pure tone FDLs shows increasing FDLs with increasing frequency in
     the context of a mild level rove on the pure tone """
     # Initialize simulator object
-    sim = anf.AuditoryNerveHeinz2001Numba()
+    sim = anf.AuditoryNerveHeinz2001()
 
     # Define stimulus parameters
     fs = int(200e3)

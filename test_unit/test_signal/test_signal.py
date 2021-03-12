@@ -101,6 +101,17 @@ def test_pure_tone_single_frequency():
     assert np.max(np.abs(output-target)) < 1e-10
 
 
+def test_pure_tone_am_single_frequency_am_at_zero():
+    """ Check to make sure that synthesizing an AM pure tone with a mod depth of zero produces the same results
+     as pure_tone() """
+    fs = int(48e3)
+    f = 1000
+    t = np.linspace(0, 1, fs)
+    target = np.sin(2*np.pi*t*f)
+    output = sg.pure_tone_am(f, 0, 1, 0, 0, 1, fs)
+    assert np.max(np.abs(output-target)) < 1e-10
+
+
 def test_pure_tone_multiple_components():
     """ Check to make sure that manually synthesizing a pure tone produces the same results as pure_tone() when we
     pass multiple components """
@@ -110,6 +121,18 @@ def test_pure_tone_multiple_components():
     target = np.sin(2*np.pi*t*f)
     output = sg.pure_tone(np.array([100, 200, f]), np.array([0, 0, 0]), 1, fs)
     assert np.max(np.abs(output[:, 2]-target)) < 1e-10
+
+
+def test_pure_tone_am_depth():
+    """ Check to make sure that synthesizing an AM pure tone with a mod depth of 1 produces a maxval near 2 """
+    output = sg.pure_tone_am(1000, 0, 1, 0, 1, 1, int(48e3))
+    np.testing.assert_approx_equal(np.max(output), 2, significant=3)
+
+
+def test_pure_tone_am_depth2():
+    """ Check to make sure that synthesizing an AM pure tone with a mod depth of 0.5 produces a maxval near 1.5 """
+    output = sg.pure_tone_am(1000, 0, 1, 0, 0.5, 1, int(48e3))
+    np.testing.assert_approx_equal(np.max(output), 1.5, significant=3)
 
 
 def test_rms_errors():
@@ -148,3 +171,20 @@ def test_te_noise():
     # Check assertion
     np.testing.assert_approx_equal(level, 50, significant=3)
 
+
+def te_noise_errorgen():
+    """ Test that te_noise throws errors when you pass an lco below 0 Hz """
+    try:
+        sg.te_noise(0, int(48e3), -1, 100, 50)
+        raise Exception('This should have failed')
+    except ValueError:
+        return
+
+
+def te_noise_errorgen2():
+    """ Test that te_noise throws errors when you pass an hco above fs/2 Hz """
+    try:
+        sg.te_noise(0, int(48e3), 0, 30e3, 50)
+        raise Exception('This should have failed')
+    except ValueError:
+        return

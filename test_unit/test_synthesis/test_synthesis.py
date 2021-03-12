@@ -4,12 +4,30 @@ from apcmodels.simulation import *
 import numpy as np
 
 
+def test_synthesizer_synthesize_parameter_sequence_bad_inputs():
+    """ Check that synthesize_sequence() correctly raises an error if you give it bad input types """
+    try:
+        synth = sy.Synthesizer()
+        results = synth.synthesize_sequence(1)
+        raise Exception('This should have failed!')
+    except TypeError:
+        return
+
+
 def test_synthesizer_synthesize_parameter_sequence():
     """ Check that synthesize_sequence() correctly accepts a list of dicts and returns a corresponding number
     of stimuli"""
     synth = sy.Synthesizer()
     results = synth.synthesize_sequence([{'foo': 1, 'bar': 2}, {'foo': 3, 'bar': 4}])
     assert len(results) == 2
+
+
+def test_synthesizer_synthesize_parameter_sequence_parameters():
+    """ Check that synthesize_sequence() correctly accepts a Parametrs object and returns a corresponding number
+    of stimuli """
+    synth = sy.Synthesizer()
+    results = synth.synthesize_sequence(Parameters())
+    assert len(results) == 1
 
 
 def test_synthesizer_synthesize_parameter_sequence_with_kwarg():
@@ -90,10 +108,18 @@ def test_synthesizer_synthesize():
 
 
 def test_puretone_synthesize():
-    """ Check that PureTone object can successfully synthesize and replicates standard puretone synthesis"""
+    """ Check that PureTone object can successfully synthesize and replicates standard pure tone synthesis"""
     synth = sy.PureTone()
     output = synth.synthesize(1000, 50, 0, 1, 0.1, int(48e3))
     reference = sg.cosine_ramp(sg.scale_dbspl(sg.pure_tone(1000, 0, 1, int(48e3)), 50), 0.1, int(48e3))
+    assert np.all(output == reference)
+
+
+def test_complextone_synthesize():
+    """ Check that ComplexTone object can successfully synthesize and replicates standard complex tone synthesis"""
+    synth = sy.ComplexTone()
+    output = synth.synthesize(100, 1, 10, 50, 0, 1, 0.1, int(48e3))
+    reference = sg.cosine_ramp(sg.complex_tone(100*np.arange(1, 11), 50*np.ones(10), np.zeros(10), 1, int(48e3)), 0.1, int(48e3))
     assert np.all(output == reference)
 
 
