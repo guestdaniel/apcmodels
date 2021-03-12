@@ -153,14 +153,11 @@ def calculate_auditory_nerve_response(nerve_model):
 
         # If a user passes 'cfs' and 'cf_low' or 'cf_high', reject the input combination as invalid
         if ('cfs' in kwargs and 'cf_low' in kwargs) or ('cfs' in kwargs and 'cf_high' in kwargs):
-            return ValueError('Both `cfs` and `cf_low` or `cf_high` passed at same time')
+            raise ValueError('Both `cfs` and `cf_low` or `cf_high` passed at same time')
         # If a user passes cf_low and cf_high along with n_cf, return a log-spaced CF array
         elif 'cf_low' in kwargs and 'cf_high' in kwargs and 'n_cf' in kwargs:
             cfs = 10 ** np.linspace(np.log10(kwargs['cf_low']), np.log10(kwargs['cf_high']), kwargs['n_cf'])
             kwargs['cfs'] = cfs
-            kwargs.pop('cf_low')
-            kwargs.pop('cf_high')
-            kwargs.pop('n_cf')
         # If user passes no appropriate inputs, raise error
         elif 'cfs' not in kwargs:
             raise ValueError('Valid CFs not specified')
