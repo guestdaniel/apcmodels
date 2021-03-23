@@ -8,20 +8,22 @@ import random
 
 
 def run_zilany2014_spikes(sound, fs, anf_num, cf, species, cohc=1, cihc=1, powerlaw='approximate', ffGn=False):
-    """
-    Run the inner ear model of Zilany et al. (2014). This model is based on the original implementation provided by the
-    authors. The MEX specific code was replaced by Python code in C files. This variant returns spike trains.
+    """ Run the inner ear model of Zilany et al. (2014).
+
+    This model is based on the original implementation provided by the authors. The MEX specific code was replaced by
+    the authors of the cochlea package. This wrapper around the C implementation returns spike trains.
 
     Parameters:
         sound (ndarray): The input sound in Pa.
-        fs (int): Sampling frequency of the sound in Hz.
+        fs (int): Sampling frequency of the sound in Hz. The IHC stage is run at this sampling rate and then the IHC
+            output is downsampled and the synapse stage is run at 50 kHz.
         anf_num (tuple): The desired number of auditory nerve fibers per frequency channel (CF), (HSR#, MSR#, LSR#).
             For example, (100, 75, 25) means that we want 100 HSR fibers, 75 MSR fibers and 25 LSR fibers per CF.
         cf (ndarray): The center frequency(s) of the simulated auditory nerve fibers. If float, then defines a single
             frequency channel. If array_like (e.g. list or ndarray), then the frequencies are used. If tuple, then must
              have exactly 3 elements (min_cf, max_cf, num_cf) and the frequencies are calculated using the Greenwood
              function.
-        species (str): Species of the simulation, either 'cat', 'human', or'human_glasberg1990'
+        species (str): Species of the simulation, either 'cat', 'human', or 'human_glasberg1990'
         cohc (float): Degradation of the outer hair cells in [0, 1]
         cihc (float): Degradation of the inner hair cells in [0, 1]
         powerlaw (str) Defines which power law implementation should be used, either 'actual' or 'approximate'
@@ -59,13 +61,15 @@ def run_zilany2014_spikes(sound, fs, anf_num, cf, species, cohc=1, cihc=1, power
 
 
 def run_zilany2014_rate(sound, fs, anf_types, cf, species, cohc=1, cihc=1, powerlaw='approximate', ffGn=False):
-    """
-    Run the inner ear model of Zilany et al. (2014). This model is based on the original implementation provided by the
-    authors. The MEX specific code was replaced by Python code in C files. This variant returns firing rates.
+    """ Run the inner ear model of Zilany et al. (2014).
+
+    This model is based on the original implementation provided by the authors. The MEX specific code was replaced by
+    the authors of the cochlea package. This wrapper around the C implementation returns firing rates.
 
     Parameters:
         sound (ndarray): The input sound in Pa.
-        fs (int): Sampling frequency of the sound in Hz.
+        fs (int): Sampling frequency of the sound in Hz. The IHC stage is run at this sampling rate and then the IHC
+            output is downsampled and the synapse stage is run at 50 kHz.
         anf_types (str, list): The desired auditory nerve fiber types, either a list of types or a single type passed
             as a string. Options are 'hsr', 'msr', and 'lsr'
         cf (ndarray): The center frequency(s) of the simulated auditory nerve fibers. If float, then defines a single
@@ -133,8 +137,7 @@ def _run_channel_spikes(args):
     ffGn = args['ffGn']
 
     # Run BM, IHC
-    vihc = _zilany2014.run_ihc(
-        signal=signal,
+    vihc = _zilany2014.run_ihc(signal=signal,
         cf=cf,
         fs=fs,
         species=species,

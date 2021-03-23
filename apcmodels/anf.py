@@ -74,6 +74,8 @@ class AuditoryNerveZilany2014(Simulator):
                 calculate_heinz2001_firing_rate. If you have warnings enabled, you may see these warnings. This is
                 useful for debugging in cases where you are not sure if certain parameters are being accepted/used by
                 downstream functions.
+            - The basilar membrane and IHC stages of the model are run at the user-provided sampling rate. The synapse
+                stage is run at 50 kHz and the outputs of the IHC stage are automatically downsampled before this point.
         """
         return calculate_zilany2014_firing_rate(**params, **kwargs)
 
@@ -101,6 +103,8 @@ class AuditoryNerveZilany2014Spikes(Simulator):
                 calculate_heinz2001_firing_rate. If you have warnings enabled, you may see these warnings. This is
                 useful for debugging in cases where you are not sure if certain parameters are being accepted/used by
                 downstream functions.
+            - The basilar membrane and IHC stages of the model are run at the user-provided sampling rate. The synapse
+                stage is run at 50 kHz and the outputs of the IHC stage are automatically downsampled before this point.
         """
         return calculate_zilany2014_spikes(**params, **kwargs)
 
@@ -288,7 +292,7 @@ def calculate_zilany2014_firing_rate(_input, fs, cfs=None, species='human', fibe
 
     Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
-        fs (int): sampling rate in Hz
+        fs (int): sampling rate in Hz of the BM and IHC stages. The ANF stage is run at 50 kHz.
         cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses. Note that the
             Zilany model for humans cannot support cfs that are below 125 Hz or above 20 kHz. If a user passes CFs in
             that range, they are clipped to within [125, 20000] and a warning is raised accordingly.
@@ -330,7 +334,7 @@ def calculate_zilany2014_spikes(_input, fs, cfs=None, species='human', anf_num=(
 
     Args:
         _input (ndarray): 1-dimensional ndarray containing an acoustic stimulus in pascals
-        fs (int): sampling rate in Hz
+        fs (int): sampling rate in Hz of the BM and IHC stages. The ANF stage is run at 50 kHz.
         cfs (ndarray): ndarray containing characteristic frequencies at which to simulate responses
         species (str): species of simulation, either cat or human
         anf_num (tuple): tuple indicating how many of each fiber type to simulate ('hsr', 'msr', 'lsr')

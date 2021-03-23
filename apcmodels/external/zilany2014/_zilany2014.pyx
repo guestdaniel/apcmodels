@@ -217,7 +217,7 @@ def run_synapse(
         spont[anf_type],             # spont
         noise_type,                  # noiseType
         powerlaw_map[powerlaw],      # implnt
-        10e3,                        # sampFreq
+        50e3,                        # sampFreq
         synout_data                  # synouttmp
     )
 
