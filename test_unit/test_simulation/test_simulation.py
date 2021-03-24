@@ -70,6 +70,25 @@ def test_parameters_flatten_with_nested_structure():
     assert params.shape == (3*3*3, ) and len(params[0]) == 2
 
 
+def test_parameters_flatten_and_unnest_with_nested_structure():
+    """ Test that Parameters.flatten() correctly flattens a 3D parameters object with at least one nested element """
+    params = si.Parameters()
+    params.wiggle('a', [1, 2, 3])
+    params.wiggle('b', [1, 2, 3])
+    params.wiggle('c', [1, 2, 3])
+    params[0, 0, 0] = [params[0, 0, 0], dict()]
+    params.flatten_and_unnest()
+    assert params.shape == (3*3*3 + 1, )
+
+
+def test_parameters_flatten_and_unnest_after_repeat():
+    """ Test that Parameters.flatten() correctly flattens a 3D parameters object """
+    params = si.Parameters(a=1)
+    params.repeat(10)
+    params.flatten_and_unnest()
+    assert params.shape == (10, )
+
+
 def test_parameters_increment():
     """ Test that Parameters.increment() correctly increments a single parameter """
     params = si.Parameters(hello=1)

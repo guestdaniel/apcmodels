@@ -241,18 +241,21 @@ class Parameters:
         self.params = evaluate_parameters(self.params)
 
     def flatten(self):
-        """ Takes the params array and flattens it into a single 1d array. We assume that each element of self.params is
-         of the same type and of the same structure.
-         """
+        """ Takes the params array and flattens it into a single 1d array. """
+        self.params = self.params.reshape((self.params.size, ))
+
+    def flatten_and_unnest(self):
+        """ Takes the params array and flattens it into a single 1d array. Along the way, elements that contained nested
+        list structure are unpacked. """
         # First, we loop through each element of self.params and flatten them out if needed
-        temp = np.empty(self.params.shape, dtype=object)
+        temp = np.empty((0, ), dtype=object)
         with np.nditer(self.params, flags=['refs_ok', 'multi_index'], op_flags=['readwrite']) as it:
             for x in it:
                 x = x.item()
                 if type(x) is list:
-                    temp[it.multi_index] = flatten_parameters(x)
+                    temp = np.concatenate((temp, np.array(flatten_parameters(x))))
                 else:
-                    temp[it.multi_index] = x
+                    temp = np.concatenate((temp, np.array([x])))
         # Next, we concatenate together all the elements of temp and return them
         self.params = temp.reshape((temp.size, ))
 
