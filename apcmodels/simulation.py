@@ -24,7 +24,7 @@ class Simulator:
     def __init__(self, frontend=None):
         self.frontend = frontend
 
-    def do_simulate(self, params):
+    def do_simulate(self, params, **kwargs):
         """ Accepts a single positional input and returns a simulation result.
 
         This is a dummy method that should be overwritten by subclasses.
@@ -37,7 +37,7 @@ class Simulator:
         """
         return params
 
-    def simulate(self, params):
+    def simulate(self, params, **kwargs):
         """ Accepts a single positional input and returns a simulation result.
 
         This is a wrapper around do_simulate() that handles logic pertaining to frontends. Frontends are models that
@@ -54,10 +54,10 @@ class Simulator:
             result: the result of a simulation on params
         """
         if self.frontend is None:
-            return self.do_simulate(params)
+            return self.do_simulate(params, **kwargs)
         else:
-            params['_input'] = self.frontend.simulate(params)
-            return self.do_simulate(params)
+            params['_input'] = self.frontend.simulate(params, **kwargs)
+            return self.do_simulate(params, **kwargs)
 
     def run(self, params, runfunc=None, parallel=True, n_thread=8, hide_progress=False):
         """ Main logical core of Simulator, accepting parameter list/array and returning simulation results.

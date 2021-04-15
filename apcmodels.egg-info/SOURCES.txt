@@ -3,7 +3,6 @@ setup.py
 apcmodels/__init__.py
 apcmodels/anf.py
 apcmodels/decode.py
-apcmodels/pitch.py
 apcmodels/signal.py
 apcmodels/simulation.py
 apcmodels/synthesis.py
