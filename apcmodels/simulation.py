@@ -23,6 +23,7 @@ class Simulator:
     """
     def __init__(self, frontend=None):
         self.frontend = frontend
+        self.known_params = []
 
     def do_simulate(self, params, **kwargs):
         """ Accepts a single positional input and returns a simulation result.
@@ -171,7 +172,7 @@ def check_args(known_params):
             for param_name in list(params.keys()) + list(kwargs.keys()):
                 if param_name not in known_params + sim.known_params:
                     # Provide warning if the parameter name is not recognized
-                    warnings.warn(param_name + ' was passed but is not a recognized parameter name.',
+                    warnings.warn(param_name + ' was passed to Simulator but is not a recognized parameter name.',
                                   UserWarning)
             return func(sim, params, **kwargs)
         return inner
