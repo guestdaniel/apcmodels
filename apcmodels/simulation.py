@@ -168,12 +168,15 @@ def check_args(known_params):
                 sim (Simulator): Simulator object
                 params (dict): dict of parameter names and values
             """
-            # Check through known_params and if any keys in params/kwargs are not recognized, raise a warning
+            # Check through known_params and if any keys in params/kwargs are not recognized, add them to a list
+            unrecognized_params = []
             for param_name in list(params.keys()) + list(kwargs.keys()):
                 if param_name not in known_params + sim.known_params:
-                    # Provide warning if the parameter name is not recognized
-                    warnings.warn(param_name + ' was passed to Simulator but is not a recognized parameter name.',
-                                  UserWarning)
+                    unrecognized_params.append(param_name)
+            # Provide warning if more than zero unrecognized parameters
+            if len(unrecognized_params) > 0:
+                warnings.warn('Parameters passed to Simulator but unrecognized: ' + unrecognized_params.__str__(),
+                              UserWarning)
             return func(sim, params, **kwargs)
         return inner
     return outer
