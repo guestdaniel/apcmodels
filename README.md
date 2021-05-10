@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/333514564.svg)](https://zenodo.org/badge/latestdoi/333514564)
+
 # apcmodels
 
 `apcmodels` is a Python 3 library developed by Daniel Guest in the [Auditory Perception and Cognition Lab](http://apc.psych.umn.edu/) at the University of Minnesota. `apcmodels` allows users to simulate responses to acoustic stimuli for multiple different auditory nerve models and analyze the outputs. `apcmodels` utilizes code from a range of existing Python packages/code in the auditory modeling domain and provides a single unified interface to access these models. Moreover, `apcmodels` features extensive unit testing and thorough documentation to ensure validity of its outputs and ease of use.
