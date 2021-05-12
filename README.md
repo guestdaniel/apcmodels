@@ -1,4 +1,5 @@
 [![DOI](https://zenodo.org/badge/333514564.svg)](https://zenodo.org/badge/latestdoi/333514564)
+![COVERAGE](coverage.svg)
 
 # apcmodels
 
