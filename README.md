@@ -156,6 +156,12 @@ We generally recommend that you install `apcmodels` in a virtual environment (e.
 
 `apcmodels` also depends on the scientific contributions of those who build computational models of the auditory system. Attributions for such scientific works can be found in the doc strings of associated source code as well as in the top-level `AUTHORS.md` file.
 
+# Testing
+
+`apcmodels` includes a testing suite to verify correct behavior of its various components. `pytest` must be installed to run the testing suite. Tests are divided into three categories: unit, acceptance, and replication. Unit tests are small, discrete tests that aim to test a single functionality of a single component. Acceptance tests simulate how the library would be used in practice and often require the correct functioning of many different components to pass. Replication tests aim to replicate known results from the literature. The majority of tests written so far are unit tests. 
+
+To run the testing suite, refer to the `test.sh` script in the main directory. Shell commands to run the unit tests and acceptance tests can be seen here. The replication tests should be run as individual scripts as their outputs need to be evaluated visually. All tests are located in `test_*` folders and it should be easy to find them. 
+
 # Similar tools and resources
 
 Many other resources exist for performing auditory computational modeling. Most of these resources are written in MATLAB, although some are also written in Python. Some examples are listed below.

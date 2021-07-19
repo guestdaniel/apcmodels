@@ -25,6 +25,6 @@ setup(
     package_data={'apcmodels.external.verhulst2018': ['default_poles.dat']},
     license='GPLv3',
     author='Daniel R. Guest',
-    install_requires=['numpy', 'scipy', 'pandas', 'matplotlib', 'Cython', 'numba', 'pathos', 'tqdm'],
+    install_requires=['numpy', 'scipy', 'pandas', 'matplotlib', 'Cython', 'numba', 'pathos', 'tqdm', 'pytest'],
     ext_modules=cythonize(extensions, language_level='3'),
 )
