@@ -1,6 +1,7 @@
 import apcmodels.signal as sg
 import numpy as np
 from apcmodels.simulation import Parameters
+import warnings
 
 
 class Synthesizer:
@@ -101,9 +102,12 @@ class PureTone(Synthesizer):
         Returns:
             output (array): pure tone
         """
+        # Synthesize stimulus
         pt = sg.pure_tone(freq, phase, dur, fs)
         pt = sg.scale_dbspl(pt, level)
         pt = sg.cosine_ramp(pt, dur_ramp, fs)
+        # Raise warnings about arguments
+        check_args(kwargs)
         return pt
 
 
@@ -131,9 +135,19 @@ class ComplexTone(Synthesizer):
         Returns:
             output (array): complex tone
         """
+        # Synthesize stimulus
         freqs = np.arange(h_low, h_high+1) * f0
         levels = np.ones(len(freqs))*level
         phases = np.zeros(len(freqs))
         pt = sg.complex_tone(freqs, levels, phases, dur, fs)
         pt = sg.cosine_ramp(pt, dur_ramp, fs)
+        # Raise warnings about arguments
+        check_args(kwargs)
         return pt
+
+
+def check_args(kwargs):
+    """ Accepts a dict of kwargs and raises a warning that they were passed as kwargs and not explicit keywords """
+    for arg in kwargs:
+        warnings.warn('Parameters passed to Simulator but unrecognized: ' + arg.__str__(),
+                      UserWarning)

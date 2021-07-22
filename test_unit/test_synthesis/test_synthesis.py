@@ -2,6 +2,7 @@ from apcmodels import synthesis as sy
 import apcmodels.signal as sg
 from apcmodels.simulation import *
 import numpy as np
+import pytest
 
 
 def test_synthesizer_synthesize_parameter_sequence_bad_inputs():
@@ -178,6 +179,7 @@ def test_puretone_incremented_level_with_random_level():
                                    sg.dbspl_pascal(synth.synthesize_sequence(parameters=params)[1]),
                                    -1, 5)
 
+
 def test_puretone_wiggled_level_with_random_variables():
     """ Check that we can construct a parameter dict, wiggle level to be various random variables, and then
     synthesize and get plausible output values. """
@@ -186,3 +188,10 @@ def test_puretone_wiggled_level_with_random_variables():
                                                  lambda: np.random.uniform(45, 55, 1)])
     outs = synth.synthesize_sequence(parameters=params)
     assert sg.rms(outs[0]) < sg.rms(outs[1])
+
+
+def test_synthesizer_raises_warnings_about_kwargs():
+    """ Check that when we pass through kwargs to Synthesizer objects that we do get warnings """
+    synth = sy.PureTone()
+    with pytest.warns(UserWarning):
+        synth.synthesize(freq=1000, testparam='foo')
