@@ -101,84 +101,91 @@ def decode_ideal_observer(ratefunc):
         # Return ideal observer results
         return calculate_threshold(pdms_AI, API), calculate_threshold(pdms_RP, API)
 
-    def compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type):
-        """ Computes a partial derivative matrix as in Siebert (1970) and Heinz et al. (2001)
-
-        Args:
-            x (list): list of ndarrays containing firing-rate simulations in shape (n_channel x n_sample). The first
-                array should be a firing-rate simulation for baseline parameter values. The following arrays should
-                be firing-rate simulations where a single parameter has been incremented by a small amount.
-            fs (int): sampling rate in Hz
-            delta_theta (ndarray): 1d ndarray containing the increment size for each element of x after the first
-            n_fiber_per_chan (array): array containing integers of len n_cf, each element indicates how many fibers
-                are theoretically represented by the single corresponding channel in x
-            _type (str): either 'AI' or 'RP' for all-information or rate-place
-
-        Returns:
-
-        """
-        # Calculate n_param
-        n_param = len(x)-1
-        if n_param < 1:
-            raise ValueError('There is only one simulation per condition --- ideal observer needs n_param + 1 '
-                             'simulations!')
-        # Transform from list to ndarray
-        x = np.array(x)
-        x = np.transpose(x, [1, 0, 2])  # shape: n_cf x (n_param + 1) x n_sample
-        # Add small baseline firing rate to avoid issues with zeros and NaNs
-        x += 1
-        # Construct one ndarray of baseline values and another of incremented values
-        baseline = np.tile(x[:, 0, :], [n_param, 1, 1])
-        baseline = np.transpose(baseline, [1, 0, 2])  # shape: n_cf x n_param x n_sample
-        incremented = x[:, 1:, :]  # shape: n_cf x n_param x n_sample
-        if _type == 'AI':
-            # Estimate derivative with respect to each parameter
-            deriv_estimate = np.transpose(np.transpose((incremented - baseline), [0, 2, 1]) / delta_theta, [0, 2, 1])  # shape: n_CF x n_param x n_time
-            # Normalize the derivatives by the square root of rate
-            deriv_norm = np.sqrt(1 / baseline) * deriv_estimate  # shape: n_CF x n_param x n_time
-            # Compute derivative matrix
-            deriv_matrix = 1 / fs * np.matmul(deriv_norm, np.transpose(deriv_norm, [0, 2, 1]))  # shape: n_CF x n_param x n_param
-            # Sum across fibers
-            deriv_matrix = np.sum(np.transpose(n_fiber_per_chan * np.transpose(deriv_matrix, [1, 2, 0]), [2, 0, 1]), axis=0)
-            return deriv_matrix
-        elif _type == 'RP':
-            # Calculate the duration of the response
-            t_max = baseline.shape[2] * 1/fs
-            # Average results across time
-            baseline = np.mean(baseline, axis=2)
-            incremented = np.mean(incremented, axis=2)
-            # Estimate derivative with respect to each parameter
-            deriv_estimate = (incremented - baseline)/delta_theta
-            # Normalize the derivatives by the square root of rate
-            deriv_norm = np.sqrt(1 / baseline) * deriv_estimate  # shape: n_CF x n_param
-            # Compute derivative matrix
-            deriv_norm = np.stack((deriv_norm, deriv_norm), axis=2)
-            deriv_matrix = np.matmul(deriv_norm, np.transpose(deriv_norm, [0, 2, 1]))  # shape: n_CF x n_param x n_param
-            # Sum across fibers
-            deriv_matrix = 0.5 * t_max * np.sum(n_fiber_per_chan * deriv_matrix, axis=0)  # shape: n_param x n_param
-            return deriv_matrix
-
-    def calculate_threshold(FI, API):
-        """ Optimally decode firing-rate waveforms using N-D generalization of Siebert (1972).
-
-        Args:
-            FI (ndarray): Fisher information matrices for parameters, of size n_param x n_param
-            API (ndarray): Fisher information for parameter distributions, of size n_param x n_param.
-
-        Returns:
-            threshold (float): threshold estimate
-        """
-        if FI.shape == ():
-            return np.sqrt(1 / FI)
-        elif np.ndim(FI) == 2:
-            J = FI + API
-            return np.sqrt(np.linalg.inv(J)[0, 0])
-        elif np.ndim(FI) == 3:
-            FI = np.mean(FI, axis=0)
-            J = FI + API
-            return np.sqrt(np.linalg.inv(J)[0, 0])
-
     return inner
+
+
+def compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type):
+    """ Computes a partial derivative matrix as in Siebert (1970) and Heinz et al. (2001)
+
+    Args:
+        x (list): list of ndarrays containing firing-rate simulations in shape (n_channel x n_sample). The first
+            array should be a firing-rate simulation for baseline parameter values. The following arrays should
+            be firing-rate simulations where a single parameter has been incremented by a small amount.
+        fs (int): sampling rate in Hz
+        delta_theta (ndarray): 1d ndarray containing the increment size for each element of x after the first
+        n_fiber_per_chan (array): array containing integers of len n_cf, each element indicates how many fibers
+            are theoretically represented by the single corresponding channel in x
+        _type (str): either 'AI' or 'RP' for all-information or rate-place
+
+    Returns:
+
+    """
+    # Calculate n_param
+    n_param = len(x) - 1
+    if n_param < 1:
+        raise ValueError('There is only one simulation per condition --- ideal observer needs n_param + 1 '
+                         'simulations!')
+    # Transform from list to ndarray
+    x = np.array(x)
+    x = np.transpose(x, [1, 0, 2])  # shape: n_cf x (n_param + 1) x n_sample
+    # Add small baseline firing rate to avoid issues with zeros and NaNs
+    x += 1
+    # Construct one ndarray of baseline values and another of incremented values
+    baseline = np.tile(x[:, 0, :], [n_param, 1, 1])
+    baseline = np.transpose(baseline, [1, 0, 2])  # shape: n_cf x n_param x n_sample
+    incremented = x[:, 1:, :]  # shape: n_cf x n_param x n_sample
+    if _type == 'AI':
+        # Estimate derivative with respect to each parameter
+        deriv_estimate = np.transpose(np.transpose((incremented - baseline), [0, 2, 1]) / delta_theta,
+                                      [0, 2, 1])  # shape: n_CF x n_param x n_time
+        # Normalize the derivatives by the square root of rate
+        deriv_norm = np.sqrt(1 / baseline) * deriv_estimate  # shape: n_CF x n_param x n_time
+        # Compute derivative matrix
+        deriv_matrix = 1 / fs * np.matmul(deriv_norm,
+                                          np.transpose(deriv_norm, [0, 2, 1]))  # shape: n_CF x n_param x n_param
+        # Sum across fibers
+        deriv_matrix = np.sum(np.transpose(n_fiber_per_chan * np.transpose(deriv_matrix, [1, 2, 0]), [2, 0, 1]), axis=0)
+        return deriv_matrix
+    elif _type == 'RP':
+        # Calculate the duration of the response
+        t_max = baseline.shape[2] * 1 / fs
+        # Average results across time
+        baseline = np.mean(baseline, axis=2)
+        incremented = np.mean(incremented, axis=2)
+        # Estimate derivative with respect to each parameter
+        deriv_estimate = (incremented - baseline) / delta_theta
+        # Normalize the derivatives by the square root of rate
+        deriv_norm = np.sqrt(1 / baseline) * deriv_estimate  # shape: n_CF x n_param
+        # Compute derivative matrix
+        deriv_norm = np.stack((deriv_norm, deriv_norm), axis=2)
+        deriv_matrix = np.matmul(deriv_norm, np.transpose(deriv_norm, [0, 2, 1]))  # shape: n_CF x n_param x n_param
+        # Sum across fibers
+        deriv_matrix = 0.5 * t_max * np.sum(n_fiber_per_chan * deriv_matrix, axis=0)  # shape: n_param x n_param
+        return deriv_matrix
+
+
+def calculate_threshold(FI, API):
+    """ Optimally decode firing-rate waveforms using N-D generalization of Siebert (1972).
+
+    Args:
+        FI (ndarray): Fisher information matrices for parameters, of size n_param x n_param
+        API (ndarray): Fisher information for parameter distributions, of size n_param x n_param.
+
+    Warnings:
+        - Description of API above is incorrect (need to fix!)
+
+    Returns:
+        threshold (float): threshold estimate
+    """
+    if FI.shape == ():
+        return np.sqrt(1 / FI)
+    elif np.ndim(FI) == 2:
+        J = FI + API
+        return np.sqrt(np.linalg.inv(J)[0, 0])
+    elif np.ndim(FI) == 3:
+        FI = np.mean(FI, axis=0)
+        J = FI + API
+        return np.sqrt(np.linalg.inv(J)[0, 0])
 
 
 def run_rates_util(ratefunc, params):

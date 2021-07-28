@@ -63,6 +63,70 @@ def test_ideal_observer_single_input():
         return
 
 
+def test_ideal_observer_valid_input():
+    """ Test that if we provide a valid params to a ratefunc wrapped in decode_ideal_observer that everything runs
+     without any errors """
+    # Initialize simulator object
+    sim = anf.AuditoryNerveHeinz2001()
+
+    # Define stimulus parameters
+    fs = int(200e3)
+    tone_level = 30
+    tone_dur = 0.1
+    tone_ramp_dur = 0.01
+    tone_freq = 1000
+
+    # Synthesize stimuli
+    synth = sy.PureTone()
+    params = si.Parameters(level=tone_level, dur=tone_dur, dur_ramp=tone_ramp_dur, freq=tone_freq, fs=fs)
+    params.increment({'freq': 0.001})
+    stimuli = synth.synthesize_sequence(params)
+    params.add_inputs(stimuli)
+
+    # Add stimuli and model params
+    params.append(['cf_low', 'cf_high', 'n_cf'], [1000, 1000, 1])
+    params.append(['n_fiber_per_chan', 'fs', 'delta_theta', 'API'], [1, int(200e3), [0.001], np.zeros(1)])
+
+    # Run
+    out = sim.run(params, runfunc=decode_ideal_observer(sim.simulate))
+
+
+@pytest.mark.parametrize('_type', ['AI', 'RP'])
+def test_compute_partial_derivative_matrix_calculations(_type):
+    """ Test that if we pass sensible outputs to the partial derivative calculator that the outputs are correct """
+    x = [np.ones((1, 5000)), 1 + np.ones((1, 5000))]
+    fs = int(20e3)
+    delta_theta = [1]
+    n_fiber_per_chan = 1
+    np.testing.assert_almost_equal(compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type)[0, 0],
+                                   0.125, decimal=5)
+
+
+@pytest.mark.parametrize('n_chan', [1, 5])
+@pytest.mark.parametrize('n_param', [2, 5])
+@pytest.mark.parametrize('_type', ['AI', 'RP'])
+def test_compute_partial_derivative_matrix_shape(n_chan, n_param, _type):
+    """ Test that if we pass sensible inputs to the partial derivative calculator that the outputs shaped right """
+    x = list()
+    for param in range(n_param):
+        x.append(np.zeros((n_chan, 5000)) + param)
+    delta_theta = [1]*(n_param-1)
+    fs = int(20e3)
+    n_fiber_per_chan = 1
+    assert compute_partial_derivative_matrix(x, fs, delta_theta, n_fiber_per_chan, _type).shape == \
+           (n_param-1, n_param-1)
+
+
+def test_calculate_threshold_input_to_output_shape():
+    """ Test that calculate_threshold correctly handles different sizes of input matrices """
+    # Scalar input
+    assert calculate_threshold(np.array(1), np.array(1)).shape == ()
+    # Matrix input
+    assert calculate_threshold(np.array([[1, 0], [0, 1]]), np.array([[1, 1], [1, 1]])).shape == ()
+    # Stacked matrix input
+    assert calculate_threshold(np.array([[[1, 0], [0, 1]], [[1, 0], [0, 1]]]), np.array([[1, 1], [1, 1]])).shape == ()
+
+
 def test_find_parameter():
     """ Test to make sure that find_parameter accepts a nested list of params and returns the appropriate value """
     params = [[{'a': 5, 'b': 3}], [{'c': 2}]]
@@ -126,7 +190,8 @@ def test_staircase_estimation_for_different_thresholds(threshold):
     np.testing.assert_almost_equal(np.mean(results[0]), desired=target, decimal=0)
 
 
-@pytest.mark.parametrize(['p', 'n_down', 'n_up'], [(0.159, 1, 4), (0.293, 1, 2), (0.5, 1, 1), (0.707, 2, 1), (0.794, 3, 1), (0.841, 4, 1)])
+@pytest.mark.parametrize(['p', 'n_down', 'n_up'],
+                         [(0.159, 1, 4), (0.293, 1, 2), (0.5, 1, 1), (0.707, 2, 1), (0.794, 3, 1), (0.841, 4, 1)])
 def test_staircase_estimation_for_different_thresholds(p, n_down, n_up):
     """ Estimate various points along psychometric function using staircase procedure with a logistic psychometric
     function """
